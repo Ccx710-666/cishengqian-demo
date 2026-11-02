@@ -1227,6 +1227,54 @@ html, body {
   C.famWords = ['', '勉强糊口', '普通人家', '过得去', '宽裕', '很宽裕'];
   C.famLabel = function (fam) { return C.famWords[fam] || ''; };
 
+  // ── 手头的钱算宽还是紧（事件门槛用）─────────────────────
+  // 结局那套档位（C.moneyVerdict）比的是「这辈子最后攒下多少」，
+  // 中年事件不能拿它当门槛：三十岁的人账上本来就没存款，照死时的标尺算，
+  // 91% 的年轻人都成了「手紧」——那不是穷，只是还没熬到。
+  // 所以门槛另用一把尺子：存款 ÷（本国中位存款 × 同龄系数）。
+  // 系数是 4000 局实测的「该年龄平均存款 ÷ 死时中位存款」，
+  // 除完之后各年龄的分位才对得齐（P50 都在 0.9 上下）。
+  C.MED_CASH = { CHN: 1045000, DEU: 783000, BRA: 617000 };
+  var W_AGE_F = [[18, 0.10], [25, 0.14], [30, 0.16], [35, 0.26], [40, 0.40],
+    [45, 0.58], [50, 0.72], [55, 0.84], [60, 0.95], [65, 1.00]];
+  C.wFactor = function (age) {
+    if (!(age > 0)) return W_AGE_F[0][1];
+    if (age <= W_AGE_F[0][0]) return W_AGE_F[0][1];
+    var last = W_AGE_F.length - 1;
+    if (age >= W_AGE_F[last][0]) return W_AGE_F[last][1];
+    for (var i = 0; i < last; i++) {
+      var a = W_AGE_F[i], b = W_AGE_F[i + 1];
+      if (age >= a[0] && age <= b[0]) {
+        var t = (age - a[0]) / (b[0] - a[0]);
+        return a[1] + t * (b[1] - a[1]);
+      }
+    }
+    return 1;
+  };
+  // 同龄财富指数：1 是「跟同龄人差不多」，2 是「比同龄人多一倍」。
+  C.wRel = function (S) {
+    var med = C.MED_CASH[S.country] || C.MED_CASH.CHN;
+    return (S.cash || 0) / (med * C.wFactor(S.age || 0));
+  };
+  var W_ORDER = ['debt', 'tight', 'ok', 'rich', 'rich2'];
+  C.wOrder = W_ORDER;
+  // 五档。分位来自 4000 局实测（30 岁以上）：tight 约后 20%、ok 约 60%、
+  // rich 约前 12%、rich2 约前 1%，debt 是账上真的欠着。
+  C.wBand = function (S) {
+    if ((S.cash || 0) < 0) return 'debt';
+    var r = C.wRel(S);
+    if (r >= 2.5) return 'rich2';
+    if (r >= 1.5) return 'rich';
+    if (r >= 0.6) return 'ok';
+    return 'tight';
+  };
+  // 事件门槛：wAtLeast(S,'rich') 就是「手头至少比同龄人多一半」。
+  C.wAtLeast = function (S, k) {
+    return W_ORDER.indexOf(C.wBand(S)) >= W_ORDER.indexOf(k);
+  };
+  // 青年另有一套判断：十八九岁手上那点钱来自家里，跟「攒没攒下」无关。
+  C.wFamRich = function (S) { return S.fam >= 4; };
+
   // 入学这一句是每年的固定旁白，不是事件，所以单独按出身写三版。
   C.schoolLine = function (S) {
     var b = band(S);
@@ -2007,7 +2055,7 @@ html, body {
     b: '回头看，真正由自己决定的只有那么几步'
   };
 
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.3，全部内容在本地运行，不联网、不上传。";
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.4，全部内容在本地运行，不联网、不上传。";
 
   root.CONTENT = C;
   if (typeof module !== 'undefined' && module.exports) module.exports = C;
@@ -4795,14 +4843,16 @@ html, body {
   // 我们没有 170 国的财富分布表，改用自己这套经济的中位数当标尺：
   // 3000 局实测，死时存款中位数 中国 95 万 / 德国 80 万 / 巴西 65 万。
   // 档位按「本国中位数的倍数」划界，以后改经济、加国家都不用重调阈值。
-  C.MED_CASH = { CHN: 1080000, DEU: 840000, BRA: 620000 };
+  // 中位数定义在 content.js（事件门槛也要用），这里只在缺失时兜底，
+  // 免得两个文件各写一份，改经济时漏掉一处。
+  if (!C.MED_CASH) C.MED_CASH = { CHN: 1080000, DEU: 840000, BRA: 620000 };
 
   // 分位锚点：[存款/中位数, 排在前百分之几]。取自同一批 3000 局的实测累积分布。
   // 前八个点是 4000 局的实测累积分布（按各自国家中位数归一后的 P5/P10/P25/P50/P75/P90/P95/P99），
   // 再往上没有样本了，按厚尾外推补两个点，免得千万级只能显示「前 0.1%」。
   var PCT_ANCHOR = [
-    [0.101, 0.950], [0.269, 0.900], [0.581, 0.750], [1.005, 0.500],
-    [1.544, 0.250], [2.241, 0.100], [2.801, 0.050], [5.166, 0.010],
+    [0.091, 0.950], [0.258, 0.900], [0.571, 0.750], [1.007, 0.500],
+    [1.559, 0.250], [2.299, 0.100], [2.828, 0.050], [4.138, 0.010],
     [8.000, 0.0035], [12.000, 0.0013]
   ];
   function topShare(ratio) {
@@ -4909,8 +4959,17 @@ html, body {
       tail.push('这一生，你没跟人张过口。');
     }
     var line = amount + '。' + moneyPick(S, MONEY_LINE[tier.k], 11);
+    // 钱做过的事，要在结局被认出来 —— 这是玩家自己选的，不能交给随机挑。
+    // 顺序即优先级：设过基金的，不再说「捐过钱」。
+    var deed = '';
+    if (f.foundation) deed = '那笔钱后来有了自己的名字，比你的名字活得久。';
+    else if (f.gaveBack) deed = '你出钱的那几个学生，一个也没见过你。';
+    else if (f.scammed) deed = '有一大笔钱，是被人说走的。';
+    else if (f.kidDownPay && S.kids > 0) deed = '孩子那套房的首付，是你攒了一辈子的那个整数。';
+    else if (f.refusedKid) deed = '孩子后来自己买了房，小一点，也没再跟你提过。';
     // 中过头奖的，这句一定要说 —— 它是这一生最反常的一件事，不能交给随机。
     if (f.jackpot) line += '那笔彩票钱，是你这一生最不真实的一天。';
+    else if (deed) line += deed;
     else if (tail.length) line += moneyPick(S, tail, 23);
 
     return {
@@ -4937,8 +4996,8 @@ html, body {
     return '晚年';
   };
 
-  C.version = '0.8.3 vertical slice';
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.3，全部内容在本地运行，不联网、不上传。";
+  C.version = '0.8.4 vertical slice';
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.4，全部内容在本地运行，不联网、不上传。";
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -8640,6 +8699,435 @@ html, body {
       { t: '起身走了', s: '你把碗一推，出了门', eff: { rel: { sib: -12 }, flag: { sibCut: 1 } } }
     ]
   });
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function (root) {
+  'use strict';
+  // ─────────────────────────────────────────────────────────────
+  // 钱的门槛
+  //
+  // 原作《80亿分之一》里，钱最主要的作用不是加一个数字，而是
+  // 「你遇得到什么事」：净资产够不上一道线，立遗嘱、设奖学金、回乡定居
+  // 这些事件根本不会摆到你面前。这一批补的就是这条线。
+  //
+  // 门槛用 C.wRel(S)（存款 ÷（本国中位存款 × 同龄系数））判，
+  // 分五档：debt / tight / ok / rich / rich2。
+  // 不写「存款到 100 万」这种绝对数：三国货币不同，改一次经济就全废。
+  //
+  // 每一档都要有出口，钱不能只进不出：
+  //   富人这边花钱的地方是税、是亲戚、是孩子的首付、是面子；
+  //   穷人这边是房租、是病、是把自己最后几样东西卖掉。
+  // ─────────────────────────────────────────────────────────────
+
+  var C = root.CONTENT;
+  if (!C || !C.events) return;
+  var E = C.events, M = C.M;
+
+  function ev(o) {
+    if (!o.a) o.a = [0, 120];
+    if (o.w === undefined) o.w = 1;
+    if (o.once === undefined) o.once = true;
+    E.push(o);
+  }
+  function opt(t, s, eff, ghost) { return { t: t, s: s, eff: eff, ghost: ghost }; }
+  function lines() { var a = [].slice.call(arguments); return function () { return a.slice(); }; }
+  function atLeast(S, k) { return C.wAtLeast(S, k); }
+
+  // ═════════════════════════════════════════════════════════════
+  // 一、手头紧的时候：房租、病、卖东西、催账
+  // ═════════════════════════════════════════════════════════════
+  // 这一档的人不是「穷得没饭吃」（穷成那样游戏里活不下去），
+  // 是「差一点」：差一个月的房租、差一次检查的钱、差一笔凑不齐的学费。
+
+  ev({
+    id: 'wm_rentdue', a: [25, 50], w: 1.1,
+    when: function (S) { return C.wRel(S) < 0.6; },
+    text: function (S) {
+      return M(S,
+        ['房东在门口站了一会儿。', '他说这个月又晚了三天。'],
+        ['房租的转账被退了回来。', '银行的信写得很客气，说余额不够。'],
+        ['房东在楼下按了两下喇叭。', '这个月的房租，又涨了一点。']);
+    },
+    choices: [
+      opt('跟人开口借', '你跟人开了口，说下个月一定还', function (S) {
+        return { cash: M(S, 6000, 1200, 900), rel: { friend: -3 }, health: -1, flag: { borrowedSmall: 1 } };
+      }),
+      opt('卖点东西顶上', '你把不用的东西挂了出去', function (S) {
+        return { cash: M(S, 4000, 800, 600), health: -1 };
+      }, '那几样东西，卖得比你想的便宜'),
+      opt('拖到发工资', '你拖了十天，每次听见敲门都心里一紧', { health: -3, flag: { rentLate: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'wm_sellthing', a: [28, 66], w: 0.9,
+    when: function (S) { return C.wRel(S) < 0.6; },
+    text: function (S) {
+      return M(S,
+        ['柜子里还剩几样东西。', '金镯子是你妈留下的，相机是你年轻时攒钱买的。'],
+        ['地下室堆着些旧东西。', '工具、自行车、一台还能响的收音机。'],
+        ['家里能卖的东西，你都想过了。', '摩托车是最后一样。']);
+    },
+    choices: [
+      opt('卖大件', '你把最值钱的那样卖了', function (S) {
+        return { cash: M(S, 18000, 5000, 7000), health: -1, rel: { mother: -2 }, flag: { soldKeepsake: 1 } };
+      }, '买主压了价，你没还'),
+      opt('只卖小件', '你把零碎的都清了', function (S) {
+        return { cash: M(S, 4000, 1100, 1500) };
+      }),
+      opt('不卖了', '你把它们又放回原处', { health: -1, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'wm_collect', a: [30, 56], w: 0.9,
+    when: function (S) { return S.cash < 0; },
+    text: function (S) {
+      return M(S,
+        ['电话一天来三个。', '对方能报出你的名字，和身份证后四位。'],
+        ['催款的信来了第三封。', '最后一封写着，再不付就交法院。'],
+        ['电话里的人说话很客气，也很准时。', '每天上午十点。']);
+    },
+    choices: [
+      opt('一个个接，跟他们商量', '你一家一家谈，谈下来一点', function (S) {
+        return { cash: M(S, 2000, 500, 800), health: -2, know: 2, flag: { debtTalk: 1 } };
+      }),
+      opt('不接了', '你把那个号码拉黑了', { health: -4, flag: { hounded: 1 } }, '那阵子手机一响，你心就沉一下'),
+      opt('找亲戚周转', '你跟亲戚开了一次口', function (S) {
+        return { cash: M(S, 15000, 4000, 6000), rel: { friend: -4, mother: -2 }, flag: { borrowedSmall: 1 } };
+      })
+    ]
+  });
+
+  ev({
+    id: 'wm_nodoctor', a: [42, 72], w: 1,
+    when: function (S) { return C.wRel(S) < 0.6 && S.health < 62; },
+    text: function (S) {
+      return M(S,
+        ['医生说，最好做个检查。', '你问了价钱，先记在了心里。'],
+        ['医生说这项保险不报。', '自付的部分写在单子上，字很小。'],
+        ['公立排到明年三月。', '私立当天就能做，价钱也一样清楚。']);
+    },
+    choices: [
+      opt('做', '你把钱交了', function (S) {
+        return { cash: -M(S, 6000, 900, 2000), health: 6 };
+      }),
+      opt('只拿点药', '你只拿了最便宜的那种', function (S) {
+        return { cash: -M(S, 800, 150, 300), health: 2 };
+      }, '医生看了你一眼，没再劝'),
+      opt('先不看了', '你说再等等', { health: -6, flag: { delayedCare: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'wm_childfee', a: [32, 55], w: 1, need: 'kid',
+    when: function (S) { return C.wRel(S) < 0.6; },
+    text: function (S) {
+      return M(S,
+        ['学校要交一笔钱。', '单子上写着校服、资料、还有一次外出。'],
+        ['孩子带回一张单子。', '班级要出去三天，费用自己出。'],
+        ['孩子把通知放在桌上。', '书、本子、校服，一样一样都要钱。']);
+    },
+    choices: [
+      opt('照数交上', '你把钱数了两遍，交了上去', function (S) {
+        return { cash: -M(S, 5000, 600, 1200), rel: { kids: 5 } };
+      }),
+      opt('跟老师说缓一缓', '你给老师打了电话', function (S) {
+        return { rel: { kids: -3 }, health: -1 };
+      }, '孩子回来没提这件事，你也没问'),
+      opt('让孩子别去', '你说这次不去了', { rel: { kids: -9 }, health: -1 })
+    ]
+  });
+
+  // ═════════════════════════════════════════════════════════════
+  // 二、手头过得去：车、房子、出门一趟
+  // ═════════════════════════════════════════════════════════════
+  // 这一档最像大多数人的中年：能买，但要算；算了还是买了，
+  // 或者算了就算了。选项的区别不在「买不买得起」，在「买了以后怎么过」。
+
+  ev({
+    id: 'wm_car', a: [28, 48], w: 1,
+    when: function (S) { return C.wRel(S) >= 0.6 && !S.flag.car; },
+    text: function (S) {
+      return M(S,
+        ['牌照摇到了。', '有效期一年，过期作废。'],
+        ['看中了一辆二手车。', '车主说，随时可以来看。'],
+        ['店里在搞活动。', '首付分期，每个月还一点。']);
+    },
+    choices: [
+      opt('买新的', '你提了一辆新的', function (S) {
+        return { cash: -M(S, 130000, 22000, 60000), health: 2, rel: { partner: 4 }, flag: { car: 1 } };
+      }, '头一年你洗车的次数，比后来十年加起来都多'),
+      opt('买二手的', '你买了一辆二手的', function (S) {
+        return { cash: -M(S, 55000, 9000, 24000), health: 1, flag: { car: 1 } };
+      }),
+      opt('再等等', '你把牌照让了出去', { know: 1, health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'wm_renovate', a: [34, 60], w: 0.9, need: 'house',
+    when: function (S) { return C.wRel(S) >= 0.6; },
+    text: function (S) {
+      return M(S,
+        ['老房子的水管开始响。', '楼下说天花板洇了一片。'],
+        ['屋顶有一块瓦松了。', '师傅来看过，说要整面换。'],
+        ['一下雨，墙角就渗水。', '盆摆了三个。']);
+    },
+    choices: [
+      opt('一次修好', '你把该换的都换了', function (S) {
+        return { cash: -M(S, 90000, 15000, 30000), health: 2, flag: { fixedHome: 1 } };
+      }),
+      opt('先对付一下', '你找人补了补', function (S) {
+        return { cash: -M(S, 18000, 3000, 6000), health: -1 };
+      }, '第二年雨季，同一个地方又洇了'),
+      opt('不修了', '你说还能住', { health: -3 })
+    ]
+  });
+
+  ev({
+    id: 'wm_trip', a: [30, 58], w: 0.9, need: 'kid',
+    when: function (S) { return C.wRel(S) >= 0.6; },
+    text: function (S) {
+      return M(S,
+        ['孩子放暑假，说同学都去了海边。', '你翻了翻手机里的价钱。'],
+        ['孩子问，今年夏天能不能出去一趟。', '旅行社的册子摊在桌上。'],
+        ['孩子说，同学家去了海边。', '你算了算油钱和住店的钱。']);
+    },
+    choices: [
+      opt('去一趟远的', '你们去了海边', function (S) {
+        return { cash: -M(S, 12000, 2500, 4000), health: 3, rel: { kids: 7, partner: 3 }, flag: { familyTrip: 1 } };
+      }, '照片洗出来，孩子那张笑得最开'),
+      opt('近处玩玩', '你们在近处住了两晚', function (S) {
+        return { cash: -M(S, 4000, 800, 1200), health: 2, rel: { kids: 3 } };
+      }),
+      opt('今年不去', '你说等明年', { rel: { kids: -4 }, health: -1 })
+    ]
+  });
+
+  // ═════════════════════════════════════════════════════════════
+  // 三、手头宽裕：钱开始替你办事
+  // ═════════════════════════════════════════════════════════════
+  // 门槛是「比同龄人多一半」（wRel ≥ 1.5，约前 12%）。
+  // 这一档的事件有一个共同点：钱要花出去，而且花得不舒服 ——
+  // 税、亲戚、孩子的首付、面子。钱多了，来分的人也多。
+
+  ev({
+    id: 'wm_taxman', a: [42, 64], w: 1.1,
+    when: function (S) { return atLeast(S, 'rich'); },
+    text: function (S) {
+      return M(S,
+        ['税务那边来了一封信。', '说要核对前几年的几笔收入。'],
+        ['税务局来信，说要查三年的账。', '你把文件夹都翻了出来。'],
+        ['税务局的人打来电话。', '说有几笔进账对不上。']);
+    },
+    choices: [
+      opt('请人打理', '你请了人，把账一笔笔理清', function (S) {
+        return { cash: -M(S, 120000, 18000, 30000), health: -2, know: 3, flag: { taxClean: 1 } };
+      }, '补是补了，好在没留下别的事'),
+      opt('自己一笔笔对', '你自己对了一个月', function (S) {
+        return { cash: -M(S, 60000, 9000, 15000), health: -5, know: 4 };
+      }),
+      opt('拖着', '你说等他们再来问', { health: -3, flag: { taxDodge: 1 } }, '那封信一直在抽屉里，没拆第二遍')
+    ]
+  });
+
+  ev({
+    id: 'wm_invest_trap', a: [40, 66], w: 1,
+    when: function (S) { return atLeast(S, 'rich'); },
+    text: function (S) {
+      return M(S,
+        ['一个老熟人找上门。', '说有个项目，只给几个人做，回报写在纸上。'],
+        ['朋友带来一个人，说认识里面的人。', '合同做得很漂亮，一页一页都是数字。'],
+        ['有人拉你入股一家店。', '说三年回本，剩下的都是赚的。']);
+    },
+    choices: [
+      {
+        t: '投一大笔', s: '你把钱划了过去',
+        gamble: {
+          p: function () { return 0.3; },
+          win: function (S) { return { cash: M(S, 320000, 52000, 90000), health: -2, flag: { invested: 1 } }; },
+          lose: function (S) { return { cash: -M(S, 260000, 42000, 70000), health: -6, flag: { scammed: 1 } }; }
+        }
+      },
+      opt('少投一点', '你只投了一点，说当交学费', function (S) {
+        return { cash: -M(S, 40000, 6000, 10000), know: 2, flag: { invested: 1 } };
+      }, '后来那点钱没了，人也没再出现'),
+      opt('不投', '你说不懂的东西不碰', { know: 2, rel: { friend: -3 } })
+    ]
+  });
+
+  ev({
+    id: 'wm_scholarship', a: [50, 75], w: 1,
+    when: function (S) { return atLeast(S, 'rich'); },
+    text: function (S) {
+      return M(S,
+        ['县中学的校长找来了。', '说想设一个奖学金，问你愿不愿意出这个头。'],
+        ['母校寄来一封信。', '说有个学生考上了，家里出不起。'],
+        ['社区学校的老师上门。', '说有几个孩子，学费还差一截。']);
+    },
+    choices: [
+      opt('设一个', '你出钱设了一个，名字用了你母亲', function (S) {
+        return { cash: -M(S, 400000, 60000, 120000), know: 3, rel: { mother: 6, friend: 4 }, flag: { gaveBack: 1 } };
+      }, '每年发一次，发了很多年'),
+      opt('捐一笔', '你捐了一笔，没留名字', function (S) {
+        return { cash: -M(S, 80000, 12000, 24000), know: 2, flag: { gaveBack: 1 } };
+      }),
+      opt('不出这个头', '你说自己也不宽裕', { know: 1, rel: { friend: -3 } }, '那位校长再没来过')
+    ]
+  });
+
+  ev({
+    id: 'wm_relative_ask', a: [38, 62], w: 1, need: 'sib',
+    when: function (S) { return atLeast(S, 'rich'); },
+    text: function (S) {
+      return M(S,
+        ['家里来了一屋子人。', '说是坐坐，坐了半个钟头才开口。'],
+        ['兄弟姐妹约你吃饭。', '菜上齐了，话才绕到钱上。'],
+        ['亲戚带着孩子上门。', '手里提着东西，坐下就一直夸你。']);
+    },
+    choices: [
+      opt('借', '你借了，说不用急着还', function (S) {
+        return { cash: -M(S, 250000, 40000, 80000), rel: { sib: 6, mother: 3 }, flag: { lentBig: 1 } };
+      }, '那笔钱后来还了一半，剩下的一半没人提'),
+      opt('给一部分', '你给了一部分，说就这些', function (S) {
+        return { cash: -M(S, 80000, 12000, 24000), rel: { sib: 2 } };
+      }),
+      opt('说没有', '你说钱都压着，动不了', function (S) {
+        return { rel: { sib: -10, mother: -4 }, health: -1, flag: { coldFamily: 1 } };
+      }, '那年过年，饭桌上没人跟你说话')
+    ]
+  });
+
+  ev({
+    id: 'wm_kid_down', a: [48, 64], w: 1.1, need: 'kid22',
+    when: function (S) { return atLeast(S, 'rich'); },
+    text: function (S) {
+      return M(S,
+        ['孩子看中了一套房。', '首付差一截，问你能不能帮。'],
+        ['孩子说要买房，差的不多。', '那个「不多」，你听懂了是多少。'],
+        ['孩子拿着一张纸来问你。', '上面是房款、首付、和每个月要还的数。']);
+    },
+    choices: [
+      opt('全出了', '你把首付补齐了', function (S) {
+        return { cash: -M(S, 600000, 90000, 180000), rel: { kids: 12 }, health: -1, flag: { kidDownPay: 1 } };
+      }, '孩子搬进去那天，请你去吃了一顿饭'),
+      opt('出一半', '你出了一半，剩下的让他们自己想办法', function (S) {
+        return { cash: -M(S, 300000, 45000, 90000), rel: { kids: 5 }, flag: { kidDownPay: 1 } };
+      }),
+      opt('一分不出', '你说这钱是你养老的', function (S) {
+        return { rel: { kids: -12 }, know: 1, flag: { refusedKid: 1 } };
+      }, '孩子后来自己买了，小一点，也没再提这件事')
+    ]
+  });
+
+  ev({
+    id: 'wm_private_care', a: [55, 78], w: 1,
+    when: function (S) { return atLeast(S, 'rich') && S.health < 70; },
+    text: function (S) {
+      return M(S,
+        ['私立医院有个专家号。', '不用排队，价钱也不用问。'],
+        ['有人介绍了一位私人医生。', '可以上门，一年一签。'],
+        ['私立医院的护士打来电话。', '说有长期的护理套餐。']);
+    },
+    choices: [
+      opt('请', '你请了，一年一签', function (S) {
+        return { cash: -M(S, 60000, 9000, 18000), health: 7, flag: { privateCare: 1 } };
+      }),
+      opt('按次请', '你只在难受的时候请一次', function (S) {
+        return { cash: -M(S, 12000, 2000, 4000), health: 3 };
+      }),
+      opt('不用', '你说自己的身体自己知道', { health: -4 })
+    ]
+  });
+
+  ev({
+    id: 'wm_status', a: [40, 62], w: 0.9,
+    when: function (S) { return atLeast(S, 'rich'); },
+    text: function (S) {
+      return M(S,
+        ['商会来人，说想请你当个理事。', '章程里写着，理事要「意思一下」。'],
+        ['本地的协会改选。', '有人提了你的名字，说你该出个头。'],
+        ['教会那边送来了名单。', '捐款的数目是公开的，排在前面的人名字大一些。']);
+    },
+    choices: [
+      opt('应下来', '你应了下来，钱也出了', function (S) {
+        return { cash: -M(S, 80000, 12000, 25000), rel: { friend: 7 }, know: 2, flag: { patron: 1 } };
+      }, '那几年本地的事，你都在场'),
+      opt('只捐一点', '你捐了一点，名字写在后面', function (S) {
+        return { cash: -M(S, 20000, 3000, 6000), rel: { friend: 2 } };
+      }),
+      opt('推掉', '你说自己不爱这些场面', function (S) {
+        return { rel: { friend: -3 }, health: 1 };
+      })
+    ]
+  });
+
+  // ═════════════════════════════════════════════════════════════
+  // 四、钱多到别人开始算：争产、信托
+  // ═════════════════════════════════════════════════════════════
+  // rich2（比同龄人多 2.5 倍以上，约前 1%）。这一档的麻烦不是缺钱，
+  // 是「你还在，别人已经在算你走以后的事了」。
+
+  ev({
+    id: 'wm_willfight', a: [55, 78], w: 1,
+    // 这段文案里三句都提到孩子（「孩子在饭桌上问」），所以必须有孩子；
+    // 写成「有孩子或已婚」会让一对没孩子的夫妻读到「孩子问得越来越具体」。
+    when: function (S) { return atLeast(S, 'rich2') && S.kids > 0; },
+    text: function (S) {
+      return M(S,
+        ['有人在饭桌上问了一句。', '问那些房子和钱，以后怎么算。'],
+        ['孩子问得越来越具体。', '问哪张卡、哪个折子、密码是多少。'],
+        ['亲戚开始打听。', '问你的东西将来归谁。']);
+    },
+    choices: [
+      opt('当着大家说清楚', '你把话摊在桌上说了', function (S) {
+        return { know: 2, rel: { kids: 4, sib: -3 }, flag: { saidClear: 1 } };
+      }, '那天以后，家里安静了一阵'),
+      opt('写下来，锁起来', '你写了，锁进抽屉', function (S) {
+        return { cash: -M(S, 20000, 3000, 6000), know: 3, flag: { will: 1 } };
+      }),
+      opt('谁也不说', '你说还早，不谈这个', function (S) {
+        return { rel: { kids: -6 }, health: -2, flag: { silentEnd: 1 } };
+      })
+    ]
+  });
+
+  ev({
+    id: 'wm_foundation', a: [52, 75], w: 0.9,
+    when: function (S) { return atLeast(S, 'rich2'); },
+    text: function (S) {
+      return M(S,
+        ['律师提了一个说法。', '说这笔钱可以不留给家里，交给一个以你命名的东西。'],
+        ['有人建议你把钱放进一个基金。', '说这样能一直用下去，不进任何人的口袋。'],
+        ['一位做慈善的老先生说，钱多了要有个去处。', '他说这话的时候，像是在说自己。']);
+    },
+    choices: [
+      opt('设一个', '你设了一个，章程写了很久', function (S) {
+        return { cash: -M(S, 1000000, 150000, 300000), know: 5, rel: { kids: -5 }, flag: { foundation: 1 } };
+      }, '那笔钱后来有了自己的名字，和你的名字并列'),
+      opt('只立遗嘱', '你找律师写了一份，别的没动', function (S) {
+        return { cash: -M(S, 50000, 8000, 15000), know: 2, flag: { will: 1 } };
+      }),
+      opt('不做', '你说钱还是留在自己手里', { know: 1 })
+    ]
+  });
+
+  // ═════════════════════════════════════════════════════════════
+  // 五、门槛表：留给 QA 用的自检
+  // ═════════════════════════════════════════════════════════════
+  // 每个事件的档位写在一个地方，扫描脚本据此核对「穷人版 / 富人版」有没有串。
+  C.WEALTH_EVENTS = {
+    wm_rentdue: 'tight', wm_sellthing: 'tight', wm_collect: 'debt',
+    wm_nodoctor: 'tight', wm_childfee: 'tight',
+    wm_car: 'ok', wm_renovate: 'ok', wm_trip: 'ok',
+    wm_taxman: 'rich', wm_invest_trap: 'rich', wm_scholarship: 'rich',
+    wm_relative_ask: 'rich', wm_kid_down: 'rich', wm_private_care: 'rich', wm_status: 'rich',
+    wm_willfight: 'rich2', wm_foundation: 'rich2'
+  };
+
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
