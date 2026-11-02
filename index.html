@@ -1496,6 +1496,7 @@ html, body {
 
   ev({
     id: 'teacher', a: [13, 16], w: 0.75,
+    when: function (S) { return !S.flag.left_school; },
     text: function () {
       return ['班主任在走廊上叫住你，说你这门课有点天分，问要不要进竞赛班。', '你回去想了两天，没跟家里提。'];
     },
@@ -1504,8 +1505,9 @@ html, body {
 
   ev({
     id: 'firstlove', a: [15, 18], w: 1.1,
+    // 文案不写「放学」：15 岁就出来做工的人也会在这条路上遇见人。
     text: function () {
-      return ['有人在放学路上等你。你们并排走了一段，谁都没说话。', '走到岔路口，那个人停下来，看着你。'];
+      return ['有人在路口等你。你们并排走了一段，谁都没说话。', '走到分岔的地方，那个人停下来，看着你。'];
     },
     choices: [
       { t: '认真谈', s: '你认真谈了一场恋爱', eff: { rel: { partner: 3 }, know: -4, health: 1 } },
@@ -1520,7 +1522,7 @@ html, body {
       return ['学费的单子又来了。父亲把它压在碗柜上，没有说话。', '你听见父母夜里在算，算到一半就停了。'];
     },
     choices: [
-      { t: '不读了，出去做工', s: '你辍学出去做工', eff: function (S) { return { edu: 'secondary', cash: M(S, 2400, 900, 700), know: -6, health: -2 }; } },
+      { t: '不读了，出去做工', s: '你辍学出去做工', eff: function (S) { return { edu: 'secondary', cash: M(S, 2400, 900, 700), know: -6, health: -2, flag: { left_school: 1 } }; } },
       { t: '申请补助，继续读', s: '你去申请了补助，继续读', eff: { know: 3, rel: { father: -2 } } },
       { t: '半工半读', s: '你半工半读撑了下来', eff: function (S) { return { know: -2, cash: M(S, 1500, 600, 500), health: -4 }; } }
     ]
@@ -1555,7 +1557,7 @@ html, body {
         ghost: '那年如果报了，说不定会去另一座城市'
       },
       { t: '稳妥填志愿', s: '你稳妥地填了志愿', eff: { edu: 'uni', know: 4, flag: { uni: 1 } } },
-      { t: '不考了，先工作', s: '你放弃了考试，先去挣钱', eff: function (S) { return { edu: 'high', cash: M(S, 5000, 2000, 1600), know: -4 }; } }
+      { t: '不考了，先工作', s: '你放弃了考试，先去挣钱', eff: function (S) { return { edu: 'high', cash: M(S, 5000, 2000, 1600), know: -4, flag: { left_school: 1 } }; } }
     ]
   });
 
@@ -2055,7 +2057,7 @@ html, body {
     b: '回头看，真正由自己决定的只有那么几步'
   };
 
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.5，全部内容在本地运行，不联网、不上传。";
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.6，全部内容在本地运行，不联网、不上传。";
 
   root.CONTENT = C;
   if (typeof module !== 'undefined' && module.exports) module.exports = C;
@@ -2214,6 +2216,7 @@ html, body {
 
   ev({
     id: 'm_teacher_talk', a: [13, 16], w: 1,
+    when: function (S) { return !S.flag.left_school; },
     text: lines('放学后老师让你留一下。', '办公室里只有你们两个。'),
     choices: [
       opt('站着听完', '你站着听完了，一句话没反驳', { know: 3, rel: { mother: 2 } }),
@@ -3118,6 +3121,8 @@ html, body {
 
   ev({
     id: 'm_late', a: [14, 18], w: 1,
+    // 人在学校才有迟到。辍学/毕业就工作的，不该再被班主任堵在门口。
+    when: function (S) { return !S.flag.left_school; },
     text: lines('你又迟到了。', '班主任站在门口，手里拿着本子。'),
     choices: [
       opt('认错，写检查', '你写了检查', { know: -1, rel: { mother: 2 } }),
@@ -3128,6 +3133,7 @@ html, body {
 
   ev({
     id: 'm_cheat', a: [14, 17], w: 0.9,
+    when: function (S) { return !S.flag.left_school; },
     text: lines('这场考试很重要，你什么都不会。', '前排的卷子摊得很开。'),
     choices: [
       opt('看一眼', '你看了', { know: -2, health: -1, flag: { cheated: 1 } }),
@@ -3138,6 +3144,7 @@ html, body {
 
   ev({
     id: 'm_band', a: [15, 18], w: 0.8,
+    when: function (S) { return !S.flag.left_school; },
     text: lines('班上几个同学问你要不要一起组个乐队。', '排练在周末，在一个同学家的车库。'),
     choices: [
       opt('去', '你去了，一练就是两年', function (S) { return { cash: -M(S, 1200, 300, 250), health: 2, rel: { mother: -2 }, flag: { band: 1 } }; }),
@@ -3147,6 +3154,7 @@ html, body {
 
   ev({
     id: 'm_sportteam', a: [14, 17], w: 0.9,
+    when: function (S) { return !S.flag.left_school; },
     text: lines('校队在招人。', '每天要早到一小时。'),
     choices: [
       opt('去练', '你去了', { health: 4, know: -1, rel: { father: 3 } }),
@@ -3166,7 +3174,7 @@ html, body {
 
   ev({
     id: 'm_nightout', a: [16, 19], w: 0.8,
-    text: lines('朋友叫你出去，说是通宵。', '家里以为你在同学家写作业。'),
+    text: lines('朋友叫你出去，说是通宵。', '家里以为你在朋友家。'),
     choices: [
       opt('去', '你去了，天亮才回', { health: -2, rel: { mother: -3 }, flag: { wild: 1 } }),
       opt('不去', '你没去', { know: 1, rel: { mother: 1 } }),
@@ -3176,6 +3184,7 @@ html, body {
 
   ev({
     id: 'm_familyshop', a: [15, 18], w: 0.9,
+    when: function (S) { return !S.flag.left_school; },
     text: lines('家里的店缺人。', '放学那几个小时，正好是忙的时候。'),
     choices: [
       opt('每天去帮忙', '你每天放学都去', function (S) { return { know: -2, rel: { mother: 6, father: 4 }, cash: M(S, 800, 200, 150) }; }),
@@ -3188,7 +3197,7 @@ html, body {
     id: 'm_siblingfee', a: [13, 17], w: 0.8,
     text: lines('家里只够供一个。', '父母没说要谁让。'),
     choices: [
-      opt('我来让', '你说你不读了', { know: -4, rel: { mother: 8 } }, '这件事你后来很少提起'),
+      opt('我来让', '你说你不读了', { know: -4, rel: { mother: 8 }, flag: { left_school: 1 } }, '这件事你后来很少提起'),
       opt('接着读', '你接着读了', { know: 2, rel: { mother: -4 } }),
       opt('一边读一边挣', '你一边读一边挣钱', function (S) { return { cash: M(S, 1500, 400, 300), health: -3, know: 1 }; })
     ]
@@ -3196,6 +3205,7 @@ html, body {
 
   ev({
     id: 'm_rumor', a: [14, 18], w: 0.8,
+    when: function (S) { return !S.flag.left_school; },
     text: lines('关于你的一件事，在班里传开了。', '你不知道是谁先说出去的。'),
     choices: [
       opt('当面问', '你当面去问', { health: -2, know: 1 }),
@@ -3932,7 +3942,7 @@ html, body {
     choices: [
       opt('去做学徒', '你去做了三年学徒', function (S) { return { edu: 'voc', know: 2, cash: M(S, 3000, 600, 400), job: { tier: 1, name: C.jobNames.DEU[0][0] }, flag: { ausbildung: 1 } }; }, '出师那天，师傅把手套给了你'),
       opt('继续读上去', '你决定把书读下去', function (S) { return { edu: 'high', know: 5 }; }),
-      opt('先打零工', '你先去打零工', function (S) { return { edu: 'secondary', cash: M(S, 2400, 500, 400), know: -2 }; })
+      opt('先打零工', '你先去打零工', function (S) { return { edu: 'secondary', cash: M(S, 2400, 500, 400), know: -2, flag: { left_school: 1 } }; })
     ]
   });
 
@@ -4063,7 +4073,7 @@ html, body {
         ghost: '差的那几分，本来能换一个专业'
       },
       opt('报一个稳的', '你报了一个稳的专业', { edu: 'uni', know: 3, flag: { uni: 1 } }),
-      opt('先工作', '你先去工作了', function (S) { return { edu: 'high', cash: M(S, 1800, 300, 300) }; })
+      opt('先工作', '你先去工作了', function (S) { return { edu: 'high', cash: M(S, 1800, 300, 300), flag: { left_school: 1 } }; })
     ]
   });
 
@@ -4073,7 +4083,7 @@ html, body {
     choices: [
       opt('去技校', '你进了技校', function (S) { return { edu: 'voc', know: 3, cash: M(S, 900, 200, 200), flag: { tech: 1 } }; }),
       opt('继续读高中', '你继续读高中', { edu: 'high', know: 4 }),
-      opt('去打工', '你直接去打工了', function (S) { return { edu: 'secondary', cash: M(S, 2400, 400, 400), know: -3 }; })
+      opt('去打工', '你直接去打工了', function (S) { return { edu: 'secondary', cash: M(S, 2400, 400, 400), know: -3, flag: { left_school: 1 } }; })
     ]
   });
 
@@ -4291,10 +4301,11 @@ html, body {
         ['圣诞夜，亲戚们一个一个往你手里塞钱。', '你攥着，手心全是汗。']);
     },
     firstlove: function (S) {
+      // 不写「放学」：15 岁就出来做工的人也会在这条路上遇见人，正文不能预设学籍。
       return M(S,
-        ['有人在放学路上等你。你们并排走了一段，谁都没说话。', '走到岔路口，那个人停下来，看着你。'],
-        ['放学后，那个人在自行车棚等你，说想一起走一段。', '你们推着车走，路上谁都没先开口。'],
-        ['那个人在门口等你，手里拿着两瓶汽水。', '你们坐在台阶上，一直坐到天黑。']);
+        ['有人在路口等你。你们并排走了一段，谁都没说话。', '走到分岔的地方，那个人停下来，看着你。'],
+        ['那个人在门口等你，说想一起走一段。', '你们并排走，路上谁都没先开口。'],
+        ['那个人在公交站等你，说想一起坐一段。', '车来了两趟，你们都没上。']);
     },
     firstjob: function (S) {
       return M(S,
@@ -4471,10 +4482,13 @@ html, body {
         ['你烧了好几天。夜里有人一直用凉毛巾给你擦。', '退烧后，邻居说附近有个人看小孩很灵。']);
     },
     m_kindergarten: function (S) {
+      // 事件本体（content-more1.js）已经从「第一天」改成「午睡睡不着、窗外有人扫地」，
+      // 选项也围着那件事写（数扫帚声 / 爬起来看 / 推醒旁边的人）。
+      // 这里的覆盖文案必须跟着改，否则正文和选项各说一件事。
       return M(S,
-        ['幼儿园第一天，门口挤满了家长。', '老师把孩子抱进去，门在身后关上。'],
-        ['幼儿园第一天，你带孩子去认自己的挂钩。', '老师蹲下来说，下午四点来接。'],
-        ['幼儿园第一天，母亲在外面站了一上午。', '孩子在里面哭，她在外面哭。']);
+        ['午睡的时候，你睡不着。', '窗户外面有人在扫地，扫帚一下一下。'],
+        ['午休时间，别的人都躺下了，你还睁着眼。', '走廊尽头的清洁工在扫地，扫帚一下一下。'],
+        ['午睡的时候，蝉一直叫，你睡不着。', '院子里有人在扫落叶，扫帚一下一下。']);
     },
     m_bedstory: function (S) {
       return M(S,
@@ -4996,8 +5010,8 @@ html, body {
     return '晚年';
   };
 
-  C.version = '0.8.5 vertical slice';
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.5，全部内容在本地运行，不联网、不上传。";
+  C.version = '0.8.6 vertical slice';
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.6，全部内容在本地运行，不联网、不上传。";
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -7716,6 +7730,7 @@ html, body {
 
   ev({
     id: 'k_grade', a: [13, 16], w: 0.95,
+    when: function (S) { return !S.flag.left_school; },
     text: function () {
       return ['这次月考，你退了二十名。', '班主任在办公室等你。'];
     },
@@ -7728,6 +7743,7 @@ html, body {
 
   ev({
     id: 'k_smoke', a: [13, 17], w: 0.75,
+    when: function (S) { return !S.flag.left_school; },
     text: function () {
       return ['放学后，几个人在楼后面。', '有人递过来一支。'];
     },
@@ -7766,6 +7782,8 @@ html, body {
 
   ev({
     id: 'k_want_leave', a: [15, 17], w: 0.8,
+    // 「等毕业再说」这句只有在读的人才说得出。
+    when: function (S) { return !S.flag.left_school; },
     text: function (S) {
       if (S.country === 'CHN') return ['有个同学说，他表哥在南方，一个月能挣三千。', '你算了算，比家里两个人加起来还多。'];
       if (S.country === 'DEU') return ['有个同学申请了交换，去一年。', '申请表上要家长签字。'];
@@ -7780,6 +7798,7 @@ html, body {
 
   ev({
     id: 'k_language', a: [12, 16], w: 0.7,
+    when: function (S) { return !S.flag.left_school; },
     text: function (S) {
       if (S.country === 'CHN') return ['你在学校说普通话，回家说方言。', '有一次你在班上说了句家里的土话，全班笑了。'];
       if (S.country === 'DEU') return ['你说话带一点口音，同学会学。', '你开始把那个音改掉。'];
