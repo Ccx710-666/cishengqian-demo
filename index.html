@@ -297,58 +297,102 @@ html, body {
   font-size: 14px;
 }
 
+/* ---------- 决策：牌匾式选项按钮（参考玩家样式图） ----------
+   「选项」标题居中、两侧金棕装饰线；每个选项是一条米色横匾：
+   深棕外框、两端微尖（六边形切角）、文字居中、纵向排列。 */
 .decision {
-  margin-top: 6px;
-  border: 0.5px solid var(--rule);
-  border-radius: 6px;
-  background: var(--paper2);
-  overflow: hidden;
+  margin-top: 12px;
   animation: rise .3s ease both;
 }
 
 .decision-head {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 7px 14px;
-  border-bottom: 0.5px solid var(--rule2);
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 13px;
 }
 
-.decision-head .label { font-size: 11px; color: var(--red); letter-spacing: 3px; }
-.decision-head .count { font-size: 11px; color: var(--faint); }
-
-.option {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  padding: 12px 14px;
-  border-bottom: 0.5px solid #EFE7D8;
-  cursor: pointer;
-  transition: background .16s ease;
-}
-.option:last-child { border-bottom: 0; }
-.option:hover { background: #F4EDDD; }
-.option .box {
-  width: 14px; height: 14px;
-  border: 0.5px solid #C4B7A1;
-  border-radius: 2px;
-  flex: none;
-  position: relative;
-}
-.option .key { font-size: 11px; color: var(--faint); width: 12px; flex: none; }
-.option .txt { font-size: 13.5px; color: var(--ink); line-height: 1.5; }
-.option.chosen { background: #F7EFE9; }
-.option.chosen .box { border-color: var(--red); }
-.option.chosen .box::after {
+.decision-head::before,
+.decision-head::after {
   content: "";
-  position: absolute;
-  inset: 2px;
-  background: var(--red);
-  animation: stamp .18s ease both;
+  flex: none;
+  width: 54px;
+  height: 1px;
 }
-@keyframes stamp {
-  from { transform: scale(1.6); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+.decision-head::before { background: linear-gradient(90deg, rgba(180, 154, 98, 0), #B49A62); }
+.decision-head::after { background: linear-gradient(90deg, #B49A62, rgba(180, 154, 98, 0)); }
+
+.decision-head .label {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-family: var(--serif);
+  font-size: 13px;
+  letter-spacing: 5px;
+  text-indent: 5px;
+  color: #A8874A;
+}
+.decision-head .label::before,
+.decision-head .label::after {
+  content: "◆";
+  font-size: 7px;
+  letter-spacing: 0;
+  text-indent: 0;
+  color: #B99C5E;
+  transform: translateY(-1px);
+}
+
+/* 匾按钮：外层深棕 = 描边，内层米色 = 匾面；clip-path 做两端微尖 */
+.option {
+  display: block;
+  position: relative;
+  margin: 0 auto 10px;
+  padding: 2.5px; /* 外框厚度 */
+  background: linear-gradient(180deg, #83652F, #5A431E);
+  clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 15px 100%, 0 50%);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: filter .15s ease, opacity .2s ease, transform .1s ease;
+  animation: rise .32s ease both;
+}
+.option:nth-of-type(2) { animation-delay: .05s; }
+.option:nth-of-type(3) { animation-delay: .1s; }
+.option:nth-of-type(4) { animation-delay: .15s; }
+
+.option .txt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 34px;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #3F2D15;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .8), rgba(255, 255, 255, 0) 38%),
+    linear-gradient(180deg, #FCF6E7, #F4EAD1 58%, #EADBB9);
+  clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 14px 100%, 0 50%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .4);
+}
+
+@media (hover: hover) {
+  .option:hover { filter: brightness(1.045); }
+}
+.option:active { transform: scale(.985); }
+.option:focus-visible { outline: 2px solid #B49A62; outline-offset: 2px; }
+
+.option.chosen { background: linear-gradient(180deg, #A5763C, #7C5626); }
+.option.chosen .txt {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .6), rgba(255, 255, 255, 0) 38%),
+    linear-gradient(180deg, #FBEFD2, #F2DFB2 58%, #E8D0A0);
+  color: #33220E;
+  font-weight: 500;
 }
 .option.locked { pointer-events: none; }
 .option.locked:not(.chosen) { opacity: .38; }
@@ -722,16 +766,38 @@ html, body {
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 @media (max-width: 760px) {
-  .topbar { flex-wrap: wrap; gap: 4px 10px; }
-  .topbar .meta { font-size: 11px; }
-  .ledger { min-width: 0; flex: 1 1 100%; }
-  .game-foot { flex-direction: column; align-items: stretch; }
-  .game-foot .btn { width: 100%; }
-  .decision-head, .option { padding-left: 10px; padding-right: 10px; }
-  .option .txt { font-size: 13px; }
-  #app { padding: 12px 10px 28px; }
-  .game-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 16px; }
+  /* —— 手机版：全幅纸面 + 顶栏/底栏吸附 + 大触控目标 —— */
+  html, body { background: var(--paper); }
+  #app { max-width: none; padding: 0 0 1px; }
+  .paper {
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  #screen-game .paper { display: flex; flex-direction: column; }
+  #screen-game .game-grid { flex: 1; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    background: var(--paper);
+    padding-top: max(12px, env(safe-area-inset-top));
+    box-shadow: 0 1px 0 rgba(217, 207, 188, .6);
+  }
+  .topbar .age { font-size: 20px; }
+  .topbar .meta { display: none; } /* 手机上一行放不下：编号/国别并进档案页，正文页只留年龄年份 */
+
+  .game-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 16px 16px 20px; }
   .timeline { display: none; }
+
+  .narrative p { font-size: 16px; line-height: 1.95; margin-bottom: 13px; }
+  .narrative p.flavor { font-size: 14px; }
+  .narrative p.year-note { font-size: 12.5px; }
+
   .side {
     border-left: 0;
     border-top: 0.5px solid var(--rule2);
@@ -739,21 +805,53 @@ html, body {
     padding-top: 12px;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 14px 22px;
+    gap: 12px 22px;
   }
   .side .stat { min-width: 84px; }
+
+  /* 决策匾：更大的触控目标与字号 */
+  .decision { margin-top: 16px; }
+  .decision-head::before, .decision-head::after { width: 38px; }
+  .option { margin-bottom: 12px; }
+  .option .txt {
+    min-height: 50px;
+    padding: 11px 30px;
+    font-size: 15.5px;
+  }
+
+  /* 底部账目 + 继续按钮：吸附在屏底，按钮够高够好按 */
+  .game-foot {
+    position: sticky;
+    bottom: 0;
+    z-index: 6;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 9px;
+    padding: 10px 16px max(12px, env(safe-area-inset-bottom));
+    box-shadow: 0 -1px 0 rgba(217, 207, 188, .6);
+  }
+  .ledger { min-width: 0; flex: 1 1 100%; font-size: 12px; }
+  .game-foot .btn.primary { width: 100%; min-height: 48px; font-size: 16px; letter-spacing: 4px; }
+
+  .result { font-size: 14px; }
+
   /* 首屏第一眼必须是「这个人」，不是那枚印。印挪到全篇末尾，像盖在纸上。 */
   .end-main { flex-direction: column; }
   .end-right { width: 100%; display: flex; align-items: center; gap: 14px; justify-content: flex-end; margin-top: 8px; text-align: right; }
   .seal { margin: 0; width: 84px; height: 84px; }
   .seal span { font-size: 15px; }
   .end-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .end-actions { flex-wrap: wrap; }
-  .end-actions .btn { flex: 1 1 46%; }
+  .end-actions { flex-wrap: wrap; gap: 9px; }
+  .end-actions .btn { flex: 1 1 46%; min-height: 46px; font-size: 14px; }
+  #screen-end .paper { padding: 24px 18px 20px; }
+
   .cab-item { flex-direction: column; align-items: flex-start; gap: 5px; }
   .cab-item .v { max-width: 100%; text-align: left; font-size: 12.5px; }
-  #screen-draw .paper { padding: 30px 18px 22px; }
-  .brand { font-size: 28px; }
+  #screen-cabinet .paper { padding: 20px 16px; }
+
+  #screen-draw .paper { padding: 34px 18px 22px; }
+  .brand { font-size: 30px; }
+  .birth-card { padding: 16px 14px; }
   .draw-foot {
     flex-direction: column;
     align-items: center;
@@ -766,8 +864,9 @@ html, body {
   }
   .draw-foot > span { max-width: 100%; }
   .draw-foot .btn.ghost { font-size: 11px; padding: 5px 10px; margin: 0 2px; }
-  .game-foot { flex-wrap: wrap; }
-  .narrative p { font-size: 14.5px; }
+
+  .modal { padding: 24px 14px calc(24px + env(safe-area-inset-bottom)); }
+  .toast { bottom: calc(28px + env(safe-area-inset-bottom)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -10078,13 +10177,14 @@ html, body {
     d.innerHTML = '';
 
     if (p.kind === 'event' && p.decision) {
+      // 选项改为牌匾式按钮（参考玩家提供的样式图）：去勾选框和序号，
+      // 只留米色横匾 + 居中文字。类名 .option 和 data-i 保留，QA/键盘钩子依赖它们。
       var opts = p.decision.choices.map(function (c, i) {
-        return '<div class="option" data-i="' + i + '">' +
-          '<span class="box"></span><span class="key">' + (i + 1) + '</span>' +
+        return '<div class="option" data-i="' + i + '" role="button" tabindex="0">' +
           '<span class="txt">' + c.t + '</span></div>';
       }).join('');
       d.innerHTML = '<div class="decision" data-ev-id="' + (p.decision.id || '') + '">' +
-        '<div class="decision-head"><span class="label">决 定</span><span class="count">' + p.decision.choices.length + ' 个选项</span></div>' +
+        '<div class="decision-head"><span class="label">选 项</span></div>' +
         opts + '</div>';
       var nodes = d.querySelectorAll('.option');
       for (var i = 0; i < nodes.length; i++) {
