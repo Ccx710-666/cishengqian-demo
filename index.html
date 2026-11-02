@@ -795,6 +795,9 @@ html, body {
   .timeline { display: none; }
 
   .narrative p { font-size: 16px; line-height: 1.95; margin-bottom: 13px; }
+  /* 窄屏上「前 X%」跟在数字后面会挤，单独换一行靠左。 */
+  .mp-pct { margin-left: 0; flex-basis: 100%; font-size: 10.5px; }
+  .mp-line { font-size: 13.5px; }
   .narrative p.flavor { font-size: 14px; }
   .narrative p.year-note { font-size: 12.5px; }
 
@@ -969,6 +972,42 @@ html, body {
 .fi-lines { font-size: 12.5px; color: var(--ink2); line-height: 1.8; }
 .fi-lines p { margin: 0; }
 .final .tex-chips { margin-top: 0; }
+
+/* 钱这一栏：左边一档、中间一个数、右边一个分位。
+   分位靠右，是给「同国的人里排第几」一个安静的位置，不抢数字。 */
+.moneypan {
+  margin: 0 0 22px;
+  padding: 12px 16px 13px;
+  background: var(--paper2);
+  border: 0.5px solid var(--rule2);
+  border-radius: 8px;
+}
+.mp-top {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.mp-tier {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  border: 0.5px solid var(--rule);
+  border-radius: 2px;
+  padding: 2px 7px 1px;
+  flex: none;
+}
+.mp-num {
+  font-family: var(--serif);
+  font-size: 21px;
+  color: var(--ink);
+  letter-spacing: .02em;
+  line-height: 1.2;
+}
+.mp-num.neg { color: var(--red); }
+.mp-pct { margin-left: auto; font-size: 11px; color: var(--faint); letter-spacing: .5px; }
+.mp-line { margin: 0; font-size: 13px; color: var(--ink2); line-height: 1.85; }
 .e-good { color: var(--red); border-color: rgba(179, 58, 43, .35); }
 .e-hard { color: var(--indigo); border-color: rgba(46, 74, 98, .3); }
 .tex-chips { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -1968,7 +2007,7 @@ html, body {
     b: '回头看，真正由自己决定的只有那么几步'
   };
 
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.2，全部内容在本地运行，不联网、不上传。";
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.3，全部内容在本地运行，不联网、不上传。";
 
   root.CONTENT = C;
   if (typeof module !== 'undefined' && module.exports) module.exports = C;
@@ -2401,27 +2440,90 @@ html, body {
     ]
   });
 
+  // ── 彩票：三档奖 ────────────────────────────────────────────
+  // 原来只有「中/不中」两种，中的那 2% 只给三万，正文却写着「中了是几百万」——
+  // 文案和结算对不上。现在按真实彩票的样子分三档：头奖、二奖、小奖。
+  // 概率用种子定档，不消耗主随机源，所以同一局重玩结果完全一样。
+  var LOT = {
+    pAny: 0.05,        // 单张中奖率（任一档）= 1/20，跟刮刮乐的返奖率差不多
+    pJack: 0.006,      // 单张头奖率 = 1/167
+    pSecond: 0.010,    // 单张二奖率 = 1/100
+    jack: function (S) { return M(S, 5000000, 4000000, 3200000); },
+    second: function (S) { return M(S, 1200000, 1000000, 800000); },
+    small: function (S) { return M(S, 120000, 100000, 80000); }
+  };
+  function lotRoll(S, k) {
+    var x = Math.abs(S.seed * 7919 + S.age * 131 + (k + 1) * 104729);
+    return (x % 100003) / 100003;
+  }
+  // 已经判定「中了」，再定是第几档：头奖 5%、二奖 20%、其余小奖。
+  function lotTier(S, k) {
+    var u = lotRoll(S, k);
+    if (u < LOT.pJack / LOT.pAny) return 'jack';
+    if (u < (LOT.pJack + LOT.pSecond) / LOT.pAny) return 'second';
+    return 'small';
+  }
+  function lotWin(S, k, many) {
+    var tier = lotTier(S, k);
+    if (tier === 'jack') {
+      return {
+        cash: LOT.jack(S), health: 1, flag: { lucky: 1, jackpot: 1 },
+        _note: many ? '十张里有一张，号码一个不差——头奖。你把那张纸对了七遍。'
+          : '号码一个不差。头奖。你把那张纸对了七遍。'
+      };
+    }
+    if (tier === 'second') {
+      return {
+        cash: LOT.second(S), flag: { lucky: 1 },
+        _note: many ? '十张里有一张中了二奖。不是头奖，也够你把这一页翻过去。'
+          : '二奖。不是头奖，也够你把这一页翻过去。'
+      };
+    }
+    return {
+      cash: LOT.small(S), health: 1, flag: { lucky: 1 },
+      _note: many ? '十张里有一张中了小奖。够换台新手机。' : '中了个小奖。够换台新手机。'
+    };
+  }
+  function lotP(n) { return 1 - Math.pow(1 - LOT.pAny, n); }
+
   ev({
     id: 'm_lottery', a: [22, 30], w: 0.8,
-    // 原来只写「街角那家店 / 一张两块钱」，看不出是做什么生意的。
     // 三国的彩票不是同一个东西，价格也不一样，所以按国家分开写。
     text: function (S) {
       return M(S,
-        ['街角那家彩票店，门口排着队。', '一张两块钱，一注号码，中了是几百万。'],
-        ['街角的报亭，彩票柜台前站了几个人。', '一张两欧，六个数字，头奖已经滚了十一期。'],
-        ['街角那家彩票点，门口排着队。', '一张三块五，押六个号，电视上每晚开一次。']);
+        ['街角那家彩票店，门口排着队。', '一张两块钱，头奖五百万。'],
+        ['街角的报亭，彩票柜台前站着几个人。', '一张两欧，头奖四百万，已经滚了十一期。'],
+        ['街角那家彩票点，门口排着队。', '一张三块钱，头奖三百二十万，电视上每晚开一次。']);
     },
-    choices: [
-      {
-        t: '买一张', s: '你买了一张，号码抄在手机备忘录里',
-        gamble: {
-          p: function () { return 0.02; },
-          win: function (S) { return { cash: M(S, 30000, 8000, 6000), health: 1, flag: { lucky: 1 } }; },
-          lose: function (S) { return { cash: -M(S, 200, 40, 30), know: -1 }; }
+    choices: function (S) {
+      var list = [
+        {
+          t: '买一张', s: '你买了一张，号码抄在手机备忘录里',
+          gamble: {
+            p: function () { return lotP(1); },
+            win: function (st) { return lotWin(st, 0, false); },
+            lose: function (st) {
+              return { cash: -M(st, 2, 2, 3), know: -1, _note: '没中。那张票在手机背面贴了半年，后来掉了。' };
+            }
+          }
         }
-      },
-      opt('不买', '你站在旁边看了一会儿，没买', { know: 1 }, '后来那几期的号码，你一个都没记住')
-    ]
+      ];
+      // 手头真拿得出二十块钱，才给「买十张」这个选项。
+      if (S.cash >= M(S, 20, 20, 30)) {
+        list.push({
+          t: '买十张', s: '你把零钱数了数，买了十张',
+          gamble: {
+            p: function () { return lotP(10); },
+            win: function (st) { return lotWin(st, 1, true); },
+            lose: function (st) {
+              return { cash: -M(st, 20, 20, 30), know: -1, _note: '十张，一张没中。你把它们揉成一团，扔进店里那个桶。' };
+            }
+          }
+        });
+      }
+      list.push(opt('不买', '你站在旁边看了一会儿，没买', { know: 1 }, '后来那几期的号码，你一个都没记住'));
+      return list;
+    }
   });
 
   ev({
@@ -2649,14 +2751,16 @@ html, body {
     text: lines('手里有一笔钱。', '有人劝你投一个项目，说回报写在纸上。'),
     choices: [
       opt('放稳妥的地方', '你放了稳妥的地方', function (S) { return { cash: M(S, 8000, 2000, 1500) }; }),
-      opt('搏一把', '你搏了一把', {
+      // 赌局必须挂在 choice.gamble 上（引擎只认这一层）。以前写在 opt() 的第三个参数里，
+      // 成了 eff.gamble —— 引擎读不到，这个选项点下去什么都不发生。
+      {
         t: '搏一把', s: '你把钱投了进去',
         gamble: {
           p: function () { return 0.42; },
           win: function (S) { return { cash: M(S, 60000, 15000, 11000), health: -1 }; },
           lose: function (S) { return { cash: -M(S, 50000, 12000, 9000), health: -3 }; }
         }
-      }),
+      },
       opt('不碰', '你没碰', { know: 1 })
     ]
   });
@@ -4682,6 +4786,144 @@ html, body {
     if (ABOUT[e.id]) e.about = ABOUT[e.id];
   });
 
+  // ═════════════════════════════════════════════════════════
+  // 十、钱的判词：这点存款，在你这一生里算什么
+  // ═════════════════════════════════════════════════════════
+  // 原作《80 亿分之 1》的结局里，钱从来不是单独一个数字：它按「本国财富分位」
+  // 折成一句话（「家产攒到了进该国前 X% 的数，但孩子跟你生疏」），
+  // 而且只分「宽裕 / 不宽裕」两头，中间的人不写钱。
+  // 我们没有 170 国的财富分布表，改用自己这套经济的中位数当标尺：
+  // 3000 局实测，死时存款中位数 中国 95 万 / 德国 80 万 / 巴西 65 万。
+  // 档位按「本国中位数的倍数」划界，以后改经济、加国家都不用重调阈值。
+  C.MED_CASH = { CHN: 1080000, DEU: 840000, BRA: 620000 };
+
+  // 分位锚点：[存款/中位数, 排在前百分之几]。取自同一批 3000 局的实测累积分布。
+  // 前八个点是 4000 局的实测累积分布（按各自国家中位数归一后的 P5/P10/P25/P50/P75/P90/P95/P99），
+  // 再往上没有样本了，按厚尾外推补两个点，免得千万级只能显示「前 0.1%」。
+  var PCT_ANCHOR = [
+    [0.101, 0.950], [0.269, 0.900], [0.581, 0.750], [1.005, 0.500],
+    [1.544, 0.250], [2.241, 0.100], [2.801, 0.050], [5.166, 0.010],
+    [8.000, 0.0035], [12.000, 0.0013]
+  ];
+  function topShare(ratio) {
+    if (!(ratio > 0)) return null;
+    var n = PCT_ANCHOR.length;
+    if (ratio <= PCT_ANCHOR[0][0]) return PCT_ANCHOR[0][1];
+    if (ratio >= PCT_ANCHOR[n - 1][0]) return PCT_ANCHOR[n - 1][1];
+    for (var i = 0; i < n - 1; i++) {
+      var a = PCT_ANCHOR[i], b = PCT_ANCHOR[i + 1];
+      if (ratio >= a[0] && ratio <= b[0]) {
+        // 存款是厚尾分布，线性插值会把中段拉平，所以在对数坐标里插。
+        var t = (Math.log(ratio) - Math.log(a[0])) / (Math.log(b[0]) - Math.log(a[0]));
+        return Math.exp(Math.log(a[1]) + t * (Math.log(b[1]) - Math.log(a[1])));
+      }
+    }
+    return null;
+  }
+  function topTxt(share) {
+    if (share == null) return '';
+    var p = share * 100;
+    if (p >= 10) return '前 ' + Math.round(p) + '%';
+    if (p >= 1) return '前 ' + (Math.round(p * 10) / 10) + '%';
+    if (p >= 0.1) return '前 ' + (Math.round(p * 100) / 100) + '%';
+    return '前 0.1% 以内';
+  }
+
+  var MONEY_TIERS = [
+    { k: 'debt', label: '欠着', max: 0 },
+    { k: 'tight', label: '手紧', max: 0.25 },
+    { k: 'ok', label: '够用', max: 1 },
+    { k: 'roomy', label: '宽裕', max: 2 },
+    { k: 'rich', label: '富足', max: 4 },
+    { k: 'huge', label: '巨富', max: 8 },
+    { k: 'legend', label: '传世', max: Infinity }
+  ];
+
+  // 每一档三句：只写钱，不带家里人——家里那半句单独按条件拼，避免「没孩子也提孩子」。
+  var MONEY_LINE = {
+    debt: [
+      '走的时候，账还没还完。',
+      '最后留在账上的是个负数。',
+      '不是不会过日子，是有些年不由人。'
+    ],
+    tight: [
+      '够办一场事。',
+      '不多，但每一分都是干净的。',
+      '你从没觉得自己穷，只是从来没富过。'
+    ],
+    ok: [
+      '比上不足，比下有余。',
+      '你算过，够花到八十岁——刚好。',
+      '没有大起大落，账本上一笔一笔都记着。'
+    ],
+    roomy: [
+      '一个普通人一辈子能攒下的，差不多就是这个数。',
+      '该办的事都办完了，还剩下这些。',
+      '到后来，你不用先看余额才敢做决定。'
+    ],
+    rich: [
+      '这个数，在你认识的人里没有几个。',
+      '你从没跟人提过，别人也是办后事的时候才知道。',
+      '到后来，你已经不太算它了。'
+    ],
+    huge: [
+      '这个数目，已经不像工资攒出来的。',
+      '你早就不是为了钱在忙，可钱还是自己长了出来。',
+      '后来它成了一个词：家底。'
+    ],
+    legend: [
+      '这个数已经不像存款，像一个机构。',
+      '你走以后，这笔钱还会自己长很多年。',
+      '你这辈子没靠它享过福，它却替你留住了名字。'
+    ]
+  };
+
+  function moneyPick(S, arr, salt) {
+    var x = Math.abs(S.seed * 5381 + (S.deathAge || 0) * 131 + salt);
+    return arr[x % arr.length];
+  }
+
+  // 钱的判词。fmt 由引擎传进来（各国有各国的货币符号，内容层不碰格式化）。
+  C.moneyVerdict = function (S, fmt) {
+    if (!S || S.deathAge == null || S.deathAge < 25) return null;
+    var cash = Math.round(S.cash || 0);
+    var med = C.MED_CASH[S.country] || C.MED_CASH.CHN;
+    var ratio = cash / med;
+    var tier = MONEY_TIERS[MONEY_TIERS.length - 1];
+    for (var i = 0; i < MONEY_TIERS.length; i++) {
+      if (ratio < MONEY_TIERS[i].max) { tier = MONEY_TIERS[i]; break; }
+    }
+    var share = cash > 0 ? topShare(ratio) : null;
+    var amount = fmt ? fmt(cash) : String(cash);
+
+    // 家里那半句：按真实状态挑，能挑的才写。
+    var f = S.flag || {}, rel = S.rel || {};
+    var tail = [];
+    if (S.kids > 0 && (rel.kids || 0) < 40) tail.push('钱留下了，跟孩子的话没留下。');
+    if (S.kids > 0 && (rel.kids || 0) >= 60) tail.push('孩子隔三差五回来，最后那几天都在。');
+    if (!S.kids && !S.married) tail.push('这些钱最后归了谁，没有第二个人跟你争。');
+    if (S.married && (rel.partner || 0) >= 55) tail.push('最后那几年，钱是两个人一起数的。');
+    // 死的时候健康中位数只有 40，照 40 划一半人都落进这句，所以压到 25 且要有钱才说。
+    if (S.health < 25 && cash > med * 0.5) tail.push('钱还在，人先垮了。');
+    if (!tail.length && S.ledger && S.ledger.debtYears === 0 && cash > 0) {
+      tail.push('这一生，你没跟人张过口。');
+    }
+    var line = amount + '。' + moneyPick(S, MONEY_LINE[tier.k], 11);
+    // 中过头奖的，这句一定要说 —— 它是这一生最反常的一件事，不能交给随机。
+    if (f.jackpot) line += '那笔彩票钱，是你这一生最不真实的一天。';
+    else if (tail.length) line += moneyPick(S, tail, 23);
+
+    return {
+      k: tier.k,
+      label: tier.label,
+      cash: cash,
+      ratio: Math.round(ratio * 100) / 100,
+      top: share,
+      topTxt: topTxt(share),
+      line: line
+    };
+  };
+
   C.stages = [
     { k: '童年', a: 0, b: 12 },
     { k: '少年', a: 13, b: 19 },
@@ -4695,8 +4937,8 @@ html, body {
     return '晚年';
   };
 
-  C.version = '0.8.2 vertical slice';
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.2，全部内容在本地运行，不联网、不上传。";
+  C.version = '0.8.3 vertical slice';
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.3，全部内容在本地运行，不联网、不上传。";
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -9464,7 +9706,9 @@ html, body {
     S.pending = null;
     S.relScore = relScore(S);
     traceStep(S);
-    return { label: opt.t, deltas: deltas, outcome: outcome, ghost: opt.ghost || null, intoDebt: intoDebt };
+    // 赌局/抽奖这类结果不该只说「赢了 / 没赢」：彩票要写明是哪一档。
+    // 文案挂在 eff._note 上，applyEff 不认这个键，所以不会落进数值里。
+    return { label: opt.t, deltas: deltas, outcome: outcome, note: (e && e._note) || null, ghost: opt.ghost || null, intoDebt: intoDebt };
   }
 
   function ta(S) { return S.sex === 'F' ? '她' : '他'; }
@@ -9892,6 +10136,12 @@ html, body {
       },
       decisions: S.turns.length,
       recap: recap(S),
+      // 钱这一栏：存款落在哪一档、在本国算什么位置。内容层出文字，引擎只递格式化函数。
+      moneyBox: (function () {
+        if (!C.moneyVerdict) return null;
+        try { return C.moneyVerdict(S, function (v) { return money(S, v); }); }
+        catch (e) { return null; }
+      })(),
       texture: texture(S),
       miles: miles,
       wishes: wishes(S),
@@ -10229,7 +10479,7 @@ html, body {
 
     var box = document.createElement('div');
     box.className = 'result';
-    box.innerHTML = '<div>' + (res.outcome ? (res.outcome === 'win' ? '赌赢了。' : '没有赌赢。') : '你选了：' + res.label) + '</div>' +
+    box.innerHTML = '<div>' + (res.note || (res.outcome ? (res.outcome === 'win' ? '赌赢了。' : '没有赌赢。') : '你选了：' + res.label)) + '</div>' +
       (chips.length ? '<div class="chips">' + chips.join('') + '</div>' : '');
     $('decision').appendChild(box);
 
@@ -10299,7 +10549,7 @@ html, body {
   function saveLife(a) {
     var list = loadLives();
     for (var i = 0; i < list.length; i++) if (list[i].id === a.id && list[i].age === a.age) return false;
-    list.unshift({ id: a.id, name: a.name, sex: a.sex, country: a.country, birth: a.birth, born: a.born, died: a.died, age: a.age, verdict: a.verdict, seal: a.seal, cause: a.cause, turns: a.turns, road: a.road, stats: a.stats, countryName: a.countryName, decisions: a.decisions, recap: a.recap, texture: a.texture, miles: a.miles, ledger: a.ledger, wishes: a.wishes, after: a.after, ending: a.ending, done: a.done, proud: a.proud, house: a.house, obsession: a.obsession, at: Date.now() });
+    list.unshift({ id: a.id, name: a.name, sex: a.sex, country: a.country, birth: a.birth, born: a.born, died: a.died, age: a.age, verdict: a.verdict, seal: a.seal, cause: a.cause, turns: a.turns, road: a.road, stats: a.stats, countryName: a.countryName, decisions: a.decisions, recap: a.recap, texture: a.texture, miles: a.miles, ledger: a.ledger, wishes: a.wishes, after: a.after, ending: a.ending, done: a.done, proud: a.proud, house: a.house, obsession: a.obsession, moneyBox: a.moneyBox, at: Date.now() });
     MEM = list;
     try { localStorage.setItem(STORE, JSON.stringify(list.slice(0, 24))); } catch (e) { }
     return true;
@@ -10439,6 +10689,22 @@ html, body {
         '</div>';
     }
 
+    // ── 钱这一栏：存款落在哪一档，在本国算什么位置 ──
+    // 参考原作：钱不单独给一个数，而是折成「本国前 X%」再加一句人话。
+    var mb = arc.moneyBox;
+    var moneyHtml = '';
+    if (mb) {
+      moneyHtml = '<div class="sec-label">钱 这 一 栏</div>' +
+        '<div class="moneypan">' +
+        '<div class="mp-top">' +
+        '<span class="mp-tier">' + mb.label + '</span>' +
+        '<span class="mp-num' + (mb.cash < 0 ? ' neg' : '') + '">' + money(arc, mb.cash) + '</span>' +
+        '<span class="mp-pct">' + (mb.topTxt ? '本国存款 ' + mb.topTxt : '账上是负数') + '</span>' +
+        '</div>' +
+        '<p class="mp-line">' + mb.line + '</p>' +
+        '</div>';
+    }
+
     var html =
       '<div class="end-top"><span>人 生 档 案 · 已 归 档</span><span>' + arc.id + '</span></div>' +
       '<div class="end-main"><div class="end-left">' +
@@ -10448,6 +10714,7 @@ html, body {
       (arc.cause ? '<br>' + arc.cause.t : '') + '</div>' +
       factsHtml +
       finalHtml +
+      moneyHtml +
       sayHtml +
       recapHtml +
       wishHtml +
