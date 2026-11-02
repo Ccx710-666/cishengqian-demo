@@ -1605,7 +1605,7 @@ html, body {
 
   // 成年早期第一次"家里能给你什么 / 需要你给什么"——出身的差别到这里才真正落地。
   ev({
-    id: 'familyhelp', a: [22, 25], w: 1.3,
+    id: 'familyhelp', a: [22, 25], w: 1.3, need: 'parents',
     text: function (S) {
       if (band(S) === 'rich') return ['家里问你要不要先拿一笔钱，做点自己的事，不用急着还。', '父母说，别像他们那辈一样从零开始。'];
       return ['家里打来电话，问你这个月能不能先寄一点回去。', '电话那头说得很轻，像是怕给你添麻烦。'];
@@ -2057,7 +2057,7 @@ html, body {
     b: '回头看，真正由自己决定的只有那么几步'
   };
 
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.6，全部内容在本地运行，不联网、不上传。";
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.7，全部内容在本地运行，不联网、不上传。";
 
   root.CONTENT = C;
   if (typeof module !== 'undefined' && module.exports) module.exports = C;
@@ -2423,7 +2423,7 @@ html, body {
   });
 
   ev({
-    id: 'm_gohome', a: [25, 30], w: 1, slot: 'homeland',
+    id: 'm_gohome', a: [25, 30], w: 1, slot: 'homeland', need: 'parents',
     text: lines('家里说，回来吧。', '这边的事刚有点起色。'),
     choices: [
       opt('回去', '你收拾了东西回去', function (S) { return { cash: -M(S, 4000, 800, 600), rel: { mother: 6, father: 4 }, know: -1 }; }),
@@ -3870,12 +3870,19 @@ html, body {
 
   ev({
     id: 'cn_elder_hospital', a: [42, 58], w: 2.2, need: 'parents', when: only('CHN'),
-    text: lines('父亲住院了。走廊里排着加床，护士推着车来回走。', '医保能报一部分，剩下的要自己先垫。'),
-    choices: [
-      opt('请护工，自己上班', '你请了护工，白天照常上班', function (S) { return { cash: -M(S, 26000, 0, 0), rel: { father: 4 }, health: -2 }; }),
-      opt('请假守着', '你请了长假，守在床边', function (S) { return { cash: -M(S, 12000, 0, 0), rel: { father: 10 }, health: -6, flag: { quitForCare: 1 } }; }, '那半年你的位置被别人坐了'),
-      opt('让兄弟姐妹轮', '你们几个轮流守', function (S) { return { cash: -M(S, 9000, 0, 0), rel: { father: 3 }, know: 1 }; })
-    ]
+    text: function (S) {
+      var who = S.parents.father.alive ? '父亲' : '母亲';
+      return [who + '住院了。走廊里排着加床，护士推着车来回走。', '医保能报一部分，剩下的要自己先垫。'];
+    },
+    choices: function (S) {
+      var key = S.parents.father.alive ? 'father' : 'mother';
+      function rel(v) { var o = {}; o[key] = v; return o; }
+      return [
+        opt('请护工，自己上班', '你请了护工，白天照常上班', function (S) { return { cash: -M(S, 26000, 0, 0), rel: rel(4), health: -2 }; }),
+        opt('请假守着', '你请了长假，守在床边', function (S) { return { cash: -M(S, 12000, 0, 0), rel: rel(10), health: -6, flag: { quitForCare: 1 } }; }, '那半年你的位置被别人坐了'),
+        opt('让兄弟姐妹轮', '你们几个轮流守', function (S) { return { cash: -M(S, 9000, 0, 0), rel: rel(3), know: 1 }; })
+      ];
+    }
   });
 
   ev({
@@ -3989,7 +3996,7 @@ html, body {
     id: 'deu_kindergeld', a: [28, 42], w: 2, need: 'kid', when: only('DEU'),
     text: lines('儿童金每个月到账，数目不小。', '幼儿园的位置排了很久，还没排上。'),
     choices: [
-      opt('妈妈先不上班', '伴侣在家带了两年孩子', function (S) { return { cash: -M(S, 9000, 3000, 1500), rel: { kids: 8, partner: 3 }, health: -2 }; }),
+      opt('先有一人在家', '伴侣在家带了两年孩子', function (S) { return { cash: -M(S, 9000, 3000, 1500), rel: { kids: 8, partner: 3 }, health: -2 }; }),
       opt('送私立幼儿园', '你们送去了私立', function (S) { return { cash: -M(S, 12000, 4000, 2000), rel: { kids: 3, partner: -2 } }; }),
       opt('两个人轮流', '你们两个人轮流请假', function (S) { return { cash: -M(S, 6000, 1500, 800), rel: { partner: 6 }, health: -4 }; })
     ]
@@ -4148,13 +4155,20 @@ html, body {
   });
 
   ev({
-    id: 'bra_igreja', a: [22, 58], w: 1.8, when: only('BRA'),
-    text: lines('周日早上，街上的人都往一个方向走。', '母亲说，去坐坐也好。'),
-    choices: [
-      opt('每周都去', '你每周都去', { rel: { friend: 7, mother: 3 }, health: 2, flag: { faith: 1 } }),
-      opt('偶尔去', '你偶尔去', { rel: { mother: 2 }, health: 1 }),
-      opt('不去了', '你后来不去了', { know: 2, rel: { mother: -4 } })
-    ]
+    id: 'bra_igreja', a: [22, 58], w: 1.8, when: only('BRA'), need: 'parents',
+    text: function (S) {
+      var who = S.parents.mother.alive ? '母亲' : '父亲';
+      return ['周日早上，街上的人都往一个方向走。', who + '说，去坐坐也好。'];
+    },
+    choices: function (S) {
+      var key = S.parents.mother.alive ? 'mother' : 'father';
+      function rel(v, extra) { var o = {}; o[key] = v; if (extra) o.friend = extra; return o; }
+      return [
+        opt('每周都去', '你每周都去', function () { return { rel: rel(3, 7), health: 2, flag: { faith: 1 } }; }),
+        opt('偶尔去', '你偶尔去', function () { return { rel: rel(2), health: 1 }; }),
+        opt('不去了', '你后来不去了', function () { return { know: 2, rel: rel(-4) }; })
+      ];
+    }
   });
 
   ev({
@@ -4202,12 +4216,27 @@ html, body {
 
   ev({
     id: 'cn_demolition', a: [34, 56], w: 2.2, when: only('CHN'),
-    text: lines('老家的房子要拆。村里说，按面积补。', '你父亲那辈人，头一回见到这么大的数。'),
-    choices: [
-      opt('要房', '你们要了两套安置房', function (S) { return { cash: M(S, 20000, 0, 0), mortgage: 0, flag: { house: 1, demolished: 1 }, rel: { father: 6 } }; }, '那两套房后来一套自己住，一套租出去了'),
-      opt('要钱', '你们要了钱', function (S) { return { cash: M(S, 150000, 0, 0), flag: { windfall: 1 }, rel: { father: 2 } }; }),
-      opt('让他们自己定', '你把这事交给了老人', { rel: { father: 10, mother: 6 }, know: 1 })
-    ]
+    text: function (S) {
+      if (S.parents.father.alive) {
+        return ['老家的房子要拆。村里说，按面积补。', '你父亲那辈人，头一回见到这么大的数。'];
+      }
+      if (S.parents.mother.alive) {
+        return ['老家的房子要拆。村里说，按面积补。', '你母亲那辈人，头一回见到这么大的数。'];
+      }
+      return ['老家的房子要拆。村里说，按面积补。', '电话打到城里来，问你打算怎么处理。'];
+    },
+    choices: function (S) {
+      var anyParent = S.parents.father.alive || S.parents.mother.alive;
+      var key = S.parents.father.alive ? 'father' : (S.parents.mother.alive ? 'mother' : null);
+      function rel(v) { if (!key) return {}; var o = {}; o[key] = v; return o; }
+      var list = [
+        opt('要房', '你们要了两套安置房', function (S) { return { cash: M(S, 20000, 0, 0), mortgage: 0, flag: { house: 1, demolished: 1 }, rel: rel(6) }; }, '那两套房后来一套自己住，一套租出去了'),
+        opt('要钱', '你们要了钱', function (S) { return { cash: M(S, 150000, 0, 0), flag: { windfall: 1 }, rel: rel(2) }; })
+      ];
+      // 两位老人都走了，就没有「交给老人自己定」这一项了。
+      if (anyParent) list.push(opt('让他们自己定', '你把这事交给了老人', { rel: { father: 10, mother: 6 }, know: 1 }));
+      return list;
+    }
   });
 
   ev({
@@ -4515,6 +4544,12 @@ html, body {
         ['你越来越不爱说话了。', '家里人以为你只是累了。']);
     },
     m_oldthings: function (S) {
+      // 「母亲留下的」只在她走了以后成立；人还在，那是她织的、给的。
+      if (S.country === 'BRA') {
+        return S.parents.mother.alive
+          ? ['柜子里塞满了东西，有几件很多年没打开过。', '有一件是母亲织的桌布。']
+          : ['柜子里塞满了东西，有几件很多年没打开过。', '有一件是母亲留下的桌布。'];
+      }
       return M(S,
         ['柜子里塞满了东西，有几件很多年没打开过。', '有一件是你自己小时候的棉袄。'],
         ['地下室堆满了箱子，有几箱搬进来就没开过。', '其中一箱写着上一次搬家的日期。'],
@@ -5010,8 +5045,8 @@ html, body {
     return '晚年';
   };
 
-  C.version = '0.8.6 vertical slice';
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.6，全部内容在本地运行，不联网、不上传。";
+  C.version = '0.8.7 vertical slice';
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.7，全部内容在本地运行，不联网、不上传。";
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -7921,15 +7956,23 @@ html, body {
   });
 
   ev({
-    id: 'cn_homestead', a: [30, 58], w: 0.7, when: only('CHN'),
-    text: function () {
-      return ['老家的宅基地要确权，表上要填一个名字。', '父亲打电话来问，写谁。'];
+    // 父亲已经走了还「父亲打电话来问」—— 活着的那一位来问，两位都走了就不该有这通电话。
+    id: 'cn_homestead', a: [30, 58], w: 0.7, when: only('CHN'), need: 'parents',
+    text: function (S) {
+      var who = S.parents.father.alive ? '父亲' : '母亲';
+      return ['老家的宅基地要确权，表上要填一个名字。', who + '打电话来问，写谁。'];
     },
-    choices: [
-      { t: '写父亲的名字', s: '写了父亲的名字，事情就过去了', eff: { rel: { father: 3 } } },
-      { t: '写自己的', s: '你把自己的名字填了上去', eff: { rel: { father: -6 }, know: 2, flag: { k_land: 1 } }, ghost: '那之后，兄弟之间的话少了' },
-      { t: '说先不填', s: '你说先放着，等大家回来再说', eff: { rel: { father: -2 }, know: 1 } }
-    ]
+    choices: function (S) {
+      var key = S.parents.father.alive ? 'father' : 'mother';
+      var who = S.parents.father.alive ? '父亲' : '母亲';
+      var ra = {}, rb = {}, rc = {};
+      ra[key] = 3; rb[key] = -6; rc[key] = -2;
+      return [
+        { t: '写' + who + '的名字', s: '写了' + who + '的名字，事情就过去了', eff: { rel: ra } },
+        { t: '写自己的', s: '你把自己的名字填了上去', eff: { rel: rb, know: 2, flag: { k_land: 1 } }, ghost: '那之后，兄弟之间的话少了' },
+        { t: '说先不填', s: '你说先放着，等大家回来再说', eff: { rel: rc, know: 1 } }
+      ];
+    }
   });
 
   // ═════════════════ 德国 ═════════════════
@@ -9229,6 +9272,11 @@ html, body {
       else if (n === 'nopartner' && (S.partner || S.married)) return false;
       else if (n === 'unmarried' && S.married) return false;
       else if (n === 'parents' && !(S.parents.father.alive || S.parents.mother.alive)) return false;
+      // 单独点名某一位：文案里写「父亲打电话来」的，父亲走了就不该再出现。
+      else if (n === 'father' && !S.parents.father.alive) return false;
+      else if (n === 'mother' && !S.parents.mother.alive) return false;
+      else if (n === 'nofather' && S.parents.father.alive) return false;
+      else if (n === 'nomother' && S.parents.mother.alive) return false;
       else if (n === 'sib' && !(S.sibs && S.sibs.some(function (s) { return s.alive; }))) return false;
       else if (n === 'elder' && !sibElders(S).length) return false;
       else if (n === 'younger' && !sibYoungers(S).length) return false;
