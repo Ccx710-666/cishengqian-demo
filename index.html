@@ -1029,6 +1029,400 @@ html, body {
   background: transparent;
 }
 
+/* ══════════════════════════════════════════════════════════
+   v0.9 · 卷宗一页（方案 A 节奏 + B 物质 + C 视角）
+   ══════════════════════════════════════════════════════════ */
+
+/* ── 卷宗外壳：装订线、页眉 ── */
+.dossier {
+  --plq-a: #83652F;
+  --plq-b: #5A431E;
+  --plq-ink: #3F2D15;
+  position: relative;
+  padding-left: 30px;
+  background:
+    linear-gradient(90deg, rgba(214, 202, 178, .34), rgba(214, 202, 178, 0) 28px),
+    var(--paper);
+}
+
+/* 极淡的纸纹：只在纸面上，不压在字上 */
+.dossier::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .22;
+  background-image: repeating-linear-gradient(0deg, rgba(150, 128, 92, .05) 0 1px, transparent 1px 3px);
+}
+
+.binding {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 30px;
+  border-right: 0.5px solid var(--rule2);
+  z-index: 2;
+}
+.binding::before {
+  content: "";
+  position: absolute;
+  left: 14px; top: 0; bottom: 0;
+  width: 1px;
+  background: repeating-linear-gradient(180deg, var(--rule) 0 5px, transparent 5px 11px);
+  opacity: .5;
+}
+.binding i {
+  position: absolute;
+  left: 9px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #EDE4D3;
+  box-shadow: inset 0 1px 2px rgba(120, 100, 70, .4), 0 0 0 0.5px #C9BCA4;
+}
+.binding i:nth-child(1) { top: 7%; }
+.binding i:nth-child(2) { top: 27%; }
+.binding i:nth-child(3) { top: 47%; }
+.binding i:nth-child(4) { top: 67%; }
+.binding i:nth-child(5) { top: 87%; }
+
+.dossier-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 26px 0 22px;
+  font-size: 10.5px;
+  color: var(--faint);
+  letter-spacing: 1.4px;
+}
+.dossier-head .dh-page { flex: none; }
+
+/* ── 场景行：年份 · 季节 · 人生哪一段 ── */
+.scene {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 13px 26px 0 22px;
+}
+.scene-age b {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  color: var(--ink);
+}
+.scene-line {
+  font-size: 12px;
+  color: var(--faint);
+  letter-spacing: 1.3px;
+}
+
+/* ── 主区：生命线 + 正文（侧栏退场，正文拿回宽度） ── */
+.game-grid {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 20px;
+  padding: 14px 26px 18px 22px;
+  min-height: 360px;
+}
+
+.lifeline {
+  position: relative;
+  height: 100%;
+  min-height: 330px;
+}
+.ll-rail {
+  position: absolute;
+  left: 26px; top: 4px; bottom: 4px;
+  width: 1px;
+  background: var(--rule2);
+}
+.ll-past {
+  position: absolute;
+  left: 0; top: 0;
+  width: 1px;
+  display: block;
+  background: linear-gradient(180deg, #CBBBA0, #B33A2B);
+}
+.ll-tick {
+  position: absolute;
+  left: 21px;
+  width: 5px; height: 1px;
+  background: var(--rule2);
+}
+.ll-tick.major { left: 17px; width: 9px; background: var(--rule); }
+.ll-tick.past { background: #BFAF94; }
+.ll-tick.major.past { background: #A9967A; }
+.ll-tick span {
+  position: absolute;
+  right: 13px; top: -6px;
+  font-size: 9.5px;
+  color: var(--faint);
+  letter-spacing: 0;
+}
+.ll-tick.past span { color: var(--muted); }
+.ll-now {
+  position: absolute;
+  left: 22px;
+  width: 9px; height: 9px;
+  margin-top: -4.5px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 0 3px rgba(179, 58, 43, .13);
+  z-index: 2;
+}
+
+.narrative { min-width: 0; max-width: 600px; }
+.narrative p { font-size: 15.5px; line-height: 2; margin-bottom: 13px; }
+.narrative p.flavor { font-size: 13px; }
+
+/* ── 读完再给选项：牌匾晚半拍浮现 ── */
+.decision { transition: opacity .36s ease, transform .36s ease; }
+.decision.waiting {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+/* 继续读：长页先给三段 */
+.more-read {
+  display: block;
+  width: 100%;
+  margin: 2px 0 6px;
+  padding: 10px 0;
+  background: transparent;
+  border: 0;
+  border-top: 0.5px dashed var(--rule2);
+  border-bottom: 0.5px dashed var(--rule2);
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: color .18s ease, background .18s ease;
+}
+.more-read:hover { color: var(--red); background: rgba(179, 58, 43, .03); }
+
+/* ── 牌匾材质随人生阶段变：童年浅木 → 铜 → 晚年褪色 ── */
+.dossier[data-stage="child"] { --plq-a: #BC9F6B; --plq-b: #987A4B; --plq-ink: #4A3A20; }
+.dossier[data-stage="teen"]  { --plq-a: #9C7C45; --plq-b: #75592A; --plq-ink: #3E2E14; }
+.dossier[data-stage="young"] { --plq-a: #83652F; --plq-b: #5A431E; --plq-ink: #3F2D15; }
+.dossier[data-stage="prime"] { --plq-a: #8E6C36; --plq-b: #5E4520; --plq-ink: #3B2A11; }
+.dossier[data-stage="mid"]   { --plq-a: #77603A; --plq-b: #4C3B1E; --plq-ink: #33260F; }
+.dossier[data-stage="old"]   { --plq-a: #A0917A; --plq-b: #7C6E58; --plq-ink: #3C352B; }
+
+.option { background: linear-gradient(180deg, var(--plq-a), var(--plq-b)); }
+.option .txt { color: var(--plq-ink); }
+.dossier[data-stage="old"] .option .txt {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .6), rgba(255, 255, 255, 0) 38%),
+    linear-gradient(180deg, #F8F3E7, #EFE7D4 58%, #E4DAC3);
+}
+.dossier[data-stage="child"] .option .txt {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .75), rgba(255, 255, 255, 0) 38%),
+    linear-gradient(180deg, #FDF9EC, #F8F0DC 58%, #EFE2C4);
+}
+
+/* ── 口袋：数值退到实物里 ── */
+.pocket {
+  position: absolute;
+  right: 13px;
+  top: 48px;
+  width: 36px;
+  z-index: 8;
+}
+.pocket-tab {
+  position: relative;
+  width: 36px; height: 46px;
+  padding: 0;
+  border: 0.5px solid var(--rule);
+  border-radius: 4px;
+  background: linear-gradient(180deg, #FBF6EA, #F0E7D5);
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: 13px;
+  letter-spacing: 0;
+  cursor: pointer;
+  transition: border-color .18s ease, color .18s ease;
+}
+.pocket-tab:hover { border-color: #B49A62; color: var(--ink2); }
+.pdot {
+  position: absolute;
+  right: 3px; top: 3px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--red);
+  opacity: 0;
+}
+.pdot.flash { animation: pdot .9s ease; }
+@keyframes pdot {
+  0% { opacity: 0; transform: scale(.6); }
+  28% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; }
+}
+.pocket-feel {
+  position: absolute;
+  right: 44px; top: 14px;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--faint);
+  letter-spacing: .4px;
+}
+.pocket-body {
+  display: none;
+  position: absolute;
+  right: 0; top: 54px;
+  width: 252px;
+  padding: 11px;
+  background: var(--paper2);
+  border: 0.5px solid var(--rule);
+  border-radius: 7px;
+  box-shadow: 0 8px 26px rgba(60, 48, 30, .13);
+}
+.pocket.open .pocket-tab { border-color: #B49A62; }
+.pocket.open .pocket-body { display: block; animation: rise .2s ease both; }
+.pocket.open .pocket-feel { display: none; }
+
+.pk-card {
+  border: 0.5px solid var(--rule2);
+  background: var(--paper);
+  padding: 9px 11px;
+  margin-bottom: 8px;
+}
+.pk-card:last-child { margin-bottom: 0; }
+.pk-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 9.5px;
+  color: var(--faint);
+  letter-spacing: 2px;
+  margin-bottom: 7px;
+}
+.pk-head i { font-style: normal; letter-spacing: .5px; }
+
+.pb-bal {
+  font-family: var(--serif);
+  font-size: 19px;
+  color: var(--ink);
+  letter-spacing: .3px;
+  margin-bottom: 7px;
+  font-variant-numeric: tabular-nums;
+}
+.pb-bal.neg { color: var(--red); }
+.pb-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--muted);
+  padding: 2px 0;
+}
+.pb-row b {
+  font-weight: 400;
+  color: var(--ink2);
+  font-variant-numeric: tabular-nums;
+}
+.pb-row b.out { color: var(--red); text-decoration: line-through; text-decoration-color: rgba(179, 58, 43, .35); }
+.pb-row b.in { color: #2F6B4F; }
+
+.mc-body { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.mc-word { font-size: 12.5px; color: var(--ink2); }
+.mc-stamp {
+  flex: none;
+  font-family: var(--serif);
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 3px 6px 2px;
+  border: 1px solid rgba(179, 58, 43, .6);
+  color: var(--red);
+  border-radius: 2px;
+  transform: rotate(-5deg);
+  opacity: .78;
+}
+
+.hk-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11.5px;
+  color: var(--ink2);
+  padding: 2px 0;
+}
+.hk-row b { font-weight: 400; color: var(--muted); font-size: 11px; }
+.hk-row.dead span { color: var(--faint); text-decoration: line-through; text-decoration-color: rgba(179, 58, 43, .4); }
+.hk-row.dead b {
+  color: var(--red);
+  letter-spacing: 1.5px;
+  font-size: 9.5px;
+  border: 0.5px solid rgba(179, 58, 43, .45);
+  padding: 0 3px;
+  transform: rotate(-2deg);
+}
+
+.pk-card.obs .ob-t { font-family: var(--serif); font-size: 12.5px; color: var(--indigo); }
+
+/* 手机：装订线收掉，口袋落到底栏上方 */
+@media (max-width: 760px) {
+  .dossier { padding-left: 0; }
+  .binding { display: none; }
+  .dossier-head { padding: 8px 16px 0; font-size: 10px; letter-spacing: .8px; }
+  .dossier-head .dh-no { max-width: 58%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .scene { padding: 10px 16px 0; gap: 10px; }
+  .scene-age b { font-size: 22px; }
+  .game-grid { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 12px 16px 16px; }
+  .lifeline { display: none; }
+  .narrative { max-width: none; }
+  .narrative p { font-size: 16px; line-height: 1.95; }
+  .pocket {
+    position: fixed;
+    right: 12px;
+    top: auto;
+    bottom: calc(104px + env(safe-area-inset-bottom));
+    width: 40px;
+  }
+  .pocket-tab { width: 40px; height: 40px; border-radius: 20px; }
+  .pocket-feel { display: none; }
+  .pocket-body {
+    width: min(258px, calc(100vw - 30px));
+    top: auto;
+    bottom: 48px;
+  }
+  .more-read { padding: 12px 0; font-size: 12.5px; }
+}
+
+/* ── 归档页也是卷宗里的一页 ── */
+#screen-end .dossier,
+.paper.end-dossier { padding-left: 46px; }
+#screen-end .dossier .binding { left: 12px; }
+
+.ar-stamp {
+  display: inline-block;
+  border: 1px solid rgba(179, 58, 43, .55);
+  color: var(--red);
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 2px 7px 1px;
+  transform: rotate(-1.5deg);
+  opacity: .85;
+}
+
+.end-foot {
+  margin-top: 18px;
+  padding-top: 11px;
+  border-top: 0.5px dashed var(--rule2);
+  font-size: 10.5px;
+  color: var(--faint);
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  #screen-end .dossier,
+  .paper.end-dossier { padding-left: 18px; }
+  #screen-end .dossier .binding { display: none; }
+}
+
 </style>
 </head>
 <body>
@@ -1076,28 +1470,42 @@ html, body {
   </section>
 
   <section id="screen-game" class="screen">
-    <div class="paper">
-      <div class="topbar">
-        <div>
-          <span class="age" id="top-age">0 岁</span>
-          <span class="year" id="top-year"></span>
-        </div>
-        <div class="meta" id="top-meta"></div>
+    <div class="paper dossier" id="game-paper">
+      <!-- 装订线：这一页是从卷宗里翻出来的，不是一屏网页 -->
+      <div class="binding" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+      <div class="dossier-head">
+        <span class="dh-no" id="top-meta"></span>
+        <span class="dh-page" id="dossier-page"></span>
+      </div>
+
+      <div class="scene">
+        <div class="scene-age"><b id="top-age">0 岁</b><span id="top-year"></span></div>
+        <div class="scene-line" id="scene-line"></div>
       </div>
 
       <div class="game-grid">
-        <div class="timeline" id="timeline"></div>
+        <div class="lifeline" id="lifeline"></div>
         <div class="narrative">
           <div id="narrative"></div>
+          <button class="more-read hidden" id="btn-more">继 续 读</button>
           <div id="decision"></div>
         </div>
-        <div class="side" id="side"></div>
       </div>
 
       <div class="game-foot">
         <div class="ledger" id="ledger"></div>
         <button class="btn primary" id="btn-next">继续</button>
       </div>
+
+      <!-- 口袋：钱、身体、家里人都在里面，想看的时候才打开 -->
+      <aside class="pocket" id="pocket">
+        <button class="pocket-tab" id="pocket-tab" aria-label="打开口袋">
+          <span>袋</span><i class="pdot" id="pocket-dot"></i>
+        </button>
+        <div class="pocket-feel" id="pocket-feel"></div>
+        <div class="pocket-body" id="pocket-body"></div>
+      </aside>
     </div>
   </section>
 
@@ -2057,7 +2465,7 @@ html, body {
     b: '回头看，真正由自己决定的只有那么几步'
   };
 
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.7，全部内容在本地运行，不联网、不上传。";
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.9.0，全部内容在本地运行，不联网、不上传。";
 
   root.CONTENT = C;
   if (typeof module !== 'undefined' && module.exports) module.exports = C;
@@ -5045,8 +5453,8 @@ html, body {
     return '晚年';
   };
 
-  C.version = '0.8.7 vertical slice';
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.8.7，全部内容在本地运行，不联网、不上传。";
+  C.version = '0.9.0 vertical slice';
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.9.0，全部内容在本地运行，不联网、不上传。";
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -10811,6 +11219,24 @@ html, body {
     return '几乎不来往';
   }
 
+  // 钱的说法：不报数，只说手头松紧。数字留到口袋里的存折和最后那栏。
+  function cashWord() {
+    if (S.cash < 0) return '欠着';
+    var b = '';
+    try { b = C.wBand ? C.wBand(S) : ''; } catch (e) { b = ''; }
+    if (b === 'tight') return '手紧';
+    if (b === 'ok') return '够用';
+    if (b === 'rich') return '宽裕';
+    if (b === 'rich2') return '富足';
+    return S.cash > 0 ? '够用' : '手紧';
+  }
+
+  // 一页跨两年时，把年份写成区间；季节按页派生，稳定可复现。
+  function seasonOf(p) {
+    var k = Math.abs(((S.seed >>> 0) * 31 + p.year * 17 + p.age * 7)) % 4;
+    return ['春', '夏', '秋', '冬'][k];
+  }
+
   // 数值显示统一收口：整数就显示整数，最多一位小数，避免 4.999999999999993 这类浮点尾巴。
   function fmtN(v) {
     var n = Math.round(v * 10) / 10;
@@ -10886,51 +11312,105 @@ html, body {
     ended = false;
     show('screen-game');
     page = null;
+    pageNo = 0;
+    pendingRest = null;
+    $('pocket').classList.remove('open');
     busy = false;
     advance();
   }
 
-  function renderTimeline(age) {
-    var html = '';
-    for (var a = 0; a <= 90; a += 10) {
-      var current = Math.floor(age / 10) * 10;
-      var cls = (a === current) ? 'tick now' : 'tick';
-      html += '<div class="' + cls + '">' + (a === 0 ? '出生' : a) + '</div>';
+  // 生命线：左边一条竖线，过一年刻一道。走到底就是九十年。
+  // 以前这里是「0/10/20…」的刻度尺，只标当前十年，既不能读也不觉得时间在走。
+  function renderLifeline(age) {
+    var top = Math.max(90, age + 2);
+    var h = '<div class="ll-rail"><i class="ll-past" style="height:' + (age / top * 100).toFixed(2) + '%"></i></div>';
+    for (var a = 0; a <= top; a += 5) {
+      var pct = (a / top * 100).toFixed(2);
+      var cls = 'll-tick' + (a % 10 === 0 ? ' major' : '') + (a <= age ? ' past' : '');
+      var lab = (a >= 10 && a % 10 === 0) ? String(a) : '';
+      h += '<div class="' + cls + '" style="top:' + pct + '%">' + (lab ? '<span>' + lab + '</span>' : '') + '</div>';
     }
-    $('timeline').innerHTML = html;
+    h += '<div class="ll-now" style="top:' + (age / top * 100).toFixed(2) + '%"></div>';
+    $('lifeline').innerHTML = h;
   }
 
-  function renderSide() {
-    var s = S;
-    var owed = s.cash < 0;
-    var cashClass = 'v num' + (owed ? ' neg' : '');
-    var cashLabel = owed ? '欠款' : '存款';
-    var cashValue = owed ? -s.cash : s.cash;
-    var home = homeLines(s).map(function (t) { return '<div>' + t + '</div>'; }).join('');
-    var jobLine = s.retired ? '已退休' : (s.job ? s.job.name : (s.age < 16 ? '还没有活干' : '无固定职业'));
-    $('side').innerHTML =
-      '<div class="stat"><div class="k">' + cashLabel + '</div><div class="' + cashClass + '">' + money(s, Math.abs(cashValue)) + '</div></div>' +
-      '<div class="stat"><div class="k">身体</div><div class="v small">' + C.healthLabel(s.health) + '</div></div>' +
-      '<div class="stat"><div class="k">家里人</div><div class="v small">' + home + '</div></div>' +
-      '<div class="stat"><div class="k">学识</div><div class="v small">' + (C.eduLabel[s.edu] || s.edu) + '<br>' + jobLine + '</div></div>' +
-      (s.obsession && C.obsessionById[s.obsession]
-        ? '<div class="stat"><div class="k">执念</div><div class="v small want">' + C.obsessionById[s.obsession].t + '</div></div>'
+  // 口袋：钱、身体、家里人。默认只露一条感受，点开才看见存折、体检单、户籍页。
+  function renderPocketFeel() {
+    $('pocket-feel').textContent = '手头 ' + cashWord() + ' · 身子 ' + C.healthLabel(S.health);
+    var b = document.querySelector('#pocket-body .pb-bal');
+    if (b) {
+      var owed = S.cash < 0;
+      b.textContent = (owed ? '-' : '') + money(S, Math.abs(S.cash));
+      if (owed) b.classList.add('neg'); else b.classList.remove('neg');
+    }
+  }
+
+  function renderPocket(settle) {
+    var owed = S.cash < 0;
+    var bal = (owed ? '-' : '') + money(S, Math.abs(S.cash));
+
+    // 存折：结余 + 这一年的进出，用划线的红字记支出
+    var rows = '';
+    if (settle && !settle.household) {
+      var net = settle.net;
+      rows = '<div class="pb-row"><span>这一年收入</span><b>' + money(S, settle.income) + '</b></div>' +
+        '<div class="pb-row"><span>这一年开销</span><b class="out">' + money(S, settle.living + settle.mortgage + settle.med + (settle.interest || 0)) + '</b></div>' +
+        '<div class="pb-row"><span>结余</span><b class="' + (net < 0 ? 'out' : 'in') + '">' + (net < 0 ? '-' : '+') + money(S, Math.abs(net)) + '</b></div>';
+      var detail = [];
+      if (settle.mortgage > 0) detail.push('还贷 ' + money(S, settle.mortgage));
+      if (settle.med > 0) detail.push('看病 ' + money(S, settle.med));
+      if (settle.interest > 0) detail.push('利息 ' + money(S, settle.interest));
+      if (detail.length) rows += '<div class="pb-note">其中 ' + detail.join(' · ') + '</div>';
+      if (settle.debt > 0) rows += '<div class="pb-note">账上欠款 ' + money(S, settle.debt) + '</div>';
+    } else {
+      rows = '<div class="pb-row"><span>这一年</span><b>家里的</b></div>';
+    }
+
+    var sibs = (E.sibAlive ? E.sibAlive(S) : []);
+    var home = homeLines(S).map(function (t) {
+      var dead = /已故/.test(t);
+      return '<div class="hk-row' + (dead ? ' dead' : '') + '"><span>' + t.split(' · ')[0] + '</span>' +
+        '<b>' + (dead ? '注 销' : t.split(' · ')[1] || '') + '</b></div>';
+    }).join('');
+
+    $('pocket-body').innerHTML =
+      '<div class="pk-card passbook">' +
+      '<div class="pk-head"><span>存 折</span><i>' + (owed ? '欠' : '余') + '</i></div>' +
+      '<div class="pb-bal' + (owed ? ' neg' : '') + '">' + bal + '</div>' +
+      rows +
+      '</div>' +
+      '<div class="pk-card medcard">' +
+      '<div class="pk-head"><span>体 检 单</span><i>' + (S.age) + ' 岁</i></div>' +
+      '<div class="mc-body"><span class="mc-word">' + C.healthLabel(S.health) + '</span>' +
+      '<span class="mc-stamp">' + (S.health >= 55 ? '合 格' : '复 查') + '</span></div>' +
+      '</div>' +
+      '<div class="pk-card hukou">' +
+      '<div class="pk-head"><span>户 籍 页</span><i>' + (S.job ? '在职' : (S.age < 16 ? '在读' : '待业')) + '</i></div>' +
+      home +
+      '</div>' +
+      (S.obsession && C.obsessionById[S.obsession]
+        ? '<div class="pk-card obs"><div class="pk-head"><span>念 想</span></div><div class="ob-t">' + C.obsessionById[S.obsession].t + '</div></div>'
         : '');
+
+    renderPocketFeel();
+
+    // 钱一有动静，袋口亮一下
+    var dot = $('pocket-dot');
+    if (dot && settle && !settle.household && Math.abs(settle.net) > 0) {
+      dot.classList.remove('flash');
+      void dot.offsetWidth;
+      dot.classList.add('flash');
+    }
   }
 
+  // 底栏只留这一年最重要的两个数；开销明细和还贷都挪进口袋的存折里，
+  // 免得每页都有一块数字在跟正文抢注意力。
   function renderLedger(settle) {
     if (!settle) { $('ledger').innerHTML = ''; return; }
     if (settle.household) { $('ledger').innerHTML = '这一年的开销，由家里承担。'; return; }
     var net = settle.net;
-    var spend = settle.living + settle.mortgage + settle.med + (settle.interest || 0);
-    var html = '这一年：收入 <b>' + money(S, settle.income) + '</b> · 开销 <b>' + money(S, spend) + '</b> · 结余 <b>' +
+    var html = '这一年 · 收入 <b>' + money(S, settle.income) + '</b> · 结余 <b>' +
       (net < 0 ? '-' : '+') + money(S, Math.abs(net)) + '</b>' + (settle.debt > 0 && net > 0 ? '（先还账）' : '');
-
-    var parts = [];
-    if (settle.mortgage > 0) parts.push('还贷 ' + money(S, settle.mortgage));
-    if (settle.med > 0) parts.push('看病 ' + money(S, settle.med));
-    if (settle.interest > 0) parts.push('欠款利息 ' + money(S, settle.interest));
-    if (parts.length) html += '<div class="ledger-2">其中：' + parts.join(' · ') + '</div>';
     if (settle.debt > 0) html += '<div class="ledger-2">账上欠款 ' + money(S, settle.debt) + '</div>';
 
     $('ledger').innerHTML = html;
@@ -10941,68 +11421,127 @@ html, body {
     if (S.dead) { showEnd(); return; }
     busy = true;
     chosen = false;
+    pageNo++;
     var p = E.nextPage(S);
     page = p;
     renderPage(p);
     busy = false;
   }
 
-  function yearHead(p) {
-    // 一页可能打包好几年：标成区间，不然「四十岁这年」会挂在「42 岁」下面，读着别扭。
-    // 末尾带一个阶段名——玩家需要知道自己在人生哪一段，而不是只有一个数字。
-    var st = (C.stageOf && C.stageOf(p.age)) || '';
-    var tail = st ? ' · ' + st : '';
-    if (p.fromYear && p.fromYear !== p.year) {
-      var a0 = p.age - (p.year - p.fromYear);
-      return p.fromYear + ' — ' + p.year + ' · ' + a0 + '–' + p.age + ' 岁' + tail;
+  // 一页一卡：正文先落地，牌匾晚半拍才浮现。
+  // 一页超过四段就先给三段 + 「继续读」，别让玩家在一条长页上滚到失去位置。
+  var NOFX = false, SPLIT_FORCE = false;
+  var pageNo = 0, pendingRest = null;
+
+  function paceAnim(el, dy) {
+    if (NOFX || !el || !el.animate) return;
+    el.animate(
+      [{ opacity: 0, transform: 'translateY(' + dy + 'px)' }, { opacity: 1, transform: 'none' }],
+      { duration: 420, easing: 'cubic-bezier(.2,.75,.2,1)' }
+    );
+  }
+
+  function paintLines(list) {
+    var html = '';
+    for (var i = 0; i < list.length; i++) {
+      var x = list[i];
+      html += x.flavor ? '<p class="flavor">' + x.t + '</p>' : '<p>' + x.t + '</p>';
     }
-    return p.year + ' · ' + p.age + ' 岁' + tail;
+    return html;
+  }
+
+  function paintDecision(p) {
+    var d = $('decision');
+    d.innerHTML = '';
+    if (!(p.kind === 'event' && p.decision)) return false;
+
+    // 牌匾式选项：去掉勾选框和序号，只留米色横匾。
+    // 类名 .option 和 data-i 保留，QA/键盘钩子依赖它们。
+    var opts = p.decision.choices.map(function (c, i) {
+      return '<div class="option" data-i="' + i + '" role="button" tabindex="0">' +
+        '<span class="txt">' + c.t + '</span></div>';
+    }).join('');
+    d.innerHTML = '<div class="decision waiting" data-ev-id="' + (p.decision.id || '') + '">' +
+      '<div class="decision-head"><span class="label">选 项</span></div>' +
+      opts + '</div>';
+    var nodes = d.querySelectorAll('.option');
+    for (var i = 0; i < nodes.length; i++) nodes[i].addEventListener('click', onPick);
+
+    var box = d.querySelector('.decision');
+    if (!NOFX) {
+      setTimeout(function () { if (box) box.classList.remove('waiting'); }, 430);
+    } else {
+      box.classList.remove('waiting');
+    }
+
+    $('btn-next').textContent = '先做决定';
+    $('btn-next').disabled = true;
+    $('btn-next').classList.add('hidden');
+    return true;
   }
 
   function renderPage(p) {
     $('top-age').textContent = p.age + ' 岁';
-    $('top-year').textContent = p.fromYear && p.fromYear !== p.year ? (p.fromYear + '—' + p.year) : String(p.year);
+    $('top-year').textContent = '';
     $('top-meta').textContent = C.countries[S.country].name + ' · ' + (S.sex === 'F' ? '女' : '男') + ' · ' + padId(S.seed);
+    $('dossier-page').textContent = pageNo > 0 ? '第 ' + pageNo + ' 页' : '';
+    // 牌匾材质跟着人生段走：童年浅木、壮年铜、晚年褪色
+    $('game-paper').setAttribute('data-stage',
+      p.age <= 12 ? 'child' : p.age <= 19 ? 'teen' : p.age <= 29 ? 'young'
+        : p.age <= 44 ? 'prime' : p.age <= 59 ? 'mid' : 'old');
 
-    renderTimeline(p.age);
-    renderSide();
+    renderLifeline(p.age);
+    renderPocket(p.settle);
     renderLedger(p.settle);
 
-    var html = '<p class="year-note">' + yearHead(p) + '</p>';
-    if (p.flavor) html += '<p class="flavor">' + p.flavor + '</p>';
-    p.lines.forEach(function (line) {
-      html += '<p>' + line + '</p>';
-    });
-    if (p.kind === 'quiet' && !p.lines.length) {
-      html += '<p class="year-note">这几年过得很快，没有什么值得记下。</p>';
-    }
-    $('narrative').innerHTML = html;
+    // 场景行：把「年份 · 季节 · 人生哪一段」压成一行，正文直接从事情本身开始。
+    var ys = (p.fromYear && p.fromYear !== p.year) ? (p.fromYear + '—' + p.year) : String(p.year);
+    var st = (C.stageOf && C.stageOf(p.age)) || '';
+    $('scene-line').textContent = ys + ' 年 · ' + seasonOf(p) + (st ? ' · ' + st : '');
 
-    var d = $('decision');
-    d.innerHTML = '';
+    var all = [];
+    if (p.flavor) all.push({ flavor: 1, t: p.flavor });
+    (p.lines || []).forEach(function (l) { all.push({ t: l }); });
 
-    if (p.kind === 'event' && p.decision) {
-      // 选项改为牌匾式按钮（参考玩家提供的样式图）：去勾选框和序号，
-      // 只留米色横匾 + 居中文字。类名 .option 和 data-i 保留，QA/键盘钩子依赖它们。
-      var opts = p.decision.choices.map(function (c, i) {
-        return '<div class="option" data-i="' + i + '" role="button" tabindex="0">' +
-          '<span class="txt">' + c.t + '</span></div>';
-      }).join('');
-      d.innerHTML = '<div class="decision" data-ev-id="' + (p.decision.id || '') + '">' +
-        '<div class="decision-head"><span class="label">选 项</span></div>' +
-        opts + '</div>';
-      var nodes = d.querySelectorAll('.option');
-      for (var i = 0; i < nodes.length; i++) {
-        nodes[i].addEventListener('click', onPick);
-      }
-      $('btn-next').textContent = '先做决定';
-      $('btn-next').disabled = true;
+    // 只有真正长的一页才分段。按段数判断：四段以内一口气读完更顺，
+    // 五段以上才值得停一次——实测这类页约占 4%。
+    var split = all.length >= 5 && (SPLIT_FORCE || !NOFX);
+    var take = Math.max(3, Math.ceil(all.length / 2));
+    var head = split ? all.slice(0, take) : all;
+    pendingRest = split ? all.slice(take) : null;
+
+    $('narrative').innerHTML = paintLines(head) ||
+      '<p class="year-note">这几年过得很快，没有什么值得记下。</p>';
+    $('btn-more').classList.toggle('hidden', !split);
+
+    if (split) {
+      $('decision').innerHTML = '';
       $('btn-next').classList.add('hidden');
-    } else {
+      $('btn-next').disabled = true;
+    } else if (!paintDecision(p)) {
       $('btn-next').classList.remove('hidden');
       $('btn-next').disabled = false;
       $('btn-next').textContent = p.kind === 'death' ? '合上这一生' : '继续';
     }
+
+    paceAnim($('narrative'), 16);
+    if (!split) paceAnim($('decision'), 22);
+  }
+
+  function onMore() {
+    if (!pendingRest) return;
+    var box = $('narrative');
+    var add = document.createElement('div');
+    add.innerHTML = paintLines(pendingRest);
+    while (add.firstChild) box.appendChild(add.firstChild);
+    pendingRest = null;
+    $('btn-more').classList.add('hidden');
+    if (!paintDecision(page)) {
+      $('btn-next').classList.remove('hidden');
+      $('btn-next').disabled = false;
+      $('btn-next').textContent = page.kind === 'death' ? '合上这一生' : '继续';
+    }
+    if (!NOFX) paceAnim($('decision'), 22);
   }
 
   function onPick(e) {
@@ -11018,7 +11557,7 @@ html, body {
     }
 
     var res = E.choose(S, idx);
-    renderSide();
+    renderPocketFeel();
 
     var chips = [];
     if (res.deltas.cash) {
@@ -11026,6 +11565,7 @@ html, body {
       if (res.deltas.borne) cashTxt += '（家里出）';
       else if (res.intoDebt) cashTxt += '（这笔借的）';
       chips.push(chip(res.deltas.cash > 0 ? 'up' : 'down', cashTxt));
+      flashDot();
     }
     if (hasDelta(res.deltas.health)) chips.push(chip(res.deltas.health > 0 ? 'up' : 'down', '身体 ' + (res.deltas.health > 0 ? '+' : '') + fmtN(res.deltas.health)));
     if (hasDelta(res.deltas.know)) chips.push(chip(res.deltas.know > 0 ? 'up' : 'down', '学识 ' + (res.deltas.know > 0 ? '+' : '') + fmtN(res.deltas.know)));
@@ -11044,6 +11584,15 @@ html, body {
   }
 
   function chip(cls, text) { return '<span class="chip ' + cls + '">' + text + '</span>'; }
+
+  // 钱有动静时，袋口亮一下：这是界面上唯一会主动跳出来的提示。
+  function flashDot() {
+    var d = $('pocket-dot');
+    if (!d || NOFX) return;
+    d.classList.remove('flash');
+    void d.offsetWidth;
+    d.classList.add('flash');
+  }
 
   function onNext() {
     if (!page) return;
@@ -11261,7 +11810,7 @@ html, body {
     }
 
     var html =
-      '<div class="end-top"><span>人 生 档 案 · 已 归 档</span><span>' + arc.id + '</span></div>' +
+      '<div class="end-top"><span class="ar-stamp">已 归 档</span><span>' + arc.id + '</span></div>' +
       '<div class="end-main"><div class="end-left">' +
       '<h1 class="end-name">' + arc.name + '</h1>' +
       '<div class="end-life"><b>' + arc.born + ' — ' + arc.died + '</b> · ' + arc.countryName + ' · ' +
@@ -11305,9 +11854,14 @@ html, body {
       '<button class="btn primary" id="end-again">再抽一次</button>' +
       '<button class="btn" id="end-same">同一个起点</button>' +
       '<button class="btn" id="end-share">复制这段签文</button>' +
-      '</div>';
+      '</div>' +
+      '<div class="end-foot">卷宗 ' + arc.id + ' · ' + arc.name + ' · 共 ' +
+      (arc.miles ? arc.miles.length : 0) + ' 条记事 · 抽签第 ' + (loadLives().length || 1) + ' 次</div>';
 
-    $('end-body').innerHTML = html;
+    var body = $('end-body');
+    body.classList.add('dossier', 'end-dossier');
+    body.setAttribute('data-stage', 'end');
+    body.innerHTML = '<div class="binding" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>' + html;
 
     $('end-again').addEventListener('click', function () { drawScreen(true); });
     $('end-same').addEventListener('click', function () {
@@ -11402,6 +11956,15 @@ html, body {
     $('btn-start').addEventListener('click', startGame);
     $('btn-redraw').addEventListener('click', doDraw);
     $('btn-next').addEventListener('click', onNext);
+    $('btn-more').addEventListener('click', onMore);
+    $('pocket-tab').addEventListener('click', function (e) {
+      e.stopPropagation();
+      $('pocket').classList.toggle('open');
+    });
+    document.addEventListener('click', function (e) {
+      var pk = $('pocket');
+      if (pk.classList.contains('open') && !pk.contains(e.target)) pk.classList.remove('open');
+    });
     $('link-cabinet').addEventListener('click', cabinet);
     $('link-cabinet2').addEventListener('click', cabinet);
     $('cab-back').addEventListener('click', function () { show('screen-draw'); });
@@ -11418,7 +11981,11 @@ html, body {
       if (tag === 'input' || tag === 'textarea') return;
       if (e.key === 'Enter' || e.key === ' ') {
         var btn = $('btn-next');
-        if ($('screen-game').classList.contains('active') && !btn.disabled && !btn.classList.contains('hidden')) {
+        // 长页还没读完时，空格/回车先当作「继续读」，别让玩家以为卡住
+        var more = $('btn-more');
+        if ($('screen-game').classList.contains('active') && more && !more.classList.contains('hidden')) {
+          e.preventDefault(); onMore();
+        } else if ($('screen-game').classList.contains('active') && !btn.disabled && !btn.classList.contains('hidden')) {
           e.preventDefault(); onNext();
         } else if ($('screen-draw').classList.contains('active') && !$('btn-start').disabled) {
           e.preventDefault(); startGame();
@@ -11437,10 +12004,12 @@ html, body {
     var seed = q.get('seed');
     if (!seed) return false;
     if (q.get('nofx') === '1') {
+      NOFX = true;
       var st = document.createElement('style');
       st.textContent = '*{animation:none!important;transition:none!important}';
       document.head.appendChild(st);
     }
+    if (q.get('split') === '1') SPLIT_FORCE = true;
     var forced = {};
     if (q.get('c')) forced.country = q.get('c');
     if (q.get('fam')) forced.fam = parseInt(q.get('fam'), 10);
@@ -11459,6 +12028,9 @@ html, body {
       startGame();
       var timer = setInterval(function () {
         if (document.getElementById('screen-end').classList.contains('active')) { clearInterval(timer); return; }
+        // 长页会先折叠，自动流程也得先读
+        var more = document.getElementById('btn-more');
+        if (more && !more.classList.contains('hidden')) { more.click(); return; }
         var opt = document.querySelector('#decision .option:not(.locked)');
         if (opt) { opt.click(); return; }
         var btn = document.getElementById('btn-next');
