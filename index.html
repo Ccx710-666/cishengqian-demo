@@ -1915,7 +1915,7 @@ html, body {
 
   C.title = '此生签';
   C.subtitle = '一次人生的随机抽样';
-  C.version = '0.12.0 readable';
+  C.version = '0.12.1 readable';
 
   C.countries = {
     CHN: { code: 'CHN', name: '中国', weight: 1410, life: 78.2, cur: '元', sym: '¥', living: 18000, mortgage: 36000, pension: 0.42 },
@@ -2523,7 +2523,8 @@ html, body {
 
   ev({
     id: 'rent', a: [21, 27], w: 1.2,
-    when: function (S) { return !(S.fam >= 4 && S.flag.familyMoney); },
+    // 备考期不上班，别在「公司附近」租房——那句文案的前提是已有工作。
+    when: function (S) { return !S.jobPending && !(S.fam >= 4 && S.flag.familyMoney); },
     text: function (S) {
       if (band(S) === 'rich') return ['你租的房子在市中心，电梯直达，窗户对着一条河。', '房东说不涨了，他知道你不缺这点钱。'];
       return ['你租的房子在六楼，没有电梯。', '房东每年涨一次价，每次都说这是最后一次。'];
@@ -2985,7 +2986,7 @@ html, body {
     b: '回头看，真正由自己决定的只有那么几步'
   };
 
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一套事，双减、分流、考研、灵活就业、租房、裁员、体检、房贷、自媒体、基金。原型版本 0.12.0，全部内容在本地运行，不联网、不上传。";
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一套事，双减、分流、考研、灵活就业、租房、裁员、体检、房贷、自媒体、基金。原型版本 0.12.1，全部内容在本地运行，不联网、不上传。";
 
   root.CONTENT = C;
   if (typeof module !== 'undefined' && module.exports) module.exports = C;
@@ -4857,10 +4858,12 @@ html, body {
   });
 
   ev({
-    id: 'cn_exam_civil', a: [22, 31], w: 1.8, when: only('CHN'),
+    id: 'cn_exam_civil', a: [22, 31], w: 1.8,
+    // 备考期（jobPending）里不再问一遍：那两年已经在复习了。
+    when: function (S) { return S.country === 'CHN' && !S.jobPending; },
     text: lines('家里说，去考个编制吧，一辈子安稳。', '报名的人一年比一年多。'),
     choices: [
-      opt('考', '你去考了', { know: 3, health: -2, flag: { examCivil: 1 } }, '那一年的题，你到现在还记得一道'),
+      opt('考', '你去考了', function (S) { return { know: 3, health: -2, cash: -M(S, 3000, 0, 0), flag: { examCivil: 1 } }; }, '那一年的题，你到现在还记得一道'),
       opt('不考，做别的', '你没去考', function (S) { return { rel: { father: -4 }, cash: M(S, 6000, 0, 0) }; }),
       opt('一边工作一边考', '你一边上班一边考了两年', function (S) { return { know: 5, health: -5, rel: { partner: -2 } }; })
     ]
@@ -5984,8 +5987,8 @@ html, body {
     return '晚年';
   };
 
-  C.version = '0.12.0 readable';
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一套事，双减、分流、考研、灵活就业、租房、裁员、体检、房贷、自媒体、基金。原型版本 0.12.0，全部内容在本地运行，不联网、不上传。";
+  C.version = '0.12.1 readable';
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一套事，双减、分流、考研、灵活就业、租房、裁员、体检、房贷、自媒体、基金。原型版本 0.12.1，全部内容在本地运行，不联网、不上传。";
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -8064,9 +8067,11 @@ html, body {
   fork('firstjob', {
     CHN: function (S) {
       return [
-        { t: '考编，考到上岸为止', s: '你在家复习了两年，最后考上了', eff: function (S) { return { job: { tier: 1, name: C.jobNames[S.country][0][0] }, cash: -M(S, 12000, 0, 0), know: 4, rel: { father: 4 }, flag: { examPost: 1 } }; } },
+        // 考编先花钱：报班买书是明账，两年不上班是暗账——所以岗位要 delayed 两年再给，
+        // 这两年按待业结算，账上的钱是往下走的。
+        { t: '考编，考到上岸为止', s: '你在家复习了两年，最后考上了', eff: function (S) { return { job: { tier: 2, name: '事业单位职员' }, jobDelay: 2, cash: -M(S, 12000, 0, 0), know: 4, health: -2, rel: { father: 4 }, flag: { examPost: 1 }, _note: '报班买书是一笔现钱；这两年不进工资，只有支出，入职之后才开始有。' }; } },
         { t: '进厂，加班多', s: '你进了厂，加班费比工资高', eff: function (S) { return { job: { tier: 2, name: C.jobNames[S.country][0][1] }, health: -7, cash: M(S, 6000, 0, 0), flag: { hard: 1 } }; }, ghost: '那份工后来落下了腰上的毛病' },
-        { t: '跑外卖、开网约车，先干着', s: '你没有固定的单位，但有活就干', eff: function (S) { return { job: { tier: 1, name: C.jobNames[S.country][0][2] || C.jobNames[S.country][0][0] }, health: -3, cash: M(S, 4000, 0, 0), flag: { gig: 1 } }; } }
+        { t: '跑外卖、开网约车，先干着', s: '你没有固定的单位，但有活就干', eff: function (S) { return { job: { tier: 1, name: '外卖骑手' }, health: -3, cash: M(S, 4000, 0, 0), flag: { gig: 1 } }; } }
       ];
     },
     DEU: function (S) {
@@ -12374,7 +12379,9 @@ html, body {
 
   ev({
     id: 'md24_kaogong', a: [22, 30], w: 2.8,
-    when: onlyCN(yr(2019, 2050)),
+    // 已经在备考路上（jobPending）就不再问一遍：再问一次会把入职又往后推两年，
+    // 最后变成四十岁还在复习。
+    when: onlyCN(function (S) { return !S.jobPending && S.year >= 2019 && S.year <= 2050; }),
     text: function (S) {
       return [
         '家里说，去考个编制。',
@@ -12382,7 +12389,7 @@ html, body {
       ];
     },
     choices: [
-      o('考了两年，考上了', '你考了两年，最后进了一个离家两百公里的单位', { job: { tier: 2, name: '事业单位职员' }, know: 4, cash: -15000, rel: { father: 6, mother: 5 }, flag: { md_post_job: 1 } }),
+      o('考了两年，考上了', '你考了两年，最后进了一个离家两百公里的单位', { job: { tier: 2, name: '事业单位职员' }, jobDelay: 2, know: 4, cash: -15000, rel: { father: 6, mother: 5 }, flag: { md_post_job: 1 }, _note: '这两年没有工资，报名、报班、来回跑的钱先出去；入职之后才有那份稳定收入。' }),
       o('考了一次，没再考', '成绩出来，你把书收进了箱子', { know: 2, cash: -6000, rel: { father: -4 }, flag: { md_gaveup_exam: 1 } }),
       o('没去考', '你说了句不想，饭桌上没人接话', { rel: { father: -6, mother: -3 }, know: 1, flag: { md_no_exam: 1 } })
     ]
@@ -12390,7 +12397,8 @@ html, body {
 
   ev({
     id: 'md25_slow', a: [22, 28], w: 2.5,
-    when: onlyCN(yr(2020, 2050)),
+    // 「毕业了，工作还没定」的前提是真的没工作，也没在备考。
+    when: onlyCN(function (S) { return !S.job && !S.jobPending && S.year >= 2020 && S.year <= 2050; }),
     text: T('毕业了，工作还没定。', '同学群里有人晒入职，有人晒录取，你把群设成了免打扰。'),
     choices: [
       o('先在家待着', '你在家待了半年，白天睡觉，晚上看书', { know: 2, health: -2, rel: { father: -5, mother: -2 }, cash: -6000, flag: { md_gap: 1 } }),
@@ -12400,7 +12408,8 @@ html, body {
   });
 
   ev({
-    id: 'md26_rent', a: [22, 30], w: 2.6, when: onlyCN(),
+    // 备考期没有公司，别在「公司附近」租房。
+    id: 'md26_rent', a: [22, 30], w: 2.6, when: onlyCN(function (S) { return !S.jobPending; }),
     text: T('你在公司附近租了一间。', '合租，十四平，厨房和别人共用。'),
     choices: [
       o('租近一点，贵一点', '你走路十分钟到公司，房租吃掉一大半', function (S) { return { cash: -30000, health: 3, know: 1, flag: { md_rentclose: 1 } }; } ),
@@ -12411,7 +12420,7 @@ html, body {
 
   ev({
     id: 'md27_ai', a: [23, 55], w: 2.6,
-    when: onlyCN(yr(2023, 2060)),
+    when: onlyCN(function (S) { return !S.jobPending && S.year >= 2023 && S.year <= 2060; }),
     text: T('公司给每个人开了个新工具。', '写方案、做表、回邮件，它几秒钟就出一版。'),
     choices: [
       o('先学会用它', '你把手上重复的活都交给了它，空出来的时间用来做别的', { know: 6, cash: 4000, health: -3, flag: { md_ai: 1 } }),
@@ -12874,6 +12883,7 @@ html, body {
       edu: 'none',
       job: null,
       jobTier: 0,
+      jobPending: null,
       lastIncome: 0,
       retired: false,
       married: false,
@@ -13067,12 +13077,23 @@ html, body {
     if (e.married !== undefined || e.partner !== undefined || typeof e.kids === 'number' || e.edu || e.retire) d.irrev = true;
     if (e.edu) S.edu = e.edu;
     if (e.job !== undefined) {
-      if (e.job === null) { S.job = null; S.jobTier = 0; }
+      if (e.job === null) { S.job = null; S.jobTier = 0; S.jobPending = null; }
       else {
         var tier = e.job.tier || 1;
-        S.job = { tier: tier, name: e.job.name || C.jobNames[S.country][0][tier - 1] };
-        S.jobTier = tier;
-        S.lastIncome = C.income[S.country][tier - 1];
+        var jn = e.job.name || C.jobNames[S.country][0][tier - 1];
+        // jobDelay：先备考，过几年才真正入职。
+        // 考编、考研这类选择，文本写的是「在家复习了两年」——如果当页就把岗位给他，
+        // 下一年的账立刻多一份工资，玩家会觉得「考编居然还能挣钱」。
+        // 挂着 pending，这几年按待业算，入职那年在 yearStep 里兑现。
+        if (e.jobDelay > 0 && !S.job) {
+          S.jobPending = { tier: tier, name: jn, year: S.year + e.jobDelay, from: S.year };
+          S.jobTier = 0;
+        } else {
+          S.job = { tier: tier, name: jn };
+          S.jobTier = tier;
+          S.lastIncome = C.income[S.country][tier - 1];
+          S.jobPending = null;
+        }
       }
     }
     if (e.married !== undefined) S.married = e.married;
@@ -13105,6 +13126,9 @@ html, body {
       base = (S.lastIncome || C.income[S.country][0]) * ci.pension;
       var floorByCountry = { CHN: 0.92, DEU: 1.12, BRA: 0.86 };
       base = Math.max(base, ci.living * (floorByCountry[S.country] || 0.5));
+    } else if (S.jobPending) {
+      // 脱产备考：这几年没有工资，靠积蓄过日子（livingCost 那边会照收生活费）。
+      base = 0;
     } else if (S.job) {
       base = C.income[S.country][S.job.tier - 1];
     } else {
@@ -13122,6 +13146,9 @@ html, body {
     var youth = S.married ? 1 : (S.age < 22 ? 0.45 : (S.age < 27 ? 0.72 : 1));
     var dep = 1 + dependents * 0.26;
     var ageFactor = S.age >= 65 ? 0.82 : 1;
+    // 脱产备考：没有工资，但饭还是要吃、房租还是要交。按必要开销的六折从积蓄里出，
+    // 不能用下面那套「收入越高花得越多」的钳位——收入为零时它会把生活费一起算成零。
+    if (S.jobPending) return r0(ci.living * dep * youth * ageFactor * 0.62);
     var base = ci.living * dep * youth * ageFactor;
     var ratio = inc > 0 ? inc / Math.max(base, 1) : 0;
     var lifestyle = 1 + 0.55 * Math.max(0, ratio - 1);
@@ -13532,6 +13559,25 @@ html, body {
     S.age++; S.year++;
     var flav = flavorOf(S.age, S.country, S.seed);
 
+    // 备考期满：这一年才算真正上班。必须放在结算之前，否则这一年的工资发不出来。
+    if (S.jobPending && S.year >= S.jobPending.year) {
+      var jp = S.jobPending;
+      S.job = { tier: jp.tier, name: jp.name };
+      S.jobTier = jp.tier;
+      S.lastIncome = C.income[S.country][jp.tier - 1];
+      S.jobPending = null;
+      lines.push('手续办完，你成了' + jp.name + '。');
+    }
+    // 还在备考的年份给一句交代，否则这几年读起来像什么都没发生。
+    // 只写「在复习」这个状态，不写「还没考上」——选项那句已经把结果说了，
+    // 这里再说一次「又考了一年」就跟前面的「最后考上了」打架。
+    if (S.jobPending && S.jobPending.year > S.year) {
+      var prepIdx = S.year - (S.jobPending.from || S.year);
+      lines.push(prepIdx <= 1
+        ? '你没去上班，在家复习，靠积蓄过日子。'
+        : '第二年，桌上摞着做完的卷子，人瘦了一圈。');
+    }
+
     if (S.age === 6 && S.edu === 'none') {
       S.edu = 'primary';
       lines.push(C.schoolLine ? C.schoolLine(S) : '你上学了。');
@@ -13565,7 +13611,7 @@ html, body {
         lines.push('成年那年，家里拿不出什么。');
       }
     }
-    if (S.age === 24 && !S.job && !S.retired) {
+    if (S.age === 24 && !S.job && !S.retired && !S.jobPending) {
       S.job = { tier: 1, name: C.jobNames[S.country][0][0] };
       S.jobTier = 1;
       S.lastIncome = C.income[S.country][0];
