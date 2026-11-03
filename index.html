@@ -1724,7 +1724,7 @@ html, body {
         '你上学了。报到那天你走错了教室，被一个老师领了回去。'
       ],
       poor: [
-        '你上学了。书包是哥哥用过的那只，肩带缝过一次。',
+        '你上学了。书包是亲戚家孩子用过的，肩带缝过一次。',
         '你上学了。纸筒是邻居家孩子用过的，糖已经倒空了。',
         '你上学了。本子是学校发的，铅笔用到只剩一截，套着一个笔套。'
       ]
@@ -2555,7 +2555,7 @@ html, body {
     b: '回头看，真正由自己决定的只有那么几步'
   };
 
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.10.0，全部内容在本地运行，不联网、不上传。";
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.10.1，全部内容在本地运行，不联网、不上传。";
 
   root.CONTENT = C;
   if (typeof module !== 'undefined' && module.exports) module.exports = C;
@@ -5107,7 +5107,7 @@ html, body {
       return M(S,
         ['有一年冬天，你在纸上写下一句话。', '写完折起来，夹进了字典最里面。'],
         ['有一年冬天，你在日记本上写了一行字。', '写完合上，塞进抽屉最里面。'],
-        ['有一年夏天，你在作业本背面写下一句话。', '写完撕下来，折好放进钱包。']);
+        ['有一年夏天，你在一个本子的背面写下一句话。', '写完撕下来，折好放进钱包。']);
     },
     m_backhome: function (S) {
       return M(S,
@@ -5349,7 +5349,7 @@ html, body {
 
 
   // 选项级约束：没这个人，就别给这个选项
-  tune('m_chores', { 2: { __need: 'sib' } });
+  tune('m_chores', { 2: { __need: 'younger' } });
   tune('parentill', { 2: { __need: 'sib' } });
   tune('m_sibmoney', { 0: { __need: 'sib' } });
 
@@ -5551,8 +5551,8 @@ html, body {
     return '晚年';
   };
 
-  C.version = '0.10.0 vertical slice';
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.10.0，全部内容在本地运行，不联网、不上传。";
+  C.version = '0.10.1 vertical slice';
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.10.1，全部内容在本地运行，不联网、不上传。";
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -7271,7 +7271,11 @@ html, body {
 
   // 退休后的回望：最后一天是怎么过的
   ev({
-    id: 'late_last_shift', a: [58, 74], w: 2.4, need: 'retired',
+    id: 'late_last_shift', a: [58, 74], w: 2.4, need: 'retired', about: 'job',
+    // 「最后一天」只能是退休那阵子的事。原来窗口 58–74，七十岁的人还在清柜子。
+    when: function (S) {
+      return S.retired && (!S.flag.retireYear || S.year - S.flag.retireYear <= 2);
+    },
     text: function (S) {
       return M(S,
         ['最后一天，你把柜子清空了。', '钥匙交上去，工牌在角上剪了一刀。'],
@@ -8407,6 +8411,8 @@ html, body {
     var a = [].slice.call(arguments);
     return function () { return a.slice(); };
   }
+  // 已经不在学校的人，不该再读到「放学」「作业」「穿去学校」。
+  function left(S) { return !!(S && S.flag && S.flag.left_school); }
   // 按国家分岔的文案
   function TC(m) {
     return function (S) { return (m[S.country] || m.CHN).slice(); };
@@ -8791,7 +8797,7 @@ html, body {
     choices: [
       o('写到会为止', '你把一张纸写满了，最后写正了', { know: 4, health: -1, flag: { k_careful: 1 } }),
       o('只写前一个字', '你只写前一个字，后面的空着', { know: 1 }),
-      o('照着描', '你照着户口本上的字描，描得很像', { know: 3 })
+      o('照着描', '你照着大人写的字描，描得很像', { know: 3 })
     ]
   });
 
@@ -9521,16 +9527,21 @@ html, body {
 
   ev({
     id: 'x10_stall', a: [10, 16], w: 0.8,
-    text: TC({
-      CHN: ['家里在街边有个摊。', '放学后你得去看一会儿，让人回去吃饭。'],
-      DEU: ['家里开一个小店，傍晚最忙。', '你放学后去收银台站着。'],
-      BRA: ['家里在集市有一个摊位。', '周末你要去帮忙，一站就是一天。']
-    }),
-    choices: [
-      o('学会了算账', '你学会了心算，找零从没出错', { know: 3, health: -1, rel: { mother: 4 }, flag: { k_handy: 1 } }),
-      o('偷懒', '你躲在后面，被叫出来三次', { health: 1, rel: { mother: -2 } }),
-      o('顺便做作业', '你把作业摊在柜台下面，一边看摊一边写', { know: 2, health: -2, rel: { mother: 2 } })
-    ]
+    text: function (S) {
+      var l = left(S);
+      if (S.country === 'CHN') return ['家里在街边有个摊。', l ? '每天下午你得去看一会儿，让人回去吃饭。' : '放学后你得去看一会儿，让人回去吃饭。'];
+      if (S.country === 'DEU') return ['家里开一个小店，傍晚最忙。', '你去收银台站着。'];
+      return ['家里在集市有一个摊位。', '周末你要去帮忙，一站就是一天。'];
+    },
+    choices: function (S) {
+      var l = left(S);
+      return [
+        o('学会了算账', '你学会了心算，找零从没出错', { know: 3, health: -1, rel: { mother: 4 }, flag: { k_handy: 1 } }),
+        o('偷懒', '你躲在后面，被叫出来三次', { health: 1, rel: { mother: -2 } }),
+        l ? o('顺便看书', '你把书摊在柜台下面，一边看摊一边看', { know: 2, health: -2, rel: { mother: 2 } })
+          : o('顺便做作业', '你把作业摊在柜台下面，一边看摊一边写', { know: 2, health: -2, rel: { mother: 2 } })
+      ];
+    }
   });
 
   ev({
@@ -9581,14 +9592,15 @@ html, body {
 
   ev({
     id: 'x11_library', a: [11, 16], w: 0.8,
-    text: TC({
-      CHN: ['镇上有一个图书室，一个下午才开。', '书不多，有一半是别人捐的。'],
-      DEU: ['学校的图书室每周开两次，可以借三本。', '管理员记得每个人借过什么。'],
-      BRA: ['社区里有一个小图书角，书放在两个铁架上。', '登记本上已经写满了。']
-    }),
+    text: function (S) {
+      var l = left(S);
+      if (S.country === 'CHN') return ['镇上有一个图书室，一个下午才开。', '书不多，有一半是别人捐的。'];
+      if (S.country === 'DEU') return [l ? '社区的图书室每周开两次，可以借三本。' : '学校的图书室每周开两次，可以借三本。', '管理员记得每个人借过什么。'];
+      return ['社区里有一个小图书角，书放在两个铁架上。', '登记本上已经写满了。'];
+    },
     choices: [
       o('一周借两本', '你一周借两本，看了大半年', { know: 5, health: -1, flag: { k_bookworm: 1 } }),
-      o('只借课本相关的', '你只借跟课有关的，别的没碰', { know: 3, flag: { k_careful: 1 } }),
+      o('只借跟课有关的', '你只借跟课有关的，别的没碰', { know: 3, flag: { k_careful: 1 } }),
       o('去了一次就不去了', '你去了一次，觉得没意思', { know: 1 })
     ]
   });
@@ -9598,10 +9610,10 @@ html, body {
     text: TC({
       CHN: ['家里买了一台电脑，放在客厅，盖着一块布。', '开机要等很久，风扇很响。'],
       DEU: ['家里有了一台电脑，接在电话线上网。', '一上网，电话就打不出去。'],
-      BRA: ['亲戚家有一台电脑，你去做作业的名义去了好几次。', '键盘上有些字母已经磨掉了。']
+      BRA: ['亲戚家有一台电脑，你找了个借口去了好几次。', '键盘上有些字母已经磨掉了。']
     }),
     choices: [
-      o('天天用', '你天天用，学会了很多课本上没有的', { know: 4, health: -2, flag: { k_handy: 1 } }),
+      o('天天用', '你天天用，学会了很多书上没有的', { know: 4, health: -2, flag: { k_handy: 1 } }),
       o('只用来打游戏', '你只用来打游戏，打到很晚', { know: 1, health: -3 }),
       o('让给家里人', '你让给家里人用，自己很少碰', { rel: { mother: 3 }, know: 1 })
     ]
@@ -9760,11 +9772,15 @@ html, body {
   ev({
     id: 'x12_cat', a: [12, 16], w: 0.7,
     text: T('墙根下有一只很小的猫，眼睛还没全睁开。', '它叫了一声，声音很细。'),
-    choices: [
-      o('抱回家', '你把它抱回了家，家里说养着吧', { health: 1, rel: { mother: 2 }, flag: { pet: 1, k_soft_pet: 1 } }),
-      o('每天来喂', '你每天放学来看它，喂了半个月', { health: 1, know: 2, flag: { soft: 1 } }),
-      o('没管', '你看了两眼就走了，第二天它不在了', { know: 1 })
-    ]
+    choices: function (S) {
+      var l = left(S);
+      return [
+        o('抱回家', '你把它抱回了家，家里说养着吧', { health: 1, rel: { mother: 2 }, flag: { pet: 1, k_soft_pet: 1 } }),
+        l ? o('每天来喂', '你每天绕过去看它，喂了半个月', { health: 1, know: 2, flag: { soft: 1 } })
+          : o('每天来喂', '你每天放学来看它，喂了半个月', { health: 1, know: 2, flag: { soft: 1 } }),
+        o('没管', '你看了两眼就走了，第二天它不在了', { know: 1 })
+      ];
+    }
   });
 
   // ═════════════════ 13 岁 ═════════════════
@@ -9841,16 +9857,21 @@ html, body {
 
   ev({
     id: 'x13_newbike', a: [13, 17], w: 0.8,
-    text: TC({
-      CHN: ['家里给你买了一辆新车，能变速。', '第一次骑去学校，你特意绕了远路。'],
-      DEU: ['家里给你买了一辆二手车，换了新轮胎。', '你把它锁在楼下的架子上。'],
-      BRA: ['家里给你买了一辆旧车，漆是自己刷的。', '刷得不太匀，远看还行。']
-    }),
-    choices: [
-      o('天天骑', '你天天骑，一学期骑坏了两条内胎', { health: 2, know: 1 }),
-      o('怕丢，很少骑', '你怕丢，锁在楼下很少骑', { health: 1, know: 1, flag: { k_careful: 1 } }),
-      o('被偷了', '车停在学校门口，放学就没了', { know: 2, health: -1, rel: { mother: -2 } })
-    ]
+    text: function (S) {
+      var l = left(S);
+      if (S.country === 'CHN') return ['家里给你买了一辆新车，能变速。', l ? '第一次骑出去，你特意绕了远路。' : '第一次骑去学校，你特意绕了远路。'];
+      if (S.country === 'DEU') return ['家里给你买了一辆二手车，换了新轮胎。', '你把它锁在楼下的架子上。'];
+      return ['家里给你买了一辆旧车，漆是自己刷的。', '刷得不太匀，远看还行。'];
+    },
+    choices: function (S) {
+      var l = left(S);
+      return [
+        o('天天骑', '你天天骑，一学期骑坏了两条内胎', { health: 2, know: 1 }),
+        o('怕丢，很少骑', '你怕丢，锁在楼下很少骑', { health: 1, know: 1, flag: { k_careful: 1 } }),
+        l ? o('被偷了', '车停在楼下，第二天就没了', { know: 2, health: -1, rel: { mother: -2 } })
+          : o('被偷了', '车停在学校门口，放学就没了', { know: 2, health: -1, rel: { mother: -2 } })
+      ];
+    }
   });
 
   ev({
@@ -9866,11 +9887,14 @@ html, body {
   ev({
     id: 'x13_clothes', a: [13, 17], w: 0.75,
     text: T('你第一次自己去买衣服。', '店里有一面镜子，你站在前面看了很久。'),
-    choices: [
-      o('挑了很显眼的', '你挑了一件很显眼的，穿去学校被看了好几天', { know: 2, health: 1, flag: { k_bold: 1 } }),
-      o('挑了最普通的', '你挑了一件最普通的，穿了两年', { know: 1, rel: { mother: 2 }, flag: { k_careful: 1 } }),
-      o('什么也没买', '你转了一圈，空手回来', { know: 1, health: -1 })
-    ]
+    choices: function (S) {
+      var l = left(S);
+      return [
+        o('挑了很显眼的', l ? '你挑了一件很显眼的，穿出去被看了好几天' : '你挑了一件很显眼的，穿去学校被看了好几天', { know: 2, health: 1, flag: { k_bold: 1 } }),
+        o('挑了最普通的', '你挑了一件最普通的，穿了两年', { know: 1, rel: { mother: 2 }, flag: { k_careful: 1 } }),
+        o('什么也没买', '你转了一圈，空手回来', { know: 1, health: -1 })
+      ];
+    }
   });
 
   // ═════════════════ 14 岁 ═════════════════
@@ -9887,7 +9911,7 @@ html, body {
 
   ev({
     id: 'x14_fight', a: [14, 17], w: 0.8,
-    text: T('两边约在放学后的操场。', '来的人比说好的多，有几个你不认识。'),
+    text: T('两边约在操场。', '来的人比说好的多，有几个你不认识。'),
     choices: [
       o('冲上去', '你冲上去，被拉开了，嘴角破了', { health: -3, know: 1, rel: { mother: -3 }, flag: { k_tough: 1 } }),
       o('站着不动', '你站着没动，那边的人也散了', { know: 2, health: -1, flag: { k_careful: 1 } }),
@@ -10149,12 +10173,19 @@ html, body {
 
   ev({
     id: 'x16_familyill', a: [16, 18], w: 0.7,
-    text: T('家里有人病了一场，住了半个月。', '那段时间家里没人问你功课。'),
-    choices: [
-      o('去医院陪', '你每天放学去医院，作业在走廊上写', { know: 1, health: -3, rel: { mother: 6, father: 4 } }),
-      o('留在学校', '你留在学校，周末才回去', { know: 4, rel: { mother: -2 }, health: -1 }),
-      o('两头跑', '你两头跑了一个月，人瘦了一圈', { know: 2, health: -4, rel: { mother: 4 } })
-    ]
+    text: function (S) {
+      return ['家里有人病了一场，住了半个月。', left(S) ? '那段时间家里没人顾得上你。' : '那段时间家里没人问你功课。'];
+    },
+    choices: function (S) {
+      var l = left(S);
+      return [
+        l ? o('去医院陪', '你每天收工去医院，夜里就在走廊上坐着', { know: 1, health: -3, rel: { mother: 6, father: 4 } })
+          : o('去医院陪', '你每天放学去医院，作业在走廊上写', { know: 1, health: -3, rel: { mother: 6, father: 4 } }),
+        l ? o('留在做事的地方', '你留在做事的地方，周末才回去', { know: 4, rel: { mother: -2 }, health: -1 })
+          : o('留在学校', '你留在学校，周末才回去', { know: 4, rel: { mother: -2 }, health: -1 }),
+        o('两头跑', '你两头跑了一个月，人瘦了一圈', { know: 2, health: -4, rel: { mother: 4 } })
+      ];
+    }
   });
 
   ev({
@@ -10179,6 +10210,8 @@ html, body {
 
   ev({
     id: 'x16_merge', a: [16, 18], w: 0.6,
+    // 已经离校的人，"学校要并到别处"这件事跟他没关系了。
+    when: function (S) { return !left(S); },
     text: T('学校要并到别处去。', '通知贴在门口，说下学期换地方上课。'),
     choices: [
       o('跟着过去', '你跟着过去了，路远了不少', { know: 2, health: -2 }),
@@ -10229,8 +10262,8 @@ html, body {
       return ['母亲又怀了一个。', '那几年，超生的罚款按上一年收入算。'];
     },
     choices: [
-      { t: '生下来，交罚款', s: '弟弟生下来了，罚款分三年交完', eff: function (S) { return { cash: M(S, -8000, 0, 0), rel: { mother: 5 }, flag: { sib: 1 } }; }, ghost: '那三年，家里没有添过一件新家具' },
-      { t: '送到外婆家养', s: '弟弟被送到外婆家，户口挂在那里', eff: function (S) { return { cash: M(S, -2000, 0, 0), rel: { mother: 2 }, flag: { sib: 1, hidden: 1 } }; }, ghost: '他六岁才回到这个家，叫你叫得很生' },
+      { t: '生下来，交罚款', s: '弟弟生下来了，罚款分三年交完', eff: function (S) { C.sib.add(S, 'M'); return { cash: M(S, -8000, 0, 0), rel: { mother: 5 }, flag: { sib: 1 } }; }, ghost: '那三年，家里没有添过一件新家具' },
+      { t: '送到外婆家养', s: '弟弟被送到外婆家，户口挂在那里', eff: function (S) { C.sib.add(S, 'M', { away: 1 }); return { cash: M(S, -2000, 0, 0), rel: { mother: 2 }, flag: { sib: 1, hidden: 1 } }; }, ghost: '他六岁才回到这个家，叫你叫得很生' },
       { t: '没有生', s: '那件事没有发生', eff: { rel: { mother: -2 }, know: 1 } }
     ]
   });
@@ -10385,7 +10418,7 @@ html, body {
     },
     choices: [
       { t: '自己填', s: '你自己填了三个晚上', eff: { know: 2, health: -1, cash: 400 } },
-      { t: '找税务师', s: '你找了税务师，付了一笔钱', eff: { cash: 900, know: 1 } },
+      { t: '找税务师', s: '你找了税务师，退回来的比付掉的多', eff: { cash: 900, know: 1 } },
       { t: '不报了', s: '你没报，觉得麻烦', eff: { cash: -300, know: -1 } }
     ]
   });
@@ -11684,6 +11717,33 @@ html, body {
     return null;
   }
 
+  // 剧情里「又生了一个」的时候，户籍上必须真的多一个人。
+  // 之前 cn_onechild 只写了 flag.sib，S.sibs 里没有 —— 于是正文有弟弟，
+  // 户籍页、手足事件、葬礼名单里都没有他。这里统一登记。
+  function sibAdd(S, sex, opts) {
+    opts = opts || {};
+    var bornAt = (typeof opts.bornAt === 'number') ? opts.bornAt : S.age;
+    var gap = Math.max(1, bornAt);          // 主角几岁，弟妹就小几岁
+    var pool = C.names[S.country][sex === 'F' ? 'F' : 'M'];
+    var idx = h2(S.seed, 8800 + (S.sibs ? S.sibs.length : 0) * 7) % pool.length;
+    var tries = 0;
+    function fullName(i) {
+      if (S.country === 'CHN') return String(S.name).slice(0, 1) + pool[i][1];
+      return pool[i][0] + ' ' + pool[i][1];
+    }
+    var name = fullName(idx);
+    while (S.sibs.some(function (x) { return x.name === name; }) && tries++ < pool.length) {
+      idx = (idx + 1) % pool.length;
+      name = fullName(idx);
+    }
+    var s = { d: -gap, sex: sex, name: name, alive: true, lv: 0, told: true, bornAt: bornAt };
+    if (opts.away) s.away = 1;
+    S.sibs.push(s);
+    S.flag.sib = 1;
+    S.miles.push({ year: S.year, age: S.age, kind: 'sib', text: '家里多了' + (sex === 'F' ? '一个妹妹' : '一个弟弟') });
+    return s;
+  }
+
   function newLife(seed, forced) {
     rebuildIndex();
     var rnd = mulberry32(seed >>> 0);
@@ -11935,7 +11995,9 @@ html, body {
     }
     if (typeof e.mortgage === 'number') S.mortgageLeft = e.mortgage;
     if (typeof e.mortgagePay === 'number') S.mortgagePay = e.mortgagePay;
-    if (e.retire) S.retired = true;
+    // 退休之后就不再有「单位」：户籍页不该还写着在职，公司里的事也不该再找上来。
+    // 职级留着（判词要用），只把岗位摘掉。
+    if (e.retire) { S.retired = true; S.job = null; S.flag.retireYear = S.year; }
     if (e.debt) S.debt = true;
     if (e.obsession) S.obsession = e.obsession;
     if (e.flag) Object.keys(e.flag).forEach(function (k) { S.flag[k] = e.flag[k]; d.flags.push(k); });
@@ -13063,7 +13125,7 @@ html, body {
 
   // 内容文件加载得比引擎早，只能挂在 CONTENT 上，事件运行时再取。
   C.sib = {
-    alive: sibAlive, word: sibWord, call: sibCall, name: sibName,
+    alive: sibAlive, word: sibWord, call: sibCall, name: sibName, add: sibAdd,
     elders: sibElders, youngers: sibYoungers, pick: sibPick,
     due: sibBirthDue, isElder: sibIsElder
   };
@@ -13076,7 +13138,7 @@ html, body {
     income: income, qx: qx, deathCheck: deathCheck, settleYear: settleYear, livingCost: livingCost,
     obsessionResult: obsessionResult,
     sibAlive: sibAlive, sibWord: sibWord, sibCall: sibCall, sibName: sibName,
-    sibElders: sibElders, sibYoungers: sibYoungers, sibPick: sibPick
+    sibElders: sibElders, sibYoungers: sibYoungers, sibPick: sibPick, sibAdd: sibAdd
   };
 
   root.ENGINE = api;
@@ -13305,7 +13367,7 @@ html, body {
       '<span class="mc-stamp">' + (S.health >= 55 ? '合 格' : '复 查') + '</span></div>' +
       '</div>' +
       '<div class="pk-card hukou">' +
-      '<div class="pk-head"><span>户 籍 页</span><i>' + (S.job ? '在职' : (S.age < 16 ? '在读' : '待业')) + '</i></div>' +
+      '<div class="pk-head"><span>户 籍 页</span><i>' + (S.retired ? '已退休' : (S.job ? '在职' : (S.age < 16 ? '在读' : '待业'))) + '</i></div>' +
       home +
       '</div>' +
       (S.obsession && C.obsessionById[S.obsession]
