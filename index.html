@@ -1915,7 +1915,7 @@ html, body {
 
   C.title = '此生签';
   C.subtitle = '一次人生的随机抽样';
-  C.version = '0.13.0 modern';
+  C.version = '0.13.1 modern';
 
   C.countries = {
     CHN: { code: 'CHN', name: '中国', weight: 1410, life: 78.2, cur: '元', sym: '¥', living: 18000, mortgage: 36000, pension: 0.42 },
@@ -2986,7 +2986,7 @@ html, body {
     b: '回头看，真正由自己决定的只有那么几步'
   };
 
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一整套事，从幼儿园摇号、双减、普职分流，到考研考编、租房裁员、体检房贷，再到延迟退休与长期护理，每个阶段都有二十条以上，抽到哪些看这一次的运气。原型版本 0.13.0，全部内容在本地运行，不联网、不上传。";
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一整套事，从幼儿园摇号、双减、普职分流，到考研考编、租房裁员、体检房贷，再到延迟退休与长期护理，每个阶段都有二十条以上，抽到哪些看这一次的运气。原型版本 0.13.1，全部内容在本地运行，不联网、不上传。";
 
   root.CONTENT = C;
   if (typeof module !== 'undefined' && module.exports) module.exports = C;
@@ -5987,8 +5987,8 @@ html, body {
     return '晚年';
   };
 
-  C.version = '0.13.0 modern';
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一整套事，从幼儿园摇号、双减、普职分流，到考研考编、租房裁员、体检房贷，再到延迟退休与长期护理，每个阶段都有二十条以上，抽到哪些看这一次的运气。原型版本 0.13.0，全部内容在本地运行，不联网、不上传。";
+  C.version = '0.13.1 modern';
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一整套事，从幼儿园摇号、双减、普职分流，到考研考编、租房裁员、体检房贷，再到延迟退休与长期护理，每个阶段都有二十条以上，抽到哪些看这一次的运气。原型版本 0.13.1，全部内容在本地运行，不联网、不上传。";
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -12927,7 +12927,7 @@ html, body {
     choices: [
       o('分在了一班', '班主任姓王，教语文，字写得很好看', { know: 2, rel: { mother: 2 } }),
       o('分在了最后一个班', '教室在顶楼，夏天很热', { health: -1, know: 2 }),
-      o('家里托人调了班', '你换到了那个据说教得好的老师班上', { know: 4, rel: { mother: 3, father: 2 }, flag: { md_classpick: 1 } })
+      o('家里托人调了班', '你换到了那个据说教得好的老师班上', { know: 4, cash: -8000, health: -1, rel: { mother: 3, father: 2 }, flag: { md_classpick: 1 } })
     ]
   });
 
@@ -12945,8 +12945,8 @@ html, body {
     id: 'mp03_checkin', a: [7, 12], w: 2.6, when: onlyCN(SCHY(2014, 2110)),
     text: T('作业要拍照上传。', '写完、拍照、点提交，一天三科。'),
     choices: [
-      o('每天按时传', '你养成了先写完再玩的习惯，手指上总有铅笔印', { know: 4, health: -1 }),
-      o('攒到晚上一起传', '你十点才开始拍，拍到手机发烫', { know: 1, health: -2, rel: { mother: -3 } }),
+      o('每天按时传', '你养成了先写完再玩的习惯，手指上总有铅笔印', { know: 4, health: -1, cash: -400 }),
+      o('攒到晚上一起传', '你十点才开始拍，和同学对完答案才传', { know: 1, health: -2, rel: { mother: -3, friend: 2 } }),
       o('有一次忘带了，第二天站着补', '你在教室后面站着写完，全班都看着', { know: 2, rel: { friend: -2 }, health: -1 })
     ]
   });
@@ -13025,7 +13025,7 @@ html, body {
     id: 'mp11_redscarf', a: [6, 9], w: 2.2, when: onlyCN(SCH()),
     text: T('入队仪式在操场上。', '红领巾发下来，有人教你怎么系。'),
     choices: [
-      o('第一批入队', '你站在前排，举了手，念了誓词', { know: 2, rel: { mother: 4 } }),
+      o('第一批入队', '你站在前排，举了手，念了誓词', { know: 2, rel: { mother: 4 }, health: -1 }),
       o('第二批', '你等到下半学期，那天下了小雨', { know: 1, rel: { friend: 1 } }),
       o('系不好，一直歪着', '同桌每天帮你系一次', { rel: { friend: 4 }, know: 1 })
     ]
@@ -13105,7 +13105,7 @@ html, body {
     id: 'mp19_sign', a: [7, 12], w: 2.5, when: onlyCN(SCH()),
     text: T('期中卷子发下来，要家长签字。', '分数写在最上面，红笔画的圈。'),
     choices: [
-      o('如实拿回去', '家里看了很久，最后签了字，说下次注意', { know: 2, rel: { mother: 2 } }),
+      o('如实拿回去', '家里看了很久，最后签了字，说到很晚', { know: 2, rel: { mother: 2 }, health: -2 }),
       o('自己模仿签字', '你练了三遍，签得比真的还像', { know: 1, rel: { mother: -5 }, flag: { md_forge: 1 } }),
       o('说老师没发', '你把卷子折起来塞进书包夹层', { rel: { mother: -4 }, know: -1, flag: { md_hide: 1 } })
     ]
@@ -13115,9 +13115,9 @@ html, body {
     id: 'mp20_video', a: [9, 13], w: 2.3, when: onlyCN(yr(2018, 2110)),
     text: T('你在班里出了个丑，被人拍下来发到了群里。', '视频只有九秒，转了三个群。'),
     choices: [
-      o('让家里找老师说', '老师在班上说了这件事，视频被删了，但有人存了', { rel: { friend: -5, mother: 3 }, health: -2, flag: { md_memed: 1 } }),
+      o('让家里找老师说', '老师在班上说了这件事，视频被删了，但有人存了', { rel: { friend: -5, mother: 3 }, health: -1, know: 1, flag: { md_memed: 1 } }),
       o('自己也发一条，把话头接过来', '你拍了一条自嘲的，反而有人说你大方', { rel: { friend: 6 }, health: -2, know: 1, flag: { md_selfmock: 1 } }),
-      o('装作没看见', '你那一周没怎么看手机，走路低着眼', { health: -3, rel: { friend: -2 } })
+      o('装作没看见', '你那一周没怎么看手机，走路低着眼', { health: -3, rel: { friend: -2 }, know: 2 })
     ]
   });
 
@@ -13155,9 +13155,9 @@ html, body {
     id: 'mp24_quarrel', a: [8, 13], w: 2.3, when: onlyCN(),
     text: T('半夜你听见客厅在吵。', '声音不大，但持续了很久，最后门响了一下。'),
     choices: [
-      o('装作睡着了', '第二天早上，桌上照常摆着早饭', { know: 1, health: -2, flag: { md_parents_fight: 1 } }),
-      o('出去倒水', '你站在客厅门口，两个人都不说话了', { rel: { mother: 2, father: -2 }, health: -2 }),
-      o('第二天问了', '你妈说没事，你爸没抬头', { know: 2, rel: { mother: 1 }, health: -1 })
+      o('装作睡着了', '第二天早上，桌上照常摆着早饭', { know: 1, health: -2, rel: { mother: 3 }, flag: { md_parents_fight: 1 } }),
+      o('出去倒水', '你站在客厅门口，两个人都不说话了', { know: 2, rel: { mother: 3, father: -1 }, health: -2 }),
+      o('第二天问了', '你妈说没事，你爸没抬头', { know: 3, rel: { mother: 1 }, health: -2 })
     ]
   });
 
@@ -13396,8 +13396,8 @@ html, body {
     id: 'mj21_english', a: [13, 16], w: 2.2, when: onlyCN(SCHY(2018, 2110)),
     text: T('英语改成机考了，戴上耳机对着麦克风说话。', '考场里全是低声念题的声音。'),
     choices: [
-      o('练了一个月', '你每天跟读半小时，最后那部分拿了高分', { know: 5, health: -1, flag: { md_english_ok: 1 } }),
-      o('考前才看了题型', '你对着麦克风结巴了两次', { know: 1, health: -1 }),
+      o('练了一个月', '你每天跟读半小时，最后那部分拿了高分', { know: 5, health: -1, cash: -600, flag: { md_english_ok: 1 } }),
+      o('考前才看了题型', '你对着麦克风结巴了两次，出来跟同学笑了半天', { know: 1, health: -1, rel: { friend: 2 } }),
       o('紧张，几乎没说话', '出考场的时候手心全是汗', { health: -2, know: -1, rel: { mother: -2 } })
     ]
   });
@@ -13499,8 +13499,8 @@ html, body {
     text: T('招飞的来学校宣讲，要求写在黑板上。', '视力、身高、成绩，一条一条往下刷。'),
     choices: [
       o('去体检了', '你过了初检，复检那天紧张得一夜没睡', { health: 3, know: 2, flag: { md_pilot_try: 1 } }),
-      o('报了军校', '你填了提前批，后来政审跑了一个月', { know: 4, health: 3, rel: { father: 6 }, flag: { md_military: 1 } }),
-      o('没去', '你觉得自己近视这一条就过不了', { know: 2 })
+      o('报了军校', '你填了提前批，后来政审跑了一个月', { know: 4, health: 2, rel: { father: 6, mother: -3 }, flag: { md_military: 1 } }),
+      o('没去', '你觉得自己近视这一条就过不了', { know: 1, health: 1, rel: { friend: 4 } })
     ]
   });
 
@@ -13508,7 +13508,7 @@ html, body {
     id: 'mh10_teacher', a: [17, 19], w: 2.4, when: onlyCN(yr(2016, 2110)),
     text: T('公费师范的招生简章上写着：免学费，毕业有编。', '下面一行小字：服务期六年，去县里。'),
     choices: [
-      o('签了', '你四年不用交学费，毕业去了一所县中', { know: 4, cash: 0, rel: { mother: 5 }, flag: { md_free_teacher: 1 } }),
+      o('签了', '你四年不用交学费，毕业去了一所县中', { know: 4, health: -2, rel: { mother: 5, friend: -3 }, flag: { md_free_teacher: 1 } }),
       o('想读，但不想被绑六年', '你报了普通的师范', { know: 4, cash: -30000 }),
       o('不读师范', '你觉得站在讲台上说话这件事，自己干不了', { know: 2 })
     ]
@@ -13703,9 +13703,9 @@ html, body {
     when: onlyCN(function (S) { return S.edu === 'uni' || S.edu === 'voc'; }),
     text: T('室友换了一台新电脑，用的是分期。', '他说一个月只要还三百。'),
     choices: [
-      o('也分期买了', '你买了手机和电脑，一个月还七百', { cash: -8000, health: -2, know: 1, flag: { md_installment: 1 } }),
-      o('没买，用旧的', '你那台开机要三分钟，但能写论文', { know: 2, health: 1 }),
-      o('去借了校园贷', '钱到账很快，利息你没看懂', { cash: -15000, health: -4, rel: { mother: -6 }, flag: { md_badloan: 1 } })
+      o('也分期买了', '你买了手机和电脑，小组作业都来找你', { cash: -8000, health: -2, know: 1, rel: { friend: 3 }, flag: { md_installment: 1 } }),
+      o('没买，用旧的', '你那台开机要三分钟，宿舍里渐渐不叫你了', { know: 2, health: 1, rel: { friend: -6 } }),
+      o('去借了校园贷', '钱到账很快，利息你后来才看懂', { cash: -15000, health: -4, know: 3, rel: { mother: -6 }, flag: { md_badloan: 1 } })
     ]
   });
 
@@ -13758,8 +13758,8 @@ html, body {
     when: onlyCN(function (S) { return S.edu === 'uni' || S.edu === 'voc'; }),
     text: T('有人在校园墙上发了你的照片。', '配的字不长，下面已经有几十条评论。'),
     choices: [
-      o('去找管理员删了', '帖子删了，但有人截图发到了别的群', { rel: { friend: -4 }, health: -3, flag: { md_wall: 1 } }),
-      o('自己发一条回应', '你把事情说清楚，有人信，有人不信', { rel: { friend: 2 }, know: 2, health: -2 }),
+      o('去找管理员删了', '帖子删了，但有人截图发到了别的群', { know: 2, rel: { friend: -4 }, health: -3, flag: { md_wall: 1 } }),
+      o('自己发一条回应', '你把事情说清楚，有人信，有人不信', { rel: { friend: 2 }, know: 2, health: -4 }),
       o('不管', '你关了评论，一周没上那个号', { health: -2, rel: { friend: -2 } })
     ]
   });
@@ -13935,7 +13935,7 @@ html, body {
     when: onlyCN(function (S) { return !S.jobPending; }),
     text: T('国企的招聘公告挂在网站上，报名截止三天。', '笔试在一所中学的教室里，两个考场。'),
     choices: [
-      o('考上了', '你去了一个不太忙的部门，工资不高，五险一金齐', { job: { tier: 2, name: '国企职员' }, cash: 3000, know: 2, health: 1, flag: { md_soe: 1 } }),
+      o('考上了', '你去了一个不太忙的部门，工资不高，五险一金齐；办公室里最年轻的同事也比你大十岁', { job: { tier: 2, name: '国企职员' }, cash: 3000, know: 2, health: 1, rel: { friend: -4 }, flag: { md_soe: 1 } }),
       o('笔试过了，面试没过', '你在门口等结果，等到天黑', { know: 2, health: -2, rel: { father: -3 } }),
       o('没报名', '你觉得那种地方待不住', { know: 1, flag: { md_no_soe: 1 } })
     ]
@@ -14025,8 +14025,8 @@ html, body {
     text: T('信用卡的额度提到了五万。', '短信说，随时可以取现。'),
     choices: [
       o('刷了一台电脑', '你分了十二期，每个月还一千', { cash: -7000, know: 1, health: -1, flag: { md_credit: 1 } }),
-      o('只用来买菜，按月还清', '你养成了记账的习惯，一年省下几百', { cash: 500, know: 2, flag: { k_careful: 1 } }),
-      o('取现去投了个东西', '那个东西半年后没了下文', { cash: -20000, health: -4, rel: { mother: -5 }, flag: { md_badloan: 1 } })
+      o('只用来买菜，按月还清', '你养成了记账的习惯，一年省下几百，也推掉了不少饭局', { cash: 500, know: 2, rel: { friend: -2 }, flag: { k_careful: 1 } }),
+      o('取现去投了个东西', '那个东西半年后没了下文，你看懂了一些事', { cash: -20000, health: -4, know: 4, rel: { mother: -5 }, flag: { md_badloan: 1 } })
     ]
   });
 
@@ -14116,7 +14116,7 @@ html, body {
     id: 'mw20_probation', a: [22, 28], w: 2.3, need: 'job', when: onlyCN(),
     text: T('试用期三个月，工资打八折。', '转正答辩在下周五。'),
     choices: [
-      o('认真准备', '你做了二十页 PPT，讲完领导点了头', { know: 4, cash: 3000, rel: { friend: 3 }, flag: { md_promoted_early: 1 } }),
+      o('认真准备', '你熬了两夜做二十页 PPT，讲完领导点了头', { know: 4, cash: 3000, health: -4, rel: { friend: 3 }, flag: { md_promoted_early: 1 } }),
       o('没准备，照着念', '你念完了，领导问了三个问题', { know: 1, health: -2 }),
       o('试用期没过', '你被延长了一个月，那一个月很难熬', { cash: -2000, health: -3, rel: { friend: -2 } })
     ]
@@ -14390,7 +14390,7 @@ html, body {
     choices: [
       o('把积蓄都还进去', '你一次还了二十万，月供少了八百，账上只剩几千', { cash: -200000, health: -2, know: 2, flag: { md_prepaid: 1 } }),
       o('只还一部分', '你还了五万，留着钱应急', { cash: -50000, know: 1 }),
-      o('不还，钱留着做别的', '你把那笔钱放进了理财，收益比房贷利率低', { cash: 5000, know: 2, flag: { md_holdcash: 1 } })
+      o('不还，钱留着做别的', '你把那笔钱放进了理财，收益比房贷利率低', { cash: 5000, health: -1, know: 2, rel: { partner: -3 }, flag: { md_holdcash: 1 } })
     ]
   });
 
@@ -14469,7 +14469,7 @@ html, body {
     id: 'mc14_boss_change', a: [27, 45], w: 2.3, need: 'job', when: onlyCN(),
     text: T('部门换了领导，是从外面来的。', '他第一次开会，让每个人写一份自己的价值。'),
     choices: [
-      o('认真写了一页', '他记住了你的名字，半年后给了你一个项目', { know: 4, cash: 5000, rel: { friend: 3 }, flag: { md_newboss_ok: 1 } }),
+      o('认真写了一页', '你写到半夜，他记住了你的名字', { know: 4, cash: 5000, health: -3, rel: { friend: 3 }, flag: { md_newboss_ok: 1 } }),
       o('写了半页敷衍', '他在会上念了你的那几句，语气不太好', { health: -3, rel: { friend: -3 } }),
       o('开始找下家', '你一边上班一边投简历', { know: 2, health: -2, flag: { md_looking: 1 } })
     ]
@@ -14510,7 +14510,7 @@ html, body {
     text: T('公司说准备上市，给了一部分期权。', '协议上写着四年成熟，一年一行小字。'),
     choices: [
       o('签了，等', '你等了三年，公司没上，期权成了一张纸', { cash: -5000, health: -3, know: 2, flag: { md_option_void: 1 } }),
-      o('签了，后来行权赚了', '上市那天，你把期权卖了一部分', { cash: 180000, know: 3, flag: { md_option_win: 1 } }),
+      o('签了，后来行权赚了', '上市那天，你把期权卖了一部分', { cash: 180000, health: -3, know: 3, rel: { friend: -3 }, flag: { md_option_win: 1 } }),
       o('换成了现金', '你多要了两个月工资，没要期权', { cash: 20000, know: 1, flag: { md_cash_over_option: 1 } })
     ]
   });
@@ -14624,7 +14624,7 @@ html, body {
     choices: [
       o('换房', '你们卖了现在的，换了一套老破小，贷款又加了二十年', { cash: -300000, rel: { partner: -6 }, health: -3, flag: { house: 1, md_schoolhouse: 1 } }),
       o('去考民办', '孩子考了一次，没考上，又找了关系', { cash: -60000, rel: { kids: -2, friend: 3 } }),
-      o('就上划片的', '学校一般，走路十分钟', { cash: 0, health: 2, rel: { kids: 2 } })
+      o('就上划片的', '学校一般，走路十分钟', { health: 2, know: -2, rel: { kids: 2 } })
     ]
   });
 
@@ -14914,7 +14914,7 @@ html, body {
     id: 'mm11_kid_job', a: [45, 60], w: 2.4, need: 'kid22', when: onlyCN(yr(2018, 2110)),
     text: T('孩子毕业了，在家投了三个月简历。', '他说，今年特别难。'),
     choices: [
-      o('让他自己找', '他半年后去了一家小公司，工资不高', { rel: { kids: 3 }, know: 1 }),
+      o('让他自己找', '他半年后去了一家小公司，工资不高；中间那几个月，他没怎么跟你说话', { rel: { kids: 1 }, health: -2, know: 1 }),
       o('托人给他找了个', '你找了一个老同学，孩子去了，干得不太开心', { rel: { kids: -3, friend: 3 }, cash: -5000, flag: { md_kid_nepotism: 1 } }),
       o('让他去考公', '他在家备考两年，第二年上岸', { cash: -30000, rel: { kids: 2 }, flag: { md_kid_gov: 1 } })
     ]
@@ -15089,9 +15089,9 @@ html, body {
     id: 'ml06_elder_scam', a: [58, 78], w: 2.3, when: onlyCN(yr(2016, 2110)),
     text: T('有人加你微信，说是老同事，换了号。', '聊了半个月，他说有个理财，稳的。'),
     choices: [
-      o('投了', '钱转过去第三天，号就没了', { cash: -80000, health: -5, rel: { kids: -4 }, flag: { md_scammed: 1 } }),
+      o('投了', '钱转过去第三天，号就没了', { cash: -80000, health: -5, know: 4, rel: { kids: -4 }, flag: { md_scammed: 1 } }),
       o('问了一句，觉得不对', '你打了个电话给那个同事，他说没换号', { know: 3, health: 1, flag: { md_sharp_old: 1 } }),
-      o('没理', '你把那个号拉黑了', { know: 1, health: 1 })
+      o('没理', '你把那个号拉黑了，还提醒了楼下的老太太', { know: 1, health: 1, rel: { friend: 2 } })
     ]
   });
 
@@ -15209,9 +15209,9 @@ html, body {
     id: 'ml18_volunteer', a: [55, 72], w: 2.1, when: onlyCN(),
     text: T('社区在招志愿者，路口维持秩序。', '一天两个小时，发一件马甲。'),
     choices: [
-      o('报了，去了三年', '你认识了这个片区的很多人，孩子都叫你爷爷（奶奶）', { rel: { friend: 8 }, health: 3, flag: { md_volunteer_old: 1 } }),
+      o('报了，去了三年', '你认识了这个片区的很多人，孩子都叫你爷爷（奶奶）', { cash: -1000, rel: { friend: 8 }, health: 3, flag: { md_volunteer_old: 1 } }),
       o('去了一段时间', '你站了一个夏天，后来天冷了就不去了', { rel: { friend: 3 }, health: 1 }),
-      o('没去', '你在家待着', { health: -1, rel: { friend: -2 } })
+      o('没去', '你在家待着，把一套旧工具修好了', { health: -1, know: 2, rel: { friend: -2 } })
     ]
   });
 
@@ -15354,8 +15354,8 @@ html, body {
     id: 'mo12_digital_old', a: [66, 92], w: 2.3, when: onlyCN(yr(2018, 2110)),
     text: T('医院要网上预约，你在挂号机前站了很久。', '后面的队伍排到了门口。'),
     choices: [
-      o('让志愿者帮忙', '一个穿红马甲的姑娘帮你弄好了，还写在纸上', { know: 3, health: 1, rel: { friend: 3 } }),
-      o('去窗口排队', '你排了四十分钟，窗口说今天的号没了', { health: -3, know: 1 }),
+      o('让志愿者帮忙', '一个穿红马甲的姑娘帮你弄好了，还写在纸上', { know: 3, health: 1, rel: { friend: 1 } }),
+      o('去窗口排队', '你排了四十分钟，和旁边的人聊熟了', { health: -1, know: 2, rel: { friend: 2 } }),
       o('回家让孩子弄', '孩子远程给你挂了下周的号', { rel: { kids: 3 }, cash: 0 }, null, 'kid')
     ]
   });
@@ -15404,9 +15404,9 @@ html, body {
     id: 'mo17_hospice', a: [82, 100], w: 2.3, when: onlyCN(yr(2020, 2110)),
     text: T('医生把家属叫到外面，说了几句话。', '回来的时候，他们笑着问你今天想吃什么。'),
     choices: [
-      o('说自己知道', '你跟他们说，别瞒着，该怎样就怎样', { health: -2, rel: { kids: 8 }, know: 2, flag: { md_knows_end: 1 } }),
-      o('配合他们演下去', '你说想吃饺子，其实吃不下几个', { rel: { kids: 4 }, health: -3 }),
-      o('要求回家', '你回了家，躺在自己的床上', { health: -4, rel: { kids: 6 }, cash: -10000, flag: { md_die_home: 1 } })
+      o('说自己知道', '你跟他们说，别瞒着，该怎样就怎样', { health: -2, rel: { kids: 6 }, know: 2, flag: { md_knows_end: 1 } }),
+      o('配合他们演下去', '你说想吃饺子，其实吃不下几个', { know: 3, rel: { kids: 4 }, health: -3 }),
+      o('要求回家', '你回了家，躺在自己的床上', { health: -4, know: 1, rel: { kids: 8 }, cash: -10000, flag: { md_die_home: 1 } })
     ]
   });
 
@@ -15416,8 +15416,8 @@ html, body {
     text: T('老年活动中心有个和你差不多年纪的人。', '他（她）每天都带两个橘子，分你一个。'),
     choices: [
       o('处了两年，住到了一起', '两边的孩子都来了，吃了一顿饭', { married: true, rel: { partner: 8, kids: -4 }, health: 3, cash: -5000, flag: { md_old_love: 1 } }),
-      o('只做伴，不住一起', '你们每天一起散步、下棋', { rel: { partner: 5, friend: 4 }, health: 3 }),
-      o('没往下走', '你觉得这个年纪了，不必了', { health: 1, rel: { friend: 2 } })
+      o('只做伴，不住一起', '你们每天一起散步、下棋', { rel: { partner: 5, friend: 4 }, health: 1 }),
+      o('没往下走', '你觉得这个年纪了，不必了', { health: 1, know: 2, rel: { friend: 2 } })
     ]
   });
 
@@ -15560,9 +15560,9 @@ html, body {
     id: 'ml32_birthday_alone', a: [55, 75], w: 2.2, when: onlyCN(),
     text: T('生日那天，手机响了几声。', '都是系统发的祝福，还有一条是银行。'),
     choices: [
-      o('自己出去吃了顿好的', '你点了两个菜，服务员给你送了一碗面', { cash: -200, health: 1, rel: { friend: 1 } }),
+      o('自己出去吃了顿好的', '你点了两个菜，服务员给你送了一碗面', { cash: -200, health: 2, rel: { friend: 1 } }),
       o('给几个老朋友打了电话', '你们聊了一个多小时，约了下次见面', { rel: { friend: 6 }, health: 1 }),
-      o('当普通一天过', '你煮了碗面，看完新闻就睡了', { health: -1, rel: { friend: -1 } })
+      o('当普通一天过', '你煮了碗面，看完新闻就睡了', { health: -1, know: 1, rel: { friend: -1 } })
     ]
   });
   // 下面这几条不挂任何身份条件：没结婚、没孩子、没房子、已经退休，
