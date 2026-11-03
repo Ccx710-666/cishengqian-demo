@@ -364,7 +364,9 @@ html, body {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   transition: filter .15s ease, opacity .2s ease, transform .1s ease;
-  animation: rise .32s ease both;
+  /* fill 用 backwards 而不是 both：both 会把最后一帧的 opacity:1 一直压在上面，
+     结果 .locked:not(.chosen) 的淡化根本没生效——选完三块牌匾一样亮。 */
+  animation: rise .32s ease backwards;
 }
 .option:nth-of-type(2) { animation-delay: .05s; }
 .option:nth-of-type(3) { animation-delay: .1s; }
@@ -393,13 +395,15 @@ html, body {
 .option:active { transform: scale(.985); }
 .option:focus-visible { outline: 2px solid #B49A62; outline-offset: 2px; }
 
-.option.chosen { background: linear-gradient(180deg, #A5763C, #7C5626); }
+/* 选中的那一块反过来：深棕匾面 + 米色字，像当场盖了章。 */
+.option.chosen { background: linear-gradient(180deg, #3B2A15, #251809); }
 .option.chosen .txt {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, .6), rgba(255, 255, 255, 0) 38%),
-    linear-gradient(180deg, #FBEFD2, #F2DFB2 58%, #E8D0A0);
-  color: #33220E;
+    linear-gradient(180deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, 0) 40%),
+    linear-gradient(180deg, #6E5129, #523A1B 60%, #402C12);
+  color: #F8EDD6;
   font-weight: 500;
+  box-shadow: inset 0 0 0 1px rgba(248, 237, 214, .18);
 }
 .option.locked { pointer-events: none; }
 .option.locked:not(.chosen) { opacity: .38; }
@@ -1430,6 +1434,324 @@ html, body {
   #screen-end .dossier .binding { display: none; }
 }
 
+/* ══════════════════════════════════════════════════════════
+   v0.12：读、改、分享
+   这一层只做三件事：逐字（打字光标）、四维常驻、结局三块 + 分享图。
+   旧规则一律不删，全部靠新增类名覆盖。
+   ══════════════════════════════════════════════════════════ */
+
+/* ---------- 抽签页：年代选择 ---------- */
+.era-pick { margin: 18px 0 6px; text-align: center; }
+.ep-label { font-size: 11px; color: var(--faint); letter-spacing: 3px; margin-bottom: 9px; }
+.ep-row { display: flex; gap: 7px; justify-content: center; flex-wrap: wrap; }
+.ep {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  background: transparent;
+  border: 0.5px solid var(--rule);
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: all .18s ease;
+}
+.ep:hover { border-color: #B49A62; color: var(--ink2); }
+.ep.on {
+  background: #2B2118;
+  border-color: #2B2118;
+  color: #F3E7CE;
+}
+
+/* ---------- 逐字：读到最后一句之前，选项不出现 ---------- */
+#narrative { cursor: default; }
+#narrative p { animation: none; }
+#narrative.reading p:last-child::after {
+  content: "";
+  display: inline-block;
+  width: 6px; height: 15px;
+  margin-left: 3px;
+  vertical-align: -2px;
+  background: var(--ink);
+  opacity: .55;
+  animation: caret 1s steps(1) infinite;
+}
+@keyframes caret { 0%,49% { opacity: .55; } 50%,100% { opacity: 0; } }
+
+/* ---------- 底栏：四维常驻 ---------- */
+.foot-left { flex: 1 1 auto; min-width: 0; }
+
+.hud { min-width: 0; }
+.hud-row { display: flex; align-items: stretch; gap: 6px; }
+.hud-c {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 5px 8px 4px;
+  border: 0.5px solid var(--rule2);
+  border-radius: 4px;
+  background: rgba(255,255,255,.35);
+  line-height: 1.25;
+}
+.hud-c .hk { display: block; font-size: 9.5px; color: var(--faint); letter-spacing: 2px; }
+.hud-c .hv {
+  display: block;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hud-c.neg .hv { color: var(--red); }
+.hud-d {
+  position: absolute;
+  top: -9px; right: 3px;
+  font-style: normal;
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 0.5px solid currentColor;
+  white-space: nowrap;
+  animation: rise .3s ease both;
+}
+.hud-d.up { color: #2F6B4F; }
+.hud-d.down { color: var(--red); }
+.hud-help {
+  flex: 0 0 26px;
+  width: 26px;
+  border: 0.5px solid var(--rule2);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--faint);
+  font-size: 12px;
+  cursor: pointer;
+}
+.hud-help:hover { color: var(--ink2); border-color: #B49A62; }
+
+/* ---------- 选择结果：先看结果，再决定要不要改 ---------- */
+.result {
+  border-left: 2px solid #B49A62;
+  background: rgba(180, 154, 98, .07);
+}
+.rs-pick { font-size: 13px; color: var(--ink); margin-bottom: 6px; }
+.rs-note { font-size: 13px; color: var(--ink2); line-height: 1.75; margin-bottom: 10px; }
+.rs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin: 4px 0 10px;
+}
+.rd {
+  border: 0.5px solid var(--rule2);
+  border-radius: 4px;
+  padding: 6px 7px 5px;
+  background: var(--paper2);
+  position: relative;
+  line-height: 1.3;
+}
+.rd .rk { display: block; font-size: 9.5px; color: var(--faint); letter-spacing: 2px; }
+.rd .rv { display: block; font-size: 14px; color: var(--ink); font-weight: 500; }
+.rd .rdv { display: block; font-style: normal; font-size: 10.5px; margin-top: 1px; color: var(--faint); }
+.rd.up .rdv { color: #2F6B4F; }
+.rd.down .rdv { color: var(--red); }
+.rd .rnote { display: block; font-style: normal; font-size: 9.5px; color: var(--faint); margin-top: 1px; }
+.rs-bal {
+  font-size: 12.5px;
+  color: var(--ink2);
+  padding-top: 8px;
+  border-top: 0.5px dashed var(--rule2);
+}
+.rs-bal .rb-from { color: var(--faint); font-size: 11px; margin-left: 8px; text-decoration: line-through; }
+.rs-actions { display: flex; align-items: center; gap: 10px; margin-top: 11px; }
+.btn.tiny {
+  font-size: 12px;
+  padding: 6px 14px;
+  min-height: 0;
+  letter-spacing: 2px;
+}
+.rs-hint { font-size: 11px; color: var(--faint); }
+
+/* ---------- 结局页：只留三块 ---------- */
+.end-hero { display: flex; align-items: flex-start; gap: 18px; margin: 6px 0 20px; }
+.end-hero .eh-left { flex: 1; min-width: 0; }
+.end-seal {
+  flex: 0 0 84px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  width: 84px; height: 84px;
+  border: 2px solid var(--red);
+  border-radius: 4px;
+  padding: 6px;
+  color: var(--red);
+  font-family: var(--serif);
+  font-size: 26px;
+  line-height: 1;
+  text-align: center;
+  transform: rotate(3deg);
+  opacity: .82;
+}
+.end-seal span { display: flex; align-items: center; justify-content: center; }
+
+.blk {
+  border: 0.5px solid var(--rule);
+  border-radius: 6px;
+  padding: 16px 18px 17px;
+  margin: 0 0 14px;
+  background: rgba(255,255,255,.28);
+}
+.blk .sec-label { margin-bottom: 10px; }
+.blk-final { background: rgba(180,154,98,.08); border-color: #D8C7A4; }
+.blk-final .fi-name {
+  font-family: var(--serif);
+  font-size: 30px;
+  letter-spacing: 3px;
+  color: var(--ink);
+  margin: 2px 0 9px;
+  font-weight: 500;
+}
+.blk-final .fi-lines { font-size: 13.5px; color: var(--ink2); line-height: 1.9; }
+.blk-final .fi-lines p { margin: 0 0 3px; }
+
+.blk-money .mp-top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.blk-money .mp-tier { font-size: 12px; color: var(--muted); letter-spacing: 1px; }
+.blk-money .mp-num {
+  font-family: var(--serif);
+  font-size: 34px;
+  letter-spacing: 1px;
+  color: var(--ink);
+  margin: 0;
+}
+.blk-money .mp-num.neg { color: var(--red); }
+.blk-money .mp-pct { margin: 4px 0 0; font-size: 11.5px; color: var(--faint); }
+.blk-money .mp-line { margin: 8px 0 0; font-size: 13px; color: var(--ink2); line-height: 1.8; }
+
+.rc-list { list-style: none; margin: 0; padding: 0 0 0 4px; }
+.rc-list li {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding: 0 0 13px 16px;
+  border-left: 0.5px solid var(--rule);
+}
+.rc-list li:last-child { border-left-color: transparent; padding-bottom: 0; }
+.rc-list li::before {
+  content: "";
+  position: absolute;
+  left: -3.5px; top: 6px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--faint);
+}
+.rc-list li.last::before { background: var(--red); border-color: var(--red); }
+.rc-list b {
+  flex: 0 0 42px;
+  font-family: var(--sans);
+  font-size: 11.5px;
+  color: var(--faint);
+  font-weight: 400;
+  letter-spacing: .5px;
+  padding-top: 2px;
+}
+.rc-list span { flex: 1; min-width: 0; font-size: 13.5px; color: var(--ink); line-height: 1.6; }
+.rc-list li.last span { color: var(--ink2); }
+
+.fold-more {
+  margin: 16px 0 8px;
+  border-top: 0.5px solid var(--rule);
+  padding-top: 12px;
+}
+.fold-more > summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--faint);
+  letter-spacing: 1px;
+  list-style: none;
+}
+.fold-more > summary::-webkit-details-marker { display: none; }
+.fold-more > summary::before { content: "＋ "; }
+.fold-more[open] > summary::before { content: "－ "; }
+.fm-body { padding-top: 14px; }
+
+/* ---------- 四维说明 ---------- */
+.st-help { display: grid; gap: 10px; margin: 6px 0 10px; }
+.sh-row { display: flex; gap: 10px; align-items: baseline; }
+.sh-row b {
+  flex: 0 0 42px;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.sh-row span { font-size: 12.5px; color: var(--ink2); line-height: 1.8; }
+.st-note { font-size: 11.5px; color: var(--faint); line-height: 1.8; }
+
+/* ---------- 分享弹层 ---------- */
+.modal-inner.share-modal { max-width: 380px; }
+.share-preview {
+  margin: 10px 0 12px;
+  max-height: 62vh;
+  overflow: auto;
+  border: 0.5px solid var(--rule);
+  border-radius: 4px;
+  background: var(--paper3);
+  text-align: center;
+}
+.share-preview img { display: block; width: 100%; height: auto; }
+.sp-loading {
+  padding: 60px 0;
+  font-size: 12px;
+  color: var(--faint);
+  letter-spacing: 1px;
+}
+.share-hint { font-size: 11.5px; color: var(--faint); line-height: 1.7; margin: 0 0 12px; }
+.share-actions { display: flex; gap: 9px; }
+.share-actions .btn { flex: 1; }
+
+@media (max-width: 760px) {
+  .era-pick { margin: 14px 0 2px; }
+  .ep { font-size: 11.5px; padding: 7px 12px; }
+  .game-foot .foot-left { flex: 1 1 100%; min-width: 0; }
+  .hud-row { gap: 5px; }
+  .hud-c { padding: 4px 6px 3px; }
+  .hud-c .hv { font-size: 12.5px; }
+  .rs-grid { gap: 5px; }
+  .rd .rv { font-size: 13px; }
+  .rs-actions { justify-content: space-between; }
+  .btn.tiny { padding: 8px 16px; }
+  .blk { padding: 13px 14px 14px; }
+  .blk-final .fi-name { font-size: 25px; letter-spacing: 2px; }
+  .blk-money .mp-num { font-size: 28px; }
+  .end-seal { flex-basis: 66px; width: 66px; height: 66px; font-size: 20px; padding: 4px; }
+  .rc-list span { font-size: 13px; }
+  .rc-list b { flex-basis: 38px; font-size: 11px; }
+  .end-actions { gap: 8px; }
+  .end-actions .btn { flex: 1 1 46%; min-height: 44px; }
+}
+
+/* 桌面端：底栏四维不要拉满整条，按钮那边留白会显得空 */
+@media (min-width: 761px) {
+  .game-foot .foot-left { max-width: 520px; }
+  .hud-c { flex: 0 0 auto; min-width: 104px; }
+  .btn[disabled] { opacity: .55; }
+}
+
+/* 选中态必须压过 .dossier[data-stage="child"] .option .txt 那套牌匾材质
+   （它多了个属性选择器，优先级比 .option.chosen .txt 高，不压就白写）。 */
+.dossier .option.chosen { background: linear-gradient(180deg, #3B2A15, #251809); }
+.dossier .option.chosen .txt {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, 0) 40%),
+    linear-gradient(180deg, #6E5129, #523A1B 60%, #402C12);
+  color: #F8EDD6;
+  font-weight: 500;
+  box-shadow: inset 0 0 0 1px rgba(248, 237, 214, .18);
+}
+
 </style>
 </head>
 <body>
@@ -1439,6 +1761,16 @@ html, body {
     <div class="paper">
       <h1 class="brand">此生签</h1>
       <div class="brand-sub">一 次 人 生 的 随 机 抽 样</div>
+
+      <div class="era-pick" id="era-pick">
+        <div class="ep-label">想活哪一代</div>
+        <div class="ep-row">
+          <button class="ep" data-era="old">八九十年代</button>
+          <button class="ep on" data-era="">随 机</button>
+          <button class="ep" data-era="m0">零 零 后</button>
+          <button class="ep" data-era="m1">一 零 后</button>
+        </div>
+      </div>
 
       <div class="tube-wrap">
         <div class="tube" id="tube" title="抽一支">
@@ -1467,7 +1799,7 @@ html, body {
       </div>
 
       <div class="draw-foot">
-        <span>三个国家 · 一支签只活一次 · 十来分钟走完一生</span>
+        <span>三个国家 · 五百多个决定 · 一支签只活一次</span>
         <span>
           <button class="btn ghost" id="link-cabinet">档案柜</button>
           <button class="btn ghost" id="link-about">关于</button>
@@ -1501,7 +1833,10 @@ html, body {
       </div>
 
       <div class="game-foot">
-        <div class="ledger" id="ledger"></div>
+        <div class="foot-left">
+          <div class="hud" id="hud"></div>
+          <div class="ledger" id="ledger"></div>
+        </div>
         <button class="btn primary" id="btn-next">继续</button>
       </div>
 
@@ -1544,6 +1879,32 @@ html, body {
   </div>
 </div>
 
+<div class="modal" id="modal-stats">
+  <div class="modal-inner">
+    <h3>这四个数，各自管什么</h3>
+    <div class="st-help">
+      <div class="sh-row"><b>钱</b><span>手里有多少现钱。它决定你能选哪些路：搬不搬、读不读、看不看病、买不买房。数字变成负的，就是欠着债，利息会一年一年往上加。</span></div>
+      <div class="sh-row"><b>身体</b><span>能撑多少年。身体掉到很低的时候，一场病就可能过不去；六十岁以后，补也很难补回来。</span></div>
+      <div class="sh-row"><b>关系</b><span>家里人、朋友跟你有多近。关系好的人，遇事有人搭把手；关系断了，晚年会一个人待着。</span></div>
+      <div class="sh-row"><b>学识</b><span>能进哪道门。升学、考证、换行当都要看它；有些选项，学识不够根本不会出现。</span></div>
+    </div>
+    <p class="st-note">每一次选择都会改动其中几项，改完就回不去了——除非你在下一步之前点「改 选」。</p>
+    <button class="btn close" id="stats-close">知道了</button>
+  </div>
+</div>
+
+<div class="modal" id="modal-share">
+  <div class="modal-inner share-modal">
+    <h3 id="share-title">这一生，存成一张图</h3>
+    <div class="share-preview" id="share-preview"></div>
+    <p class="share-hint" id="share-hint">手机上长按图片保存；电脑上点下面的按钮下载。</p>
+    <div class="share-actions">
+      <button class="btn primary" id="share-download">保 存 图 片</button>
+      <button class="btn" id="share-close">关 闭</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1554,7 +1915,7 @@ html, body {
 
   C.title = '此生签';
   C.subtitle = '一次人生的随机抽样';
-  C.version = '0.1 vertical slice';
+  C.version = '0.12.0 readable';
 
   C.countries = {
     CHN: { code: 'CHN', name: '中国', weight: 1410, life: 78.2, cur: '元', sym: '¥', living: 18000, mortgage: 36000, pension: 0.42 },
@@ -1772,6 +2133,24 @@ html, body {
     return o.A;
   };
 
+  // ── 世纪分档：这条人生是哪个年代长大的 ──────────────
+  // 出生年决定「小时候家里有什么、上学时兴什么、毕业时赶上什么」。
+  // 90 后和 00 后不止是道具不同：他们撞上的教育政策、就业市场是两套。
+  C.modern = function (S) {
+    return !!(S && ((S.birth && S.birth.year) || S.year) >= 2000);
+  };
+  C.eraLabel = function (S) {
+    var y = (S && ((S.birth && S.birth.year) || S.year)) || 1995;
+    if (y >= 2010) return '一零后';
+    if (y >= 2000) return '零零后';
+    if (y >= 1990) return '九零后';
+    return '八零后';
+  };
+  // 事件里常用：这条人生出生时，某件事是不是已经发生了。
+  C.afterYear = function (S, y) {
+    return ((S && S.year) || 0) >= y;
+  };
+
   // 二〇一〇年以后入学的孩子，书包和开学前那几天已经换了一轮：
   // 家长群、门禁卡、网上挑的书包、清单式的准备。
   var SCHOOL_LINE_C = {
@@ -1789,7 +2168,7 @@ html, body {
       poor: [
         '你上学了。书包是镇上买的，拉链有点涩，拉到底要用力。',
         '你上学了。开学要交的钱分两次凑齐，第二次过了周末才交上。',
-        '你上学了。同学的笔袋都是新的，你的是哥哥留下的，边角磨白了。'
+        '你上学了。同学的笔袋都是新的，你的是亲戚家孩子用过的，边角磨白了。'
       ]
     }
   };
@@ -2606,7 +2985,7 @@ html, body {
     b: '回头看，真正由自己决定的只有那么几步'
   };
 
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.11.0，全部内容在本地运行，不联网、不上传。";
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一套事，双减、分流、考研、灵活就业、租房、裁员、体检、房贷、自媒体、基金。原型版本 0.12.0，全部内容在本地运行，不联网、不上传。";
 
   root.CONTENT = C;
   if (typeof module !== 'undefined' && module.exports) module.exports = C;
@@ -5564,7 +5943,9 @@ html, body {
     if (!tail.length && S.ledger && S.ledger.debtYears === 0 && cash > 0) {
       tail.push('这一生，你没跟人张过口。');
     }
-    var line = amount + '。' + moneyPick(S, MONEY_LINE[tier.k], 11);
+    // 金额已经用大字单独印在上面了，这句话里再重复一遍只会显得啰嗦。
+    // 需要「金额+评语」连读的地方（复制文字、旧卡片）继续用 lineFull。
+    var line = moneyPick(S, MONEY_LINE[tier.k], 11);
     // 钱做过的事，要在结局被认出来 —— 这是玩家自己选的，不能交给随机挑。
     // 顺序即优先级：设过基金的，不再说「捐过钱」。
     var deed = '';
@@ -5585,7 +5966,8 @@ html, body {
       ratio: Math.round(ratio * 100) / 100,
       top: share,
       topTxt: topTxt(share),
-      line: line
+      line: line,
+      lineFull: amount + '。' + line
     };
   };
 
@@ -5602,8 +5984,8 @@ html, body {
     return '晚年';
   };
 
-  C.version = '0.11.0 vertical slice';
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会随机落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。走完会得到一份人生档案：先是一个终局（善终、寻常、未竟三类，共二十四种），再是回首、这段人生的纹理、一生账单、没做成的事，以及一年一年的记录。原型版本 0.11.0，全部内容在本地运行，不联网、不上传。";
+  C.version = '0.12.0 readable';
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一套事，双减、分流、考研、灵活就业、租房、裁员、体检、房贷、自媒体、基金。原型版本 0.12.0，全部内容在本地运行，不联网、不上传。";
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -8474,6 +8856,16 @@ html, body {
       return a.slice();
     };
   }
+  // 同一件事，90 后和一零后手上的东西不一样：老的一版、新的一版、别国沿用。
+  function ERA(chnOld, chnNew, other) {
+    return function (S) {
+      if (S.country !== 'CHN') {
+        var a = (other && (other[S.country] || other.DEU)) || chnOld;
+        return a.slice();
+      }
+      return (C.modern(S) ? chnNew : chnOld).slice();
+    };
+  }
   // 已经不在学校的人，不该再读到「放学」「作业」「穿去学校」。
   function left(S) { return !!(S && S.flag && S.flag.left_school); }
   // 按国家分岔的文案
@@ -9049,11 +9441,14 @@ html, body {
 
   ev({
     id: 'x05_bike', a: [5, 9], w: 0.85,
-    text: TC({
-      CHN: ['家里买了一辆自行车，二八的，比你还高。', '大人在后面扶着，你踩上去，车把晃了一下。'],
-      DEU: ['家里买了一辆自行车，带辅助轮。', '第一天上路，辅助轮一直响。'],
-      BRA: ['家里买了一辆旧自行车，链条上过油。', '院子太短，你骑到墙根就得停。']
-    }),
+    text: ERA(
+      ['家里买了一辆自行车，二八的，比你还高。', '大人在后面扶着，你踩上去，车把晃了一下。'],
+      ['家里买了一辆自行车，车架上印着牌子，比你的膝盖高不了多少。', '大人在后面扶着，你踩上去，车把晃了一下。'],
+      {
+        DEU: ['家里买了一辆自行车，带辅助轮。', '第一天上路，辅助轮一直响。'],
+        BRA: ['家里买了一辆旧自行车，链条上过油。', '院子太短，你骑到墙根就得停。']
+      }
+    ),
     choices: [
       o('摔了十几次才学会', '你摔了十几次，膝盖上的痂一层盖一层，最后学会了', { know: 3, health: -3, flag: { k_tough: 1 } }),
       o('靠着辅助轮骑', '你一直没拆辅助轮，骑得很稳', { health: 1, know: 1 }),
@@ -9267,16 +9662,24 @@ html, body {
 
   ev({
     id: 'x07_tv', a: [7, 12], w: 0.85,
-    text: TC({
-      CHN: ['家里买了第一台电视，十四寸，摆在柜子正中。', '晚上邻居会来看，屋里坐不下，有人站在门口。'],
-      DEU: ['家里换了一台彩电，旧的黑白那台放在了卧室。', '遥控器归谁，吵了一阵。'],
-      BRA: ['家里有了一台电视，天线要转到对的角度。', '一到晚上，屋里就坐满了人。']
-    }),
-    choices: [
-      o('守着看', '你每天守着看，饭都端到电视前吃', { know: 1, health: -2 }),
-      o('只在固定的时间看', '你只看那一档，看完就关', { know: 2, health: 1, flag: { k_careful: 1 } }),
-      o('更喜欢听收音机', '你更喜欢听收音机，那个能带走', { know: 3, flag: { k_bookworm: 1 } })
-    ]
+    text: ERA(
+      ['家里买了第一台电视，十四寸，摆在柜子正中。', '晚上邻居会来看，屋里坐不下，有人站在门口。'],
+      ['客厅那台电视换了，旧的搬进了你的屋。', '遥控器归你，但八点以后得让出来。'],
+      {
+        DEU: ['家里换了一台彩电，旧的黑白那台放在了卧室。', '遥控器归谁，吵了一阵。'],
+        BRA: ['家里有了一台电视，天线要转到对的角度。', '一到晚上，屋里就坐满了人。']
+      }
+    ),
+    choices: function (S) {
+      var modern = C.modern(S);
+      return [
+        o('守着看', '你每天守着看，饭都端到电视前吃', { know: 1, health: -2 }),
+        o('只在固定的时间看', '你只看那一档，看完就关', { know: 2, health: 1, flag: { k_careful: 1 } }),
+        modern
+          ? o('更愿意自己找点别的', '你把时间花在别处，电视开着也没人看', { know: 3, flag: { k_bookworm: 1 } })
+          : o('更喜欢听收音机', '你更喜欢听收音机，那个能带走', { know: 3, flag: { k_bookworm: 1 } })
+      ];
+    }
   });
 
   ev({
@@ -11676,6 +12079,529 @@ html, body {
 <script>
 (function (root) {
   'use strict';
+  // ─────────────────────────────────────────────────────────────
+  // 现代线：生在 2000 年以后的这代人，过的是另一套日子。
+  //
+  // 加这个文件的起因：试玩的人说，剧本里的年代感像九十年代，
+  // 而这一代玩家大多没在粮票和录像厅里长大，代入不进去。
+  //
+  // 写法上刻意和旧内容保持同一个手感：短句、具体物件、不写情绪词、
+  // 不写死年龄、不评价选择。区别只在道具和际遇——
+  // 他们的童年有电话手表和家长群，少年有网课和双减，
+  // 青年有考公、慢就业、租房和 AI。
+  //
+  // 时间锚点只用真实发生过的年份：
+  //   2020 春 停课、2021.7 双减、2022 职业教育法修订后普高扩容、
+  //   2023 起 AI 工具进入日常工作、2025 届毕业生 1222 万、
+  //   2025 国考报名 341.6 万（报录比约 86:1）、考研报名 388 万连续两年下降、
+  //   灵活就业 2.4 亿人（新就业形态约 8400 万，外卖骑手超 1000 万）。
+  // 只写中国：这三条是中国的政策与统计口径，别国不套用。
+  // ─────────────────────────────────────────────────────────────
+  var C = root.CONTENT;
+  if (!C || !C.events) return;
+  var E = C.events, M = C.M;
+
+  function ev(o) {
+    if (!o.a) o.a = [0, 120];
+    if (o.w === undefined) o.w = 2.6;
+    if (o.once === undefined) o.once = true;
+    o.newOnly = true;
+    E.push(o);
+  }
+  function o(t, s, eff, ghost, need) {
+    var r = { t: t, s: s, eff: eff, ghost: ghost };
+    if (need) r.need = need;
+    return r;
+  }
+  // 固定文案
+  function T() {
+    var a = [].slice.call(arguments);
+    return function () { return a.slice(); };
+  }
+  function cn(S) { return S.country === 'CHN'; }
+  // 只在中国发生
+  function onlyCN(fn) {
+    return function (S) { return cn(S) && (!fn || fn(S)); };
+  }
+  // 已经不在学校的人，不该再读到「班主任」「同桌」。
+  function inSchool(S) { return !(S && S.flag && S.flag.left_school); }
+  var SCH = function (fn) { return function (S) { return inSchool(S) && (!fn || fn(S)); }; };
+  var SCHY = function (a, b) {
+    return function (S) { return inSchool(S) && S.year >= a && S.year <= b; };
+  };
+  function yr(a, b) {
+    return function (S) { return S.year >= a && S.year <= b; };
+  }
+
+  // ═════════════ 童年 ═════════════
+
+  ev({
+    id: 'md03_pad', a: [3, 6], w: 2.8, when: onlyCN(),
+    text: T('家里那台平板归你管了。', '你学会了自己划开，找到那个会说话的图标。'),
+    choices: [
+      o('一天看到晚', '你抱着平板看到眼睛发涩，喊你也不应', { health: -3, know: 2, rel: { mother: -3 }, flag: { md_screen: 1 } }),
+      o('饭后看半小时', '你看完一集就自己关掉，把平板放回抽屉', { health: 1, know: 1, flag: { k_careful: 1 } }),
+      o('更想出去玩', '你更愿意下楼，在滑梯那儿站到天黑', { health: 2, rel: { friend: 4 } })
+    ]
+  });
+
+  ev({
+    id: 'md04_class', a: [5, 7], w: 2.6, when: onlyCN(),
+    text: T('周末被带去了一个班。', '屋里摆着几排小椅子，墙上贴着上一批人画的画。'),
+    choices: [
+      o('学画画', '你每周去画两个小时，手上总有洗不掉的颜料', function (S) { return { know: 4, cash: -6000, rel: { mother: 2 } }; } ),
+      o('学游泳', '你在水里泡了一年，能横着游一个来回', function (S) { return { health: 5, know: 1, cash: -5000 }; } ),
+      o('坐一节课，什么也不做', '你坐在最后一排，等家长来接', { know: 1, rel: { mother: -4 }, flag: { md_refuse: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md05_watch', a: [6, 9], w: 2.7, when: onlyCN(),
+    text: T('家里给你买了一块电话手表。', '能定位，能打电话，还能跟同学加好友。'),
+    choices: [
+      o('天天给同学发消息', '你在手表上按来按去，一天能发几十条', { rel: { friend: 5 }, know: 1, health: -1 }),
+      o('只在上学路上戴', '你出门戴上，回家就摘下来放进抽屉', { know: 1, health: 1 }),
+      o('嫌麻烦，扔在抽屉里', '那块表在抽屉里躺到没电', { rel: { mother: -2 }, flag: { md_offline: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md06_afterclass', a: [6, 11], w: 2.5,
+    when: onlyCN(SCHY(2021, 2035)),
+    text: T('放学后要在学校多待两个小时。', '教室里写作业，走廊上有老师来回走。'),
+    choices: [
+      o('在学校写完', '你在学校把作业写完，回家书包一扔就没事了', { know: 3, health: -1 }),
+      o('用这两小时去操场', '你在操场上跑到天黑，作业带回家写', { health: 3, know: 1, rel: { friend: 3 } }),
+      o('趴桌上睡过去', '你趴在桌上睡了一觉，醒来教室空了', { health: 2, know: -1, rel: { mother: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'md07_delivery', a: [7, 14], w: 2.4, when: onlyCN(),
+    text: T('家里没人做饭，点了一份外卖。', '骑手打电话上来，说放在门口的柜子上。'),
+    choices: [
+      o('自己下楼去拿', '你穿着拖鞋下楼，把那份烫手的袋子提上来', { health: -1, know: 1, rel: { mother: 2 } }),
+      o('让他送上来', '你隔着门说了声谢谢，把门开了一条缝', { health: 1, know: 1 }),
+      o('等家里人回来再说', '你把饭放到凉，最后泡了碗面', { health: -2, rel: { mother: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'md08_pet', a: [6, 13], w: 2.2, when: onlyCN(),
+    text: T('家里养了一只猫。', '是从同事那儿抱来的，来的时候还没断奶。'),
+    choices: [
+      o('你来喂', '你每天早上添一次粮，添了很多年', { health: 2, rel: { mother: 3 }, cash: -3000, flag: { pet: 1 } }),
+      o('只跟它玩', '你只负责逗它，铲屎的活儿不归你', { health: 1, rel: { mother: -1 }, flag: { pet: 1 } }),
+      o('家里不让养，送走了', '养了两个月，最后还是送回了同事家', { rel: { mother: -3 } })
+    ]
+  });
+
+  ev({
+    id: 'md08_tutor', a: [8, 13], w: 2.6,
+    when: onlyCN(SCHY(2008, 2021)),
+    text: T('周末的补习班在写字楼七层。', '一间屋子坐三十个人，黑板上的字很小。'),
+    choices: [
+      o('认真跟着上', '你抄满了两个本子，成绩往前挪了一截', { know: 6, health: -2, cash: -9000 }),
+      o('坐在后排混时间', '你在后排把漫画看完了，讲义还是新的', { know: 1, health: 1, cash: -9000, rel: { mother: -4 } }),
+      o('跟家里说不想去', '你说了一次，家里沉默了很久，后来还是交钱', { rel: { mother: -6 }, know: 2, flag: { md_refuse: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md08b_onetoone', a: [9, 15], w: 2.6,
+    when: onlyCN(SCHY(2022, 2040)),
+    text: T('补习班没了，家里另找了个法子。', '每周三晚上，一个大学生坐在客厅餐桌对面。'),
+    choices: [
+      o('认真学', '两个小时里你不敢走神，期末名次进了前二十', { know: 6, health: -2, cash: -22000 }),
+      o('敷衍过去', '你听着，点头，等他走了再打开手机', { know: 1, cash: -22000, rel: { mother: -5 } }),
+      o('让家里别花这个钱', '你算了一笔账，跟家里说这钱不值', { know: 2, rel: { mother: 4, father: 2 }, cash: 0, flag: { md_frugal: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md09_glasses', a: [9, 14], w: 2.5, when: onlyCN(SCH()),
+    text: T('体检的时候，你被叫到视力表前。', '左眼那一行，你看了很久才认出来。'),
+    choices: [
+      o('配眼镜', '你配了第一副眼镜，镜片很厚，同学给你起了外号', function (S) { return { cash: -1200, know: 2, rel: { friend: -2 } }; } ),
+      o('不戴，凑近点看', '你搬到第一排，黑板上的字还是有点糊', { know: 1, health: -3, flag: { md_squint: 1 } }),
+      o('每天去操场跑两圈', '你开始每天下楼，眼睛还是那样，人结实了', { health: 4, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'md10_phone', a: [11, 15], w: 3.0, when: onlyCN(),
+    text: T('你有了第一部自己的手机。', '不是新的，是家里换下来的一台，屏幕角上有一道裂。'),
+    choices: [
+      o('装满了同学都在用的东西', '你的群从三个变成十几个，消息一天响到晚', { rel: { friend: 6 }, health: -3, know: -1, flag: { md_online: 1 } }),
+      o('只用来联系家里', '手机里只存了几个号码，其余什么也没装', { know: 1, health: 1, rel: { friend: -2 }, flag: { md_offline: 1 } }),
+      o('拿去换了点钱', '你把手机卖给了同学，换了一双鞋', { cash: -0, rel: { mother: -6, friend: 2 }, flag: { md_trade: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md11_group', a: [11, 16], w: 2.5, when: onlyCN(SCH()),
+    text: T('班里建了一个群，家长也建了一个。', '两个群同时在响，说的不是一件事。'),
+    choices: [
+      o('在同学群里说话', '你在群里接梗，被几个人当成自己人', { rel: { friend: 5 }, know: -1 }),
+      o('两个群都不说话', '你把两个群都设成了免打扰', { know: 1, rel: { friend: -2 } }),
+      o('把家长群的消息念给家里听', '你每天晚上把作业和通知念一遍', { rel: { mother: 5 }, know: 2, health: -1 })
+    ]
+  });
+
+  // ═════════════ 少年 ═════════════
+
+  ev({
+    id: 'md12_sport', a: [13, 16], w: 2.6,
+    when: onlyCN(SCHY(2020, 2045)),
+    text: T('体育也算分了。', '一千米、跳绳、引体向上，一项一项测。'),
+    choices: [
+      o('每天放学练', '你在操场上跑了一个学期，最后那圈跑进了及格线', { health: 6, know: -1, cash: -800, flag: { md_fit: 1 } }),
+      o('考前突击一个月', '你练了一个月，测完就再没跑过', { health: 2, know: -1 }),
+      o('开个免测证明', '家里带你去医院开了一张，你在树荫下看别人跑', { health: -2, rel: { mother: -2 }, flag: { md_exempt: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md13_schoolzone', a: [11, 13], w: 2.5,
+    when: onlyCN(yr(2012, 2045)),
+    text: T('小升初不看考试了，看户口和房子。', '家里翻出一沓材料，房产证、户口本、水电单，一张一张对。'),
+    choices: [
+      o('进了划片的那所', '你进了家门口那所学校，走路十分钟', { know: 3, health: 1, rel: { mother: 3 }, flag: { md_zoned: 1 } }),
+      o('家里换了房子', '家里为了这个把房子换到了另一边，贷款又多了十年', function (S) { return { know: 5, cash: -120000, rel: { father: -4, mother: 2 }, flag: { house: 1, md_schoolhouse: 1 } }; } ),
+      o('去考了民办', '你去考了一所民办，学费一年几万', function (S) { return { know: 4, cash: -30000, health: -1, flag: { md_private: 1 } }; } )
+    ]
+  });
+
+  ev({
+    id: 'md14_game', a: [12, 17], w: 2.5,
+    when: onlyCN(yr(2019, 2045)),
+    text: T('游戏要实名了。', '晚上十点一到，屏幕上的字变灰，说今天的时间用完了。'),
+    choices: [
+      o('借大人的号继续玩', '你记住了家里那串身份证号，玩到后半夜', { health: -4, know: -2, rel: { friend: 4 }, flag: { md_bypass: 1 } }),
+      o('时间到了就放下', '你十点关机，去洗了个澡', { health: 2, know: 1 }),
+      o('干脆不玩了', '你把那个游戏删了，去球场站着看别人打', { health: 2, rel: { friend: 3 } })
+    ]
+  });
+
+  ev({
+    id: 'md15_shortvideo', a: [13, 19], w: 2.6,
+    when: onlyCN(yr(2018, 2050)),
+    text: T('你开始刷短视频。', '一晚上过去，手机发烫，你记不起看了什么。'),
+    choices: [
+      o('一刷就到半夜', '你把一条视频看了十几遍，天亮才睡', { health: -5, know: -3, rel: { mother: -3 }, flag: { md_scroll: 1 } }),
+      o('给自己定了时间', '你设了个闹钟，响一次就关', { health: 1, know: 1, flag: { k_careful: 1 } }),
+      o('自己也想拍', '你注册了一个号，拍了第一条', { know: 3, rel: { friend: 3, mother: -2 }, flag: { md_creator: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md16_bully', a: [13, 17], w: 2.3,
+    when: onlyCN(SCH()),
+    text: T('群里有人发了一段视频，拍的是你们班一个同学。', '下面一排表情，没有人说话。'),
+    choices: [
+      o('在群里替他说了一句', '你打了一行字发出去，群里安静了几分钟', { rel: { friend: -5 }, know: 2, health: -2, flag: { md_stood: 1 } }),
+      o('什么也没说', '你把手机扣在桌上，第二天照常去上课', { rel: { friend: -2 }, health: -1 }),
+      o('跟着发了一个表情', '你也发了一个，发完就后悔了', { rel: { friend: 2 }, know: -2, health: -2, flag: { md_joined: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md17_lockdown', a: [8, 18], w: 3.0,
+    when: onlyCN(SCHY(2020, 2022)),
+    text: T('开学推迟了，课搬到屏幕上。', '早上八点，你穿着睡衣坐在桌前，摄像头关着。'),
+    choices: [
+      o('认真听', '你一节不落地听，笔记比在学校时还整齐', { know: 5, health: -2, rel: { mother: 3 } }),
+      o('开着，人去做别的', '你把音量调到最小，去客厅看电视', { know: -3, health: -1, rel: { mother: -4 }, flag: { md_skip: 1 } }),
+      o('趁这段时间自己看书', '你从书架上抽了几本，看得比课本认真', { know: 6, health: 1, flag: { k_bookworm: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md18_love', a: [15, 18], w: 2.4, when: onlyCN(),
+    text: T('有个人每天和你聊到很晚。', '聊天框里的字删了又打，打了又删。'),
+    choices: [
+      o('说了', '你在一个周五晚上说了，对方隔了很久才回', { rel: { friend: 6 }, know: 1, health: -1, flag: { md_firstlove: 1 } }),
+      o('一直没说', '你们聊到毕业，谁也没提那件事', { know: 1, health: -1, flag: { md_unsaid: 1 } }),
+      o('把手机收起来，先考试', '你把手机交给家里保管，直到考完', { know: 5, rel: { friend: -4 }, health: 1 })
+    ]
+  });
+
+  // ═════════════ 青年 ═════════════
+
+  ev({
+    id: 'md19_subject', a: [16, 17], w: 2.9,
+    when: onlyCN(SCHY(2018, 2050)),
+    text: T('要选科了。', '一张表上列着六门，让你挑三门，剩下的只考合格。'),
+    choices: [
+      o('挑物理和化学', '你选了最难的那两门，班里只有十几个人这么选', { know: 7, health: -3, flag: { md_science: 1 } }),
+      o('挑自己考得好的', '你按分数选，选完发现能报的专业少了一半', { know: 4, flag: { md_easy: 1 } }),
+      o('听家里的', '家里说学医稳定，你就把生物加上了', { know: 4, rel: { father: 4, mother: 3 }, flag: { md_family_pick: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md21_univ', a: [18, 21], w: 2.7,
+    when: onlyCN(function (S) { return S.edu === 'uni' || S.edu === 'voc'; }),
+    text: T('宿舍六个人，四张上下铺。', '第一晚谁也没睡着，都在刷手机。'),
+    choices: [
+      o('把时间放在课上', '你每天去图书馆，宿舍里的人渐渐不叫你了', { know: 7, rel: { friend: -4 } }),
+      o('把时间放在人上', '你加了两个社团，认识了外系的人', { rel: { friend: 8 }, know: 2 }),
+      o('接了个兼职', '你在校外做兼职，一个月能挣出一半生活费', { cash: 9000, know: 1, health: -3, flag: { md_parttime: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md22_intern', a: [20, 23], w: 2.6,
+    when: onlyCN(function (S) { return S.edu === 'uni'; }),
+    text: T('校招的摊位摆了一整条路。', '每家都写着要几个人，队伍排到了楼梯口。'),
+    choices: [
+      o('投了三十份', '你投了三十份，收到四个面试，两个进了二面', { know: 3, health: -3, rel: { friend: 2 }, flag: { md_jobhunt: 1 } }),
+      o('托家里人找了个实习', '你去了一家熟人介绍的公司，做的是杂活', { cash: 6000, know: 2, rel: { father: 3 }, flag: { md_nepotism: 1 } }),
+      o('先去考个证', '你花三个月考了一张证，简历上多了一行', { know: 5, cash: -4000 })
+    ]
+  });
+
+  ev({
+    id: 'md23_kaoyan', a: [21, 25], w: 2.7,
+    when: onlyCN(yr(2016, 2050)),
+    text: T('报名的人一年比一年多。', '自习室的座位要提前一天占，桌上摆着水杯和台灯。'),
+    choices: [
+      o('考了，考上了', '你考了两年，第二年进了复试', { edu: 'post', know: 8, health: -5, cash: -12000, flag: { md_post: 1 } }),
+      o('考了，没考上', '分数差了几分，你去了招聘会', { know: 4, health: -3, cash: -8000, rel: { father: -2 }, flag: { md_failed: 1 } }),
+      o('没考，直接工作', '你没报名，投了简历', { know: 1, cash: 5000, flag: { md_directwork: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md24_kaogong', a: [22, 30], w: 2.8,
+    when: onlyCN(yr(2019, 2050)),
+    text: function (S) {
+      return [
+        '家里说，去考个编制。',
+        '一个岗位招两个人，报名的有六百多。'
+      ];
+    },
+    choices: [
+      o('考了两年，考上了', '你考了两年，最后进了一个离家两百公里的单位', { job: { tier: 2, name: '事业单位职员' }, know: 4, cash: -15000, rel: { father: 6, mother: 5 }, flag: { md_post_job: 1 } }),
+      o('考了一次，没再考', '成绩出来，你把书收进了箱子', { know: 2, cash: -6000, rel: { father: -4 }, flag: { md_gaveup_exam: 1 } }),
+      o('没去考', '你说了句不想，饭桌上没人接话', { rel: { father: -6, mother: -3 }, know: 1, flag: { md_no_exam: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md25_slow', a: [22, 28], w: 2.5,
+    when: onlyCN(yr(2020, 2050)),
+    text: T('毕业了，工作还没定。', '同学群里有人晒入职，有人晒录取，你把群设成了免打扰。'),
+    choices: [
+      o('先在家待着', '你在家待了半年，白天睡觉，晚上看书', { know: 2, health: -2, rel: { father: -5, mother: -2 }, cash: -6000, flag: { md_gap: 1 } }),
+      o('找了份不喜欢的先干', '你先上了班，工资不高，好歹每月有进项', { job: { tier: 1 }, cash: 3000, know: 1, health: -2 }),
+      o('自己做点小生意', '你在网上开了个店，头一个月只卖出去三单', { cash: -8000, know: 3, health: -2, flag: { md_smallbiz: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md26_rent', a: [22, 30], w: 2.6, when: onlyCN(),
+    text: T('你在公司附近租了一间。', '合租，十四平，厨房和别人共用。'),
+    choices: [
+      o('租近一点，贵一点', '你走路十分钟到公司，房租吃掉一大半', function (S) { return { cash: -30000, health: 3, know: 1, flag: { md_rentclose: 1 } }; } ),
+      o('租远一点，每天通勤', '你每天六点半出门，在地铁上站一个小时', function (S) { return { cash: -15000, health: -4, know: 1, flag: { md_commute: 1 } }; } ),
+      o('和人挤一间', '两个人一间，中间拉了一道帘子', function (S) { return { cash: -9000, health: -2, rel: { friend: 3 }, flag: { md_share: 1 } }; } )
+    ]
+  });
+
+  ev({
+    id: 'md27_ai', a: [23, 55], w: 2.6,
+    when: onlyCN(yr(2023, 2060)),
+    text: T('公司给每个人开了个新工具。', '写方案、做表、回邮件，它几秒钟就出一版。'),
+    choices: [
+      o('先学会用它', '你把手上重复的活都交给了它，空出来的时间用来做别的', { know: 6, cash: 4000, health: -3, flag: { md_ai: 1 } }),
+      o('不太信，还是自己写', '你还是自己一个字一个字敲，慢，但看得懂每一步', { know: 2, health: -2, flag: { md_manual: 1 } }),
+      o('担心被替掉', '你开始在下班后学别的东西，怕哪天轮到自己', { know: 4, health: -3, rel: { friend: -2 }, flag: { md_anxious: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md28_selfmedia', a: [22, 40], w: 2.4, when: onlyCN(),
+    text: T('你的号有了一万个人关注。', '后台的数字跳了一下，你把手机举给别人看。'),
+    choices: [
+      o('辞了工作，全职做', '你辞了职，把设备配齐，每天剪到凌晨', { cash: -20000, health: -5, know: 4, flag: { md_fulltime_creator: 1 } }),
+      o('下班以后做', '你白天上班，晚上剪视频，一周更两条', { cash: 12000, health: -3, know: 2 }),
+      o('不做了', '你发了一条说停更，之后就再没打开过后台', { know: 1, rel: { friend: -3 } })
+    ]
+  });
+
+  ev({
+    id: 'md29_gig', a: [22, 50], w: 2.5, when: onlyCN(),
+    text: T('找了一圈，只有这种活随时能上。', '注册、上传证件、等审核通过。'),
+    choices: [
+      o('跑外卖', '你一天跑十个小时，跑到膝盖开始疼', { job: { tier: 1, name: '外卖骑手' }, cash: 9000, health: -6, flag: { md_rider: 1, gig: 1 } }),
+      o('开网约车', '你租了辆车，一天在线十二个小时', { job: { tier: 1, name: '网约车司机' }, cash: 7000, health: -4, flag: { md_driver: 1, gig: 1 } }),
+      o('都没干，继续找', '你继续投简历，账上的钱一天比一天少', { cash: -8000, know: 2, health: -2, flag: { md_waiting: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md30_layoff', a: [28, 45], w: 2.7,
+    when: onlyCN(yr(2019, 2050)),
+    text: T('部门开会，说业务要调整。', '名单在下午发到每个人邮箱，附件是一个 PDF。'),
+    choices: [
+      o('拿了补偿，重新找', '你签了字，拿到 N+1 的离职补偿，在家投了三个月简历', function (S) { return { cash: 40000, job: { tier: Math.max(1, (S.jobTier || 1) - 1), name: '新单位的职员' }, health: -3, know: 2, flag: { md_layoff: 1 } }; }),
+      o('转去了另一个岗', '你留下来，做起了以前没碰过的活', { know: 4, health: -3, rel: { friend: 2 }, flag: { md_transfer: 1 } }),
+      o('自己出来干', '你用那笔赔偿金，注册了一个小公司', { cash: -60000, job: { tier: 2, name: '自己的公司' }, health: -3, flag: { md_founder: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md31_house', a: [26, 40], w: 2.6, when: onlyCN(),
+    text: function (S) {
+      // 2016–2021 是这一轮房价的高点，2022 之后往下走。
+      return S.year <= 2021
+        ? ['中介带你看了第三套。', '挂牌价比去年又高了一截，房东一分不让。']
+        : ['中介带你看了第三套。', '同一户型去年挂的价比现在高，房东说还能谈。'];
+    },
+    choices: [
+      o('凑首付，买', '两家的钱凑在一起，合同签在了一个下雨的下午', function (S) { return { cash: -240000, rel: { father: -5 }, health: -2, flag: { house: 1, md_mortgage: 1 } }; }, '那笔钱里，有你妈留着看病的'),
+      o('继续租', '你算了一遍账，决定再等等', function (S) { return { cash: 20000, know: 2, rel: { partner: -2 }, flag: { md_rentlife: 1 } }; } ),
+      o('回老家买', '你在老家买了一套，一年回去住十天', function (S) { return { cash: -120000, rel: { mother: 5 }, flag: { house: 1, md_homehouse: 1 } }; } )
+    ]
+  });
+
+  ev({
+    id: 'md32_kid', a: [28, 40], w: 2.5, need: 'partner', when: onlyCN(),
+    text: T('两边家里开始问什么时候要孩子。', '饭桌上这个问题被提了三次，每次都换个说法。'),
+    choices: [
+      o('要了一个', '那天凌晨，走廊里全是人', { kids: 1, cash: -40000, health: -3, rel: { partner: 6, mother: 5 }, flag: { md_parent: 1 } }),
+      o('再等等', '你们说再等等，等到两边都不问了', { cash: 30000, rel: { partner: 2, mother: -5 }, flag: { md_childfree_wait: 1 } }),
+      o('说好了不要', '你们把话说清楚，两家沉默了一阵', { cash: 20000, rel: { mother: -8, partner: 4 }, flag: { md_childfree: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md33_elder', a: [40, 60], w: 2.5, need: 'father', when: onlyCN(),
+    text: T('父亲的体检报告上多了一行。', '医生说先观察，三个月后复查。'),
+    choices: [
+      o('接来一起住', '你把父亲接来，客厅里多了一张折叠床', { cash: -30000, health: -3, rel: { father: 10, partner: -4 }, flag: { md_elder_home: 1 } }),
+      o('请人照看', '你在老家请了个阿姨，一周去三次', { cash: -36000, rel: { father: 5 }, flag: { md_elder_care: 1 } }),
+      o('先观察，什么也不做', '你打了两个电话，说等复查结果再说', { rel: { father: -6 }, health: -2, flag: { md_elder_wait: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md34_checkup', a: [28, 50], w: 2.3, when: onlyCN(),
+    text: T('单位组织体检。', '报告上标了三项偏高，最后一行写着建议复查。'),
+    choices: [
+      o('去复查了', '你请了半天假，查完医生说问题不大，注意作息', { health: 4, cash: -1500, know: 1 }),
+      o('没去', '你把报告折起来放进抽屉，后来忘了', { health: -4, flag: { md_ignore_checkup: 1 } }),
+      o('开始跑步', '你买了两双跑鞋，跑了三个月', { health: 6, cash: -1200, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'md35_fund', a: [25, 55], w: 2.3, when: onlyCN(),
+    text: T('同事说他那只涨了三成。', '你打开手机，首页推给你的都是红的。'),
+    choices: [
+      o('跟了一点', '你买了一点，头一个月没亏', function (S) { return { cash: -3000, know: 1, health: -1, flag: { md_fund: 1 }, echo: { in: 1, text: '那只涨上去了，你把它卖了。', eff: { cash: 12000 } } }; }, '第二个月你把赚的又放了回去'),
+      o('全投进去', '你把大半积蓄放了进去，每天看三次', function (S) { return { cash: -M(S, Math.round(30000 + Math.abs(S.cash) * 0.3), 0, 0), health: -3, flag: { md_fund_all: 1 } }; }, '有一年你不敢打开那个页面'),
+      o('一分没投', '你还是把钱放在银行卡里，利息很少', { cash: 2000, know: 1, flag: { md_saver: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md36_match', a: [25, 38], w: 2.3, need: 'nopartner', when: onlyCN(),
+    text: T('家里安排了一场见面。', '约在一家连锁餐厅，两个人隔着一张桌子。'),
+    choices: [
+      o('去见了', '你们聊了一个半小时，加了联系方式', { rel: { partner: 5, mother: 3 }, know: 1, cash: -600, flag: { md_blinddate: 1 } }),
+      o('去都没去', '你在楼下站了十分钟，最后回了家', { rel: { mother: -8 }, health: -1, flag: { md_nodate: 1 } }),
+      o('去了，把话说清楚', '你说自己没这个打算，对方点了点头', { rel: { mother: -4 }, know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'md37_backhome', a: [28, 45], w: 2.3, when: onlyCN(),
+    text: T('老家的朋友说，回来吧，这边压力小。', '你在阳台上站了一会儿，楼下是高架。'),
+    choices: [
+      o('回去了', '你辞了职，把东西寄回老家，租了一间带院子的房', function (S) { return { job: { tier: Math.max(1, (S.jobTier || 1) - 1), name: '老家的活儿' }, cash: -15000, health: 4, rel: { father: 8, mother: 8, friend: -4 }, flag: { md_backhome: 1, moved: (S.flag.moved || 0) + 1 } }; }),
+      o('留下来', '你把那条消息回了，说再看看', { know: 2, health: -2, flag: { md_stay: 1 } }),
+      o('两边跑', '你每个月回去一趟，高铁三个小时', { cash: -12000, health: -3, rel: { father: 5, mother: 5 }, flag: { md_split: 1 } })
+    ]
+  });
+
+  // ═════════════ 中晚年 ═════════════
+
+  ev({
+    id: 'md38_scan', a: [55, 85], w: 2.6, when: onlyCN(yr(2016, 2070)),
+    text: T('门口贴了一张纸，说现在都得先在手机上办。', '你把手机举远了一点，屏幕上的字还是不清楚。'),
+    choices: [
+      o('让孩子教你', '孩子给你装好了，还在纸上画了三个步骤', { know: 3, rel: { kids: 4 }, health: -1, cash: -2000, flag: { md_taught_phone: 1 } }, null, 'kid'),
+      o('跟着旁边的人学', '你站在门口看别人怎么弄，看了三遍', { know: 2, rel: { friend: 3 } }),
+      o('走人工通道', '你排了二十分钟队，窗口里的人认得你', { health: -2, know: 1, rel: { friend: 1 }, flag: { md_old_channel: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md39_care', a: [68, 90], w: 2.4,
+    when: onlyCN(yr(2010, 2080)),
+    text: T('一个人住已经不太行了。', '上个月你在卫生间滑了一次，扶着墙起来的。'),
+    choices: [
+      o('去养老院', '你去看了一家，两人一间，院子里的树很高', { cash: -60000, health: 3, rel: { kids: -3 }, flag: { md_nursing: 1 } }),
+      o('请护工在家里', '护工每天来六个小时，中午做一顿饭', { cash: -48000, health: 4, rel: { kids: 3 }, flag: { md_care_home: 1 } }),
+      o('自己撑着', '你在卫生间装了两个扶手，其余照旧', { health: -5, cash: -800, rel: { kids: -2 }, flag: { md_alone_old: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'md40_digital', a: [62, 92], w: 2.2,
+    when: onlyCN(yr(2015, 2085)),
+    text: T('手机里存着几千张照片。', '有一年换手机，那些照片差点全没了。'),
+    choices: [
+      o('让孩子帮忙存起来', '孩子把它们拷进一个硬盘，贴了标签', { rel: { kids: 4 }, know: 2, flag: { md_photos: 1 } }, null, 'kid'),
+      o('自己学着备份', '你问了三次，最后自己会弄了', { know: 4, health: 1, flag: { md_digital_self: 1 } }),
+      o('算了，丢了就丢了', '你没再管，后来连密码也忘了', { know: -1, rel: { kids: -2 } })
+    ]
+  });
+  // ═════════════ 台词替换：必经页 ═════════════
+  // 升学这三页由主线锁死（12 岁升学考、15 岁分岔、18 岁高考），
+  // 事件本身不能重写，否则骨架会断。这里只换台词，选项和效果一位不动，
+  // 所以对现代出生的人，读到的还是同一道题，只是那道题长在另一个年代。
+  function patchText(id, textFn) {
+    for (var i = 0; i < E.length; i++) {
+      if (E[i].id !== id) continue;
+      var e = E[i], orig = e.text;
+      e.text = function (S) {
+        if (S.country === 'CHN' && C.modern(S)) return textFn(S);
+        return typeof orig === 'function' ? orig(S) : [orig];
+      };
+      return true;
+    }
+    return false;
+  }
+
+  patchText('exam12', function (S) {
+    if (S.age >= 15) return ['毕业考在六月，卷子比平时厚。', '考完那天下了一场雨，你在校门口等家里来接。'];
+    return ['分班考在开学前一周。', '名单贴在校门口的公告栏上，你从上往下找，在后面找到了自己。'];
+  });
+
+  patchText('voc', function (S) {
+    return S.year >= 2022
+      ? ['中考出分那天，家里三个人守着手机。', '普高线划在那里，志愿表上只填了几个名字，一个比一个远。']
+      : ['中考出分那天，家里三个人守着电脑。', '分数出来，两条路摆在面前：一条再读三年，一条学门手艺。'];
+  });
+
+  patchText('gaokao', function (S) {
+    return ['高考那两天，考场外拉了警戒线，家长站了一整条街。',
+      '进门前要过一道安检门，你把口袋里的东西一样一样掏出来。'];
+  });
+
+  patchText('unicity', function (S) {
+    return ['录取通知书装在一个快递信封里，封面印着校名。',
+      '母亲把它看了三遍，然后问你，那边冷不冷。'];
+  });
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function (root) {
+  'use strict';
 
   var C = root.CONTENT || (typeof require !== 'undefined' ? require('./content.js') : null);
 
@@ -11685,13 +12611,37 @@ html, body {
   function r0(v) { return Math.round(v); }
   function r1(v) { return Math.round(v * 10) / 10; }
 
+  // v0.12：「选完能改选」要求随机流也能回退。
+  // 这里把生成器的内部状态挂到函数属性 f.s 上，调用序列一位不动，
+  // 只是多留了一个可以存下来、再原样复制回去的读数。
   function mulberry32(a) {
-    return function () {
+    var f = function () {
       a |= 0; a = a + 0x6D2B79F5 | 0;
       var t = Math.imul(a ^ a >>> 15, 1 | a);
       t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      f.s = a;
       return ((t ^ t >>> 14) >>> 0) / 4294967296;
     };
+    f.s = a | 0;
+    return f;
+  }
+  function cloneRnd(f) { return mulberry32((f && f.s) || 0); }
+
+  // ── 存档点：给「先看结果，再决定要不要改」用 ──
+  // S 里只有一个函数（_rnd），其余都是纯数据，所以整份深拷贝 + 单独把
+  // 随机流读数存下来，就能精确回到选择之前——包括赌博那一下的骰子。
+  function snapshot(S) {
+    var copy = {}, k;
+    for (k in S) if (k !== '_rnd') copy[k] = S[k];
+    return { json: JSON.stringify(copy), rnd: (S._rnd && S._rnd.s) || 0 };
+  }
+  function restore(S, snap) {
+    var obj = JSON.parse(snap.json), k, keys = [];
+    for (k in S) if (k !== '_rnd') keys.push(k);   // 先收集再删，边遍历边删会漏键
+    for (k = 0; k < keys.length; k++) delete S[keys[k]];
+    for (k in obj) S[k] = obj[k];
+    S._rnd = mulberry32(snap.rnd >>> 0);
+    return S;
   }
 
   // 与原版 wpick 同形的边界语义：累计 <=0 判定、全零取首键、耗尽取末键。
@@ -11869,15 +12819,24 @@ html, body {
     var cw = C.countryOrder.map(function (code) { return { k: code, w: C.countries[code].weight }; });
     var country = wpick(cw, rnd);
     var sex = rnd() < 0.5 ? 'M' : 'F';
-    // 出生年收窄到 1990–2004：既覆盖九零后与零零后，又不至于让同一条童年剧情跨二十年。
+    // 出生年收窄到 1990–2012：既覆盖九零后、零零后，也放进了 10 后。
     // 顺序也换了：先定年代，再按年代取家底权重——家底本来就该跟着时代走。
-    var year = 1990 + Math.floor(rnd() * 15);
+    // 抽签页可以点名年代（forced.era = old / m0 / m1），不点名就按人口比例随机。
+    var ERA_YEARS = { old: [1986, 1999], m0: [2000, 2009], m1: [2010, 2012] };
+    var eraKey = forced && forced.era;
+    var year;
+    if (eraKey && ERA_YEARS[eraKey]) {
+      year = ERA_YEARS[eraKey][0] + Math.floor(rnd() * (ERA_YEARS[eraKey][1] - ERA_YEARS[eraKey][0] + 1));
+    } else {
+      year = 1990 + Math.floor(rnd() * 23);          // 1990–2012
+    }
     var famW;
     if (country === 'CHN') {
-      // 中国这十五年变化最大：90 年代初的赤贫面到 2004 年已经收窄很多。
+      // 中国这二十多年变化最大：90 年代初的赤贫面到 10 年代已经收窄很多。
       famW = year <= 1995 ? [30, 25, 22, 15, 8]
         : (year <= 1999 ? [18, 25, 25, 22, 10]
-          : [10, 22, 28, 26, 14]);
+          : (year <= 2009 ? [10, 22, 28, 26, 14]
+            : [8, 20, 28, 28, 16]));
     } else {
       // 德国（两德统一后东部追赶）、巴西（九十年代通胀到雷亚尔计划）幅度小一些。
       famW = year <= 1997 ? [26, 25, 24, 17, 8] : [18, 24, 26, 22, 10];
@@ -12323,6 +13282,9 @@ html, body {
     if (ev.once && S.seen[ev.id] !== undefined) return false;
     if (ev.slot && S.slot[ev.slot]) return false;
     if (!inWindow(ev, S)) return false;
+    // 年代专属：00 后不看粮票，90 后也不该在六岁用上电话手表。
+    if (ev.newOnly && !(C.modern && C.modern(S))) return false;
+    if (ev.oldOnly && (C.modern && C.modern(S))) return false;
     if (ev.when && !ev.when(S)) return false;
     if (ev.need && !needOK(S, ev.need)) return false;
     return true;
@@ -12355,6 +13317,9 @@ html, body {
       var e = C.events[i];
       if (!eligible(e, S)) continue;
       var w = e.w;
+      // 00 后、10 后的这一生，先读他们自己的年代：现代线的条目加权，
+      // 旧年代的条目略降——不是删掉，只是让位。
+      if (C.modern && C.modern(S)) w *= (e.newOnly ? 2.6 : 0.82);
       var last = S.seen[e.id];
       if (last !== undefined) {
         var gap = S.age - last;
@@ -13238,6 +14203,8 @@ html, body {
           debtYears: led.debtYears, peakDebt: r0(led.peakDebt)
         };
       })(),
+      era: (C.eraLabel ? C.eraLabel(S) : ''),
+      modern: !!(C.modern && C.modern(S)),
       birth: S.birth
     };
   }
@@ -13268,7 +14235,7 @@ html, body {
     mulberry32: mulberry32, wpick: wpick, relScore: relScore, money: money,
     choicesOf: choicesOf, needOK: needOK, spineFor: spineFor,
     income: income, qx: qx, deathCheck: deathCheck, settleYear: settleYear, livingCost: livingCost,
-    obsessionResult: obsessionResult,
+    obsessionResult: obsessionResult, snapshot: snapshot, restore: restore, cloneRnd: cloneRnd,
     sibAlive: sibAlive, sibWord: sibWord, sibCall: sibCall, sibName: sibName,
     sibElders: sibElders, sibYoungers: sibYoungers, sibPick: sibPick, sibAdd: sibAdd
   };
@@ -13276,6 +14243,12 @@ html, body {
   root.ENGINE = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+// 分享卡上的二维码：指向线上试玩版，内嵌成 data URI，离线也能画进 canvas。
+window.CSQ_QR = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAFeCAIAAABCSeBNAAAGJElEQVR42u3dO46bRxCF0UvByxEUaf8rcGR4D4yZMHbshA6Idj36nNQYivxn+KENFKof79czAP/2wyMApAGQBkAaAGkApAGQBkAaAGkA5vjj83/++ev3sg/8919/Hnrlz8/q879b9bO3Ofec930XnBoAaQCkAZAGQBoAaQCkAZAGQBqArJmGTNFkYY5NvJ372XOzdOfm8M593qpP9PldnfuL3fddcGoApAGQBkAaAGkApAGQBkAaAGkAcsk0ZFpOvGXg3sGqV676vFVbGKue5MTvglMDIA2ANADSAEgDIA2ANADSAEgDENOQF+o579hz/s/93U4NgDQA0gBIAyANgDR4BIA0ANIASAMQ05CpmGj8POF32/xf1ef95ndkCtOpAZAGQBoAaQCkAZAGQBoAaQCkAYhpyMy/z3ri9seqO6m/eeWqScqef3UTvwtODYA0ANIASAMgDYA0ANIASAMgDUAumYb8PNOWy/YdTvzZibshez6rfd8FpwZAGgBpAKQBkAZAGgBpAKQBkAYga6Yh3Syc1fv/qt5z1fbHfVsnnRoAaQCkAZAGQBoAaQCkAZAGQBoA8p/TkFX7/zJwZ+G53YHnfrbn1smemyNTdIt6iqZOnRoAaQCkAZAGQBoAaQCkAZAGQBqAQR7v1zP95v/SckvfuWm5qhm+c++56pV7/l1N/C44NQDSAEgDIA2ANADSAEgDIA2ANABZsxsyLWfpUjSzWDXvuG+y8LaNleee1bmn4dQASAMgDYA0ANIASAMgDYA0ANIAxE3ZOTmn1fOVe/5s1k27TvwN9pzfdWoApAGQBkAaAGkApAGQBkAaAGkA4qbsdL2TOsemxybeDd1zZjHrdjT2vIPbbkjA/1AA0gBIAyANgDQA0gBIAyANQOyGzMZ7lqs2C06cpNw3V9rzHu2qW+M/Pw2nBkAaAGkApAGQBkAaAGkApAGQBiBrdkP23FlYtcOv573hGTjD13ML48R/99y7cmoApAGQBkAaAGkApAGQBkAaAGkAsmY3ZAbOtPXcDVk17zhxCtO76jC/69QASAMgDYA0ANIASAMgDYA0ANIAZM005LmpxKr7nSdurOx5n/XE328Gbsp0agCkAZAGQBoAaQCkAZAGQBoApAHI0d2QaTlL1/PO4rSc4MzA2cGJs7ATJymdGgBpAKQBkAZAGgBpAKQBkAZAGoCsmYY8N6dVNVv2+ZW/ec9Vt2zv20rYc5514j3pTg2ANADSAEgDIA2ANADSAEgDIA3AJR7v1zPTdge6/fn/mbTb93knTqxWPUmnBkAaAGkApAGQBkAaAGkApAGQBiCXTEOaLOx/u/fE25/tpOywV9KpAZAGQBoAaQCkAZAGQBoAaQCkAcglN2VXzTveNrXW8xZmN4M7NQDSACANgDQA0gBIAyANgDQA0gBkxDRkjk0HnptK7HnLdoqmEife0F31V/fNJ5o4k+rUAEgDIA2ANADSAEgDIA2ANADSAMQ0ZDbed1xl3z3L597VuZ/tedd51fSnUwMgDYA0ANIASAMgDYA0ANIASAMwyOP9eqbfnFaKJsD2TSXeNuEX071ODYA0ANIASAMgDYA0ANIASAMgDUBMQ97ttkm7XLZJsWrucOKErlMDIA2ANADSAEgDIA2ANADSAEgDkDU3Ze+bDvw8AVY1D7dv7+C5eceq2cFv3tXE369TAyANgDQA0gBIAyANgDQA0gBIA5A105BpeYdviuYOz83DTZzCPHdf+b7Jwol/sU4NgDQA0gBIAyANgDQA0gBIAyANQC6Zhsy6G40zcPpz4u3P5175mxnNffs7v/lETg2ANADSAEgDIA2ANADSAEgDIA1ATENeqOf9zj03OFY9q3NPY98N3U4NgDQA0gBIAyANgDQA0gBIAyANQExDxrxjWkw0ehq2Pzo1ANIASAMgDYA0ANIASAMgDYA0ADENmZvule45ldhzZ2HVlF7VZGHV77fqW+bUAEgDIA2ANADSAEgDIA2ANADSAOSSaciem/aq5g573hzdc+/gxCnMqlu2q377Tg2ANADSAEgDIA2ANADSAEgDIA3AII/36+kpAE4NgDQA0gBIAyANgDQA0gBIAyANwFz/ADeD3Z7Cgq1cAAAAAElFTkSuQmCC';
+window.CSQ_URL = 'https://ccx710-666.github.io/cishengqian-demo/';
 
 </script>
 <script>
@@ -13289,6 +14262,10 @@ html, body {
   var STORE = 'csq_lives_v1';
   var DEX = 'csq_dex_v1';
   var MEM = null, DEXMEM = null;
+  var eraPick = '';          // '' 随机 / old / m0 / m1
+  var pageSnap = null;       // 这一页开始时的存档点：改选要退回这里
+  var hUD = null;            // 上一次渲染的四维读数，用来算涨跌
+  var posterData = null;     // 刚生成的分享图（dataURL）
 
   function show(id) {
     var all = document.querySelectorAll('.screen');
@@ -13359,6 +14336,41 @@ html, body {
   }
   function hasDelta(v) { return Math.abs(v) >= 0.05; }
 
+  // 底栏要放四个数，钱只能缩写：十万以上写成「万」，一亿以上写成「亿」。
+  function compactMoney(v) {
+    var sym = C.countries[S.country].sym;
+    var n = Math.abs(Math.round(v));
+    var neg = v < 0 ? '-' : '';
+    if (n >= 100000000) return neg + sym + (n / 100000000).toFixed(2).replace(/\.?0+$/, '') + '亿';
+    if (n >= 10000) return neg + sym + (n / 10000).toFixed(1).replace(/\.0$/, '') + '万';
+    return neg + sym + n.toLocaleString('en-US');
+  }
+
+  // ── 底栏四维：钱 / 身体 / 关系 / 学识 ────────────────────
+  // 之前的版本把「收入、结余」写在底栏，钱一花出去却不跟着动，
+  // 玩家会以为账算错了。现在底栏常驻的是「现在有多少」，
+  // 选了之后立刻变，还带一个涨跌角标；当年的收支挪到结果卡里。
+  function renderHud(from) {
+    var cells = [
+      { k: '钱', v: compactMoney(S.cash), d: from ? (S.cash - from.cash) : 0, cash: 1, neg: S.cash < 0 },
+      { k: '身体', v: String(Math.round(S.health)), d: from ? (S.health - from.health) : 0 },
+      { k: '关系', v: String(Math.round(S.relScore || 0)), d: from ? ((S.relScore || 0) - from.rel) : 0 },
+      { k: '学识', v: String(Math.round(S.know)), d: from ? (S.know - from.know) : 0 }
+    ];
+    var h = '<div class="hud-row"><button class="hud-help" id="hud-help" title="这四个数各自管什么">?</button>';
+    for (var i = 0; i < cells.length; i++) {
+      var c = cells[i], dv = c.d, tag = '';
+      if (hasDelta(dv)) {
+        var txt = c.cash ? (dv > 0 ? '+' : '-') + money(S, Math.abs(dv)) : (dv > 0 ? '+' : '') + fmtN(dv);
+        tag = '<i class="hud-d ' + (dv > 0 ? 'up' : 'down') + '">' + txt + '</i>';
+      }
+      h += '<div class="hud-c' + (c.neg ? ' neg' : '') + '"><span class="hk">' + c.k + '</span>' +
+        '<b class="hv">' + c.v + '</b>' + tag + '</div>';
+    }
+    h += '</div>';
+    $('hud').innerHTML = h;
+  }
+
   function homeLines(S) {
     var out = [];
     out.push('父亲 · ' + (S.parents.father.alive ? relWord(S.rel.father) : '已故'));
@@ -13405,7 +14417,7 @@ html, body {
     $('draw-status').textContent = '抽签中';
     setTimeout(function () {
       tube.classList.remove('shaking');
-      S = E.newLife(newSeed());
+      S = E.newLife(newSeed(), eraPick ? { era: eraPick } : null);
       var ci = C.countries[S.country];
       $('b-country').textContent = ci.name + ' · ' + (S.sex === 'F' ? '女' : '男');
       $('b-fam').textContent = ['', '勉强糊口', '普通人家', '过得去', '宽裕', '很宽裕'][S.fam];
@@ -13424,10 +14436,12 @@ html, body {
   function startGame() {
     if (!S) return;
     ended = false;
+    typerStop();
     show('screen-game');
     page = null;
     pageNo = 0;
     pendingRest = null;
+    pageSnap = null;
     $('pocket').classList.remove('open');
     busy = false;
     advance();
@@ -13523,11 +14537,28 @@ html, body {
     if (!settle) { $('ledger').innerHTML = ''; return; }
     if (settle.household) { $('ledger').innerHTML = '这一年的开销，由家里承担。'; return; }
     var net = settle.net;
-    var html = '这一年 · 收入 <b>' + money(S, settle.income) + '</b> · 结余 <b>' +
-      (net < 0 ? '-' : '+') + money(S, Math.abs(net)) + '</b>' + (settle.debt > 0 && net > 0 ? '（先还账）' : '');
+    var spend = settle.living + settle.mortgage + settle.med + (settle.interest || 0);
+    // 以前这里写「结余」——玩家会把它当成余额，钱花出去却不动，像账错了。
+    // 现在改成「存下」（这一年的净进出），余额在左边那格「钱」里，会跟着变。
+    var html = '这一年 · 收入 <b>' + money(S, settle.income) + '</b> · 开销 <b>' + money(S, spend) +
+      '</b> · 存下 <b>' + (net < 0 ? '-' : '+') + money(S, Math.abs(net)) + '</b>' +
+      (settle.debt > 0 && net > 0 ? '（先还账）' : '');
     if (settle.debt > 0) html += '<div class="ledger-2">账上欠款 ' + money(S, settle.debt) + '</div>';
-
     $('ledger').innerHTML = html;
+  }
+
+  // 口袋按钮是浮在底栏正上方的：底栏高度会随「结余那行 / 继续按钮 / 结果卡」变化，
+  // 写死 bottom 迟早压到四维上。这里按底栏实际高度实时摆位。
+  function placePocket() {
+    var pk = $('pocket');
+    if (!pk) return;
+    if (!(window.matchMedia && window.matchMedia('(max-width: 760px)').matches)) {
+      pk.style.bottom = '';
+      return;
+    }
+    var foot = document.querySelector('.game-foot');
+    var h = foot ? foot.offsetHeight : 110;
+    pk.style.bottom = (h + 12) + 'px';
   }
 
   function advance() {
@@ -13535,6 +14566,8 @@ html, body {
     if (S.dead) { showEnd(); return; }
     busy = true;
     chosen = false;
+    typerStop();
+    clearGate();
     pageNo++;
     var p = E.nextPage(S);
     page = p;
@@ -13564,6 +14597,89 @@ html, body {
     return html;
   }
 
+  // ── 逐字 ────────────────────────────────────────────────
+  // 这类游戏的核心是「读」，不是「点」。所以正文一个字一个字出来，
+  // 读完了选项才出现：先读完，再决定。
+  // 三个细节：句号后停一拍、长页自动加快（整页 2–5 秒）、
+  // 任何时候点一下正文就全显（不给玩家罚站）。
+  var typer = { raf: 0, finish: null, on: false };
+
+  function typingNow() { return !!typer.on; }
+
+  function typerStop() {
+    if (typer.raf && window.cancelAnimationFrame) window.cancelAnimationFrame(typer.raf);
+    typer.raf = 0;
+    typer.finish = null;
+    typer.on = false;
+    var n = document.getElementById('narrative');
+    if (n) n.classList.remove('reading');
+  }
+
+  function typeInto(box, list, done, append) {
+    typerStop();
+    box.classList.remove('reading');
+    if (!append) box.innerHTML = '';
+    var ps = [], chars = [], total = 0, i, j;
+    for (i = 0; i < list.length; i++) {
+      var p = document.createElement('p');
+      if (list[i].flavor) p.className = 'flavor';
+      else if (list[i].yearNote) p.className = 'year-note';
+      p.textContent = '';
+      box.appendChild(p);
+      ps.push(p);
+      var arr = typeof Array.from === 'function' ? Array.from(list[i].t) : String(list[i].t).split('');
+      chars.push(arr);
+      total += arr.length;
+    }
+    if (!list.length) { if (done) done(total); return; }
+
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (NOFX || reduced || !window.requestAnimationFrame || total === 0) {
+      for (j = 0; j < ps.length; j++) ps[j].textContent = chars[j].join('');
+      if (done) done(total);
+      return;
+    }
+
+    // 每字毫秒数：短页慢一点（有余味），长页快一点（不拖）。
+    var per = Math.max(16, Math.min(42, 2800 / total));
+    var li = 0, ci = 0, acc = 0, last = 0;
+    typer.on = true;
+    box.classList.add('reading');
+
+    function step(ts) {
+      if (!last) last = ts;
+      acc += Math.min(80, ts - last);
+      last = ts;
+      var guard = 0;
+      while (acc >= per && guard++ < 600) {
+        if (li >= chars.length) break;
+        var line = chars[li];
+        if (ci >= line.length) {
+          li++; ci = 0;
+          if (li >= chars.length) break;
+          ps[li].textContent = '';
+          acc -= per * 2.4;          // 换段停一拍
+          continue;
+        }
+        ci++;
+        ps[li].textContent = line.slice(0, ci).join('');
+        var ch = line[ci - 1];
+        acc -= per;
+        if (/[。！？]/.test(ch)) acc -= per * 3.2;
+        else if (/[，、；：]/.test(ch)) acc -= per * 1.5;
+      }
+      if (li >= chars.length) { typer.raf = 0; typer.on = false; typer.finish = null; box.classList.remove('reading'); if (done) done(total); return; }
+      typer.raf = window.requestAnimationFrame(step);
+    }
+    typer.raf = window.requestAnimationFrame(step);
+    typer.finish = function () {
+      typerStop();
+      box.classList.remove('reading');
+      for (var k = 0; k < ps.length; k++) ps[k].textContent = chars[k].join('');
+      if (done) done(total);
+    };
+  }
+
   function paintDecision(p) {
     var d = $('decision');
     d.innerHTML = '';
@@ -13590,11 +14706,40 @@ html, body {
 
     $('btn-next').textContent = '先做决定';
     $('btn-next').disabled = true;
+    // 选项已经在眼前了，底栏再摆一个「先做决定」只会让人以为还能点。
+    // 按钮等选完才回来。
     $('btn-next').classList.add('hidden');
     return true;
   }
 
+  // 逐字读完不是终点：还要在页面上停一会儿，让人真的把字看进去。
+  // 停留时间跟着字数走（每字约 34ms，最短半秒，最长三秒二）。
+  // 手快的玩家点一下正文就能跳过——但那是他主动放弃，不是我们没给。
+  var gateTimer = 0;
+  function clearGate() { if (gateTimer) { clearTimeout(gateTimer); gateTimer = 0; } }
+
+  function afterTyped(p, total) {
+    clearGate();
+    if (NOFX || !total) { afterRead(p); return; }
+    var wait = Math.max(520, Math.min(3200, total * 34));
+    gateTimer = setTimeout(function () { gateTimer = 0; afterRead(p); }, wait);
+  }
+
+  // 正文读完之后才轮到选项 / 继续按钮。
+  function afterRead(p) {
+    if (!p || chosen) return;
+    if ($('decision').querySelector('.decision')) return;
+    if (!paintDecision(p)) {
+      $('btn-next').classList.remove('hidden');
+      $('btn-next').disabled = false;
+      $('btn-next').textContent = p.kind === 'death' ? '合上这一生' : '继续';
+    }
+    if (!NOFX) paceAnim($('decision'), 22);
+  }
+
   function renderPage(p) {
+    chosen = false;
+    pageSnap = E.snapshot ? E.snapshot(S) : null;
     $('top-age').textContent = p.age + ' 岁';
     $('top-year').textContent = '';
     $('top-meta').textContent = C.countries[S.country].name + ' · ' + (S.sex === 'F' ? '女' : '男') + ' · ' + padId(S.seed);
@@ -13606,6 +14751,7 @@ html, body {
 
     renderLifeline(p.age);
     renderPocket(p.settle);
+    renderHud(null);
     renderLedger(p.settle);
 
     // 场景行：把「年份 · 季节 · 人生哪一段」压成一行，正文直接从事情本身开始。
@@ -13616,6 +14762,7 @@ html, body {
     var all = [];
     if (p.flavor) all.push({ flavor: 1, t: p.flavor });
     (p.lines || []).forEach(function (l) { all.push({ t: l }); });
+    if (!all.length) all.push({ t: '这几年过得很快，没有什么值得记下。', yearNote: 1 });
 
     // 只有真正长的一页才分段。按段数判断：四段以内一口气读完更顺，
     // 五段以上才值得停一次——实测这类页约占 4%。
@@ -13624,42 +14771,42 @@ html, body {
     var head = split ? all.slice(0, take) : all;
     pendingRest = split ? all.slice(take) : null;
 
-    $('narrative').innerHTML = paintLines(head) ||
-      '<p class="year-note">这几年过得很快，没有什么值得记下。</p>';
-    $('btn-more').classList.toggle('hidden', !split);
+    $('decision').innerHTML = '';
+    $('btn-next').classList.add('hidden');
+    $('btn-next').disabled = true;
+    $('btn-more').classList.add('hidden');
 
-    if (split) {
-      $('decision').innerHTML = '';
-      $('btn-next').classList.add('hidden');
-      $('btn-next').disabled = true;
-    } else if (!paintDecision(p)) {
-      $('btn-next').classList.remove('hidden');
-      $('btn-next').disabled = false;
-      $('btn-next').textContent = p.kind === 'death' ? '合上这一生' : '继续';
-    }
+    typeInto($('narrative'), head, function (total) {
+      if (typer.on) return;
+      if (split) {
+        $('btn-more').classList.remove('hidden');
+      } else {
+        afterTyped(p, total);
+      }
+    });
 
     paceAnim($('narrative'), 16);
-    if (!split) paceAnim($('decision'), 22);
+    placePocket();
   }
 
   function onMore() {
     if (!pendingRest) return;
-    var box = $('narrative');
-    var add = document.createElement('div');
-    add.innerHTML = paintLines(pendingRest);
-    while (add.firstChild) box.appendChild(add.firstChild);
+    if (typingNow()) { if (typer.finish) typer.finish(); return; }
+    var rest = pendingRest;
     pendingRest = null;
     $('btn-more').classList.add('hidden');
-    if (!paintDecision(page)) {
-      $('btn-next').classList.remove('hidden');
-      $('btn-next').disabled = false;
-      $('btn-next').textContent = page.kind === 'death' ? '合上这一生' : '继续';
-    }
-    if (!NOFX) paceAnim($('decision'), 22);
+    typeInto($('narrative'), rest, function (total) { afterTyped(page, total); }, true);
   }
 
+  // 点正文：正在逐字就一次性显完，正停着等就立刻给选项。
+  function onReadTap() {
+    if (typingNow()) { if (typer.finish) typer.finish(); return; }
+    if (gateTimer) { clearGate(); afterRead(page); }
+  }
+
+
   function onPick(e) {
-    if (chosen) return;
+    if (chosen || typingNow()) return;
     var el = e.currentTarget;
     var idx = parseInt(el.getAttribute('data-i'), 10);
     chosen = true;
@@ -13670,31 +14817,72 @@ html, body {
       if (parseInt(opts[i].getAttribute('data-i'), 10) === idx) opts[i].classList.add('chosen');
     }
 
+    // 选之前的状态：点「改选」就退回这里。快照在渲染这一页时已经存好，
+    // 连随机流都一起存了，所以赌局悔棋也会得到同一个骰子。
+    var from = { cash: S.cash, health: S.health, know: S.know, rel: (S.relScore || 0) };
     var res = E.choose(S, idx);
+    if (!res) { chosen = false; return; }
     renderPocketFeel();
 
-    var chips = [];
-    if (res.deltas.cash) {
-      var cashTxt = '钱 ' + (res.deltas.cash > 0 ? '+' : '-') + money(S, Math.abs(res.deltas.cash));
-      if (res.deltas.borne) cashTxt += '（家里出）';
-      else if (res.intoDebt) cashTxt += '（这笔借的）';
-      chips.push(chip(res.deltas.cash > 0 ? 'up' : 'down', cashTxt));
-      flashDot();
-    }
-    if (hasDelta(res.deltas.health)) chips.push(chip(res.deltas.health > 0 ? 'up' : 'down', '身体 ' + (res.deltas.health > 0 ? '+' : '') + fmtN(res.deltas.health)));
-    if (hasDelta(res.deltas.know)) chips.push(chip(res.deltas.know > 0 ? 'up' : 'down', '学识 ' + (res.deltas.know > 0 ? '+' : '') + fmtN(res.deltas.know)));
-    if (hasDelta(res.deltas.rel)) chips.push(chip(res.deltas.rel > 0 ? 'up' : 'down', '关系 ' + (res.deltas.rel > 0 ? '+' : '') + fmtN(res.deltas.rel)));
-    if (res.outcome) chips.push(chip(res.outcome === 'win' ? 'win' : 'lose', res.outcome === 'win' ? '这一把赢了' : '这一把没赢'));
+    var cells = [
+      { k: '钱', v: compactMoney(S.cash), d: res.deltas.cash, cash: 1, note: res.deltas.borne ? '家里出' : (res.intoDebt ? '这笔是借的' : '') },
+      { k: '身体', v: Math.round(S.health), d: res.deltas.health },
+      { k: '关系', v: Math.round(S.relScore || 0), d: res.deltas.rel },
+      { k: '学识', v: Math.round(S.know), d: res.deltas.know }
+    ];
+    var grid = cells.map(function (c) {
+      var dv = c.d, cls = !hasDelta(dv) ? 'flat' : (dv > 0 ? 'up' : 'down');
+      var txt = !hasDelta(dv) ? '不变'
+        : (c.cash ? (dv > 0 ? '+' : '-') + money(S, Math.abs(dv)) : (dv > 0 ? '+' : '') + fmtN(dv));
+      return '<div class="rd ' + cls + '"><span class="rk">' + c.k + '</span>' +
+        '<b class="rv">' + c.v + '</b><i class="rdv">' + txt + '</i>' +
+        (c.note ? '<em class="rnote">' + c.note + '</em>' : '') + '</div>';
+    }).join('');
+
+    var balBefore = from.cash;
+    var balLine = '存款 ' + money(S, Math.abs(S.cash)) +
+      (S.cash < 0 ? '（欠着）' : '') +
+      (Math.abs(S.cash - balBefore) >= 1
+        ? '<span class="rb-from">这笔之前 ' + money(S, Math.abs(balBefore)) + '</span>' : '');
 
     var box = document.createElement('div');
     box.className = 'result';
-    box.innerHTML = '<div>' + (res.note || (res.outcome ? (res.outcome === 'win' ? '赌赢了。' : '没有赌赢。') : '你选了：' + res.label)) + '</div>' +
-      (chips.length ? '<div class="chips">' + chips.join('') + '</div>' : '');
+    box.innerHTML =
+      '<div class="rs-pick">你选了「' + res.label + '」</div>' +
+      '<div class="rs-note">' + (res.note || (res.outcome ? (res.outcome === 'win' ? '赌赢了。' : '没有赌赢。') : '') ) + '</div>' +
+      '<div class="rs-grid">' + grid + '</div>' +
+      '<div class="rs-bal">' + balLine + '</div>' +
+      '<div class="rs-actions">' +
+      '<button class="btn tiny" id="rs-undo">改 选</button>' +
+      '<span class="rs-hint">确认无误，点下面的「继续」</span>' +
+      '</div>';
+    if (res.note === '') box.querySelector('.rs-note').style.display = 'none';
     $('decision').appendChild(box);
+
+    renderHud(from);
+    renderLedger(page.settle);
+    if (res.deltas.cash) flashDot();
+
+    var undo = $('rs-undo');
+    if (undo) undo.addEventListener('click', undoPick);
 
     $('btn-next').classList.remove('hidden');
     $('btn-next').disabled = false;
-    $('btn-next').textContent = '继续';
+    $('btn-next').textContent = '继 续';
+    placePocket();
+  }
+
+  // 改选：退回这一页开始时的状态，选项重新亮起来。
+  function undoPick() {
+    if (!pageSnap) return;
+    E.restore(S, pageSnap);
+    chosen = false;
+    renderHud(null);
+    renderPocket(page.settle);
+    renderLedger(page.settle);
+    paintDecision(page);
+    placePocket();
+    toast('退回去了，重新选');
   }
 
   function chip(cls, text) { return '<span class="chip ' + cls + '">' + text + '</span>'; }
@@ -13748,29 +14936,76 @@ html, body {
     return { got: total, all: C.events.length, byStage: byStage, pct: Math.round(total / C.events.length * 100) };
   }
 
+  // 复制出去的文字只保留三块：结局、财富、回首。跟图上的信息一致，
+  // 多一行「纹理」「执念」都算噪声——发朋友圈的人不会读第二段。
   function shareText(arc) {
-    var ta = arc.sex === 'F' ? '她' : '他';
     var v = arc.verdict || {};
-    var lines = [];
-    lines.push('《此生签》' + arc.name + ' · ' + arc.born + '—' + arc.died + ' · ' + arc.countryName + ' · ' + arc.age + ' 岁' +
-      (arc.cause ? ' · ' + arc.cause.t : ''));
-    lines.push('「' + (v.a || '') + '。' + (v.b || '') + '」');
-    if (arc.ending) lines.push('终局：' + arc.ending.name);
-    if (arc.texture) lines.push('这段人生的纹理：' + arc.texture.name);
-    if (arc.recap && arc.recap[0]) lines.push(arc.recap[0].replace(/^\d{4} 年，/, ''));
-    if (arc.obsession) lines.push('执念：' + arc.obsession.t + '（' + (arc.obsession.done ? '成了' : '没成') + '）');
-    if (arc.after) lines.push('身后：' + arc.after);
-    lines.push('编号 ' + arc.id);
-    return lines.join('\n');
+    var out = [];
+    out.push('《此生签》' + arc.name + ' · ' + arc.born + '—' + arc.died + ' · ' + arc.countryName + ' · ' + arc.age + ' 岁');
+    out.push('【结局】' + (v.a || '') + '。' + (v.b || ''));
+    if (arc.cause && arc.cause.t) out.push(arc.cause.t);
+    var mb = arc.moneyBox;
+    var money = mb ? mb.lineFull : '';
+    out.push('【财富】' + money + (mb && mb.label ? '（' + mb.label + (mb.topTxt ? ' · 本国存款 ' + mb.topTxt : '') + '）' : ''));
+    var rc = (arc.recap || []).slice(0, 6).map(function (x) {
+      return x.replace(/^(\d{4})\s*年[，,]?\s*/, '$1 ');
+    });
+    if (rc.length) out.push('【回首】' + rc.join(' / '));
+    out.push('编号 ' + arc.id + ' · 扫码抽你自己的一签 ' + (window.CSQ_URL || ''));
+    return out.join('\n');
   }
 
   function saveLife(a) {
     var list = loadLives();
     for (var i = 0; i < list.length; i++) if (list[i].id === a.id && list[i].age === a.age) return false;
-    list.unshift({ id: a.id, name: a.name, sex: a.sex, country: a.country, birth: a.birth, born: a.born, died: a.died, age: a.age, verdict: a.verdict, seal: a.seal, cause: a.cause, turns: a.turns, road: a.road, stats: a.stats, countryName: a.countryName, decisions: a.decisions, recap: a.recap, texture: a.texture, miles: a.miles, ledger: a.ledger, wishes: a.wishes, after: a.after, ending: a.ending, done: a.done, proud: a.proud, house: a.house, obsession: a.obsession, moneyBox: a.moneyBox, at: Date.now() });
+    list.unshift({ id: a.id, name: a.name, sex: a.sex, country: a.country, birth: a.birth, born: a.born, died: a.died, age: a.age, verdict: a.verdict, seal: a.seal, cause: a.cause, turns: a.turns, road: a.road, stats: a.stats, countryName: a.countryName, decisions: a.decisions, recap: a.recap, texture: a.texture, miles: a.miles, ledger: a.ledger, wishes: a.wishes, after: a.after, ending: a.ending, done: a.done, proud: a.proud, house: a.house, obsession: a.obsession, moneyBox: a.moneyBox, era: a.era, modern: a.modern, at: Date.now() });
     MEM = list;
     try { localStorage.setItem(STORE, JSON.stringify(list.slice(0, 24))); } catch (e) { }
     return true;
+  }
+
+  // ── 结局页：只留三样 ────────────────────────────────────
+  // 制作人的意见：归档太碎，展示才是裂变的那一下。
+  // 所以首屏只放「结局 / 财富 / 回首」——这三样最抓人，
+  // 其余（纹理、账单、三句话、编年、签谱）全部收进折叠区，
+  // 想深看的人点开，想截图的人一眼就能截。
+  function secLabel(t) { return '<div class="sec-label">' + t + '</div>'; }
+
+  // 回首：从里程碑里挑几件真正定过型的事，出生一行、离世一行，中间按时间排。
+  // 不是把所有记事都倒出来——那是编年，收在折叠区里。
+  var KEY_KINDS = { school: 3, job: 3, marry: 4, kid: 4, house: 3, parent: 3, move: 2, sib: 1, retire: 2, debt: 1, sick: 1 };
+  function recapRows(arc, max) {
+    max = max || 9;
+    var ms = (arc.miles || []).filter(function (m) { return m.kind !== 'death'; });
+    var rows = [{ year: arc.born, age: 0, text: '出生在' + (arc.countryName || '') }];
+    var room = max - 1;
+    var important = ms.filter(function (m) { return (KEY_KINDS[m.kind] || 0) >= 3; });
+    var rest = ms.filter(function (m) { return (KEY_KINDS[m.kind] || 0) < 3; });
+    var pool;
+    if (important.length > room) {
+      var step = important.length / room;
+      pool = [];
+      for (var i = 0; i < room; i++) pool.push(important[Math.min(important.length - 1, Math.floor(i * step))]);
+    } else {
+      pool = important.slice();
+      var need = room - pool.length;
+      if (need > 0 && rest.length) {
+        var gap = Math.max(1, Math.floor(rest.length / need));
+        for (var k = 0; k < rest.length && need > 0; k += gap) { pool.push(rest[k]); need--; }
+      }
+      pool.sort(function (a, b) { return a.year - b.year; });
+    }
+    for (var j = 0; j < pool.length && rows.length < max; j++) {
+      if (!pool[j] || pool[j].year === rows[rows.length - 1].year) continue;
+      // 同一种事最多写两条（换过三次工作的人，回首里不必列三行「换了一份工作」）
+      if (pool[j].kind) {
+        var same = rows.filter(function (r) { return r.kind === pool[j].kind; }).length;
+        if (same >= 2) continue;
+      }
+      rows.push(pool[j]);
+    }
+    rows.push({ year: arc.died, age: arc.age, text: arc.cause ? arc.cause.t : '这一生到这里', last: 1 });
+    return rows;
   }
 
   function showEnd(a) {
@@ -13780,206 +15015,159 @@ html, body {
     try { saveLife(arc); } catch (e) { }
     show('screen-end');
 
-    var ta = arc.sex === 'F' ? '她' : '他';
-    var turns = arc.turns.map(function (t) {
-      return '<div class="turn"><span class="y">' + t.year + '</span><span>' + t.text + '</span></div>';
-    }).join('') || '<div class="turn"><span>' + '这一生没有留下什么决定。' + '</span></div>';
+    if (arc.seen) saveDex(arc.seen);
+    var dex = dexStats();
+    var ed = arc.ending || null;
+    var endIds = (C.ends || []).map(function (e) { return e.id; });
+    var endNo = ed ? (endIds.indexOf(ed.id) + 1) : 0;
 
-    var road = arc.road ? arc.road.text : '回过头看，好像每一步都是被推着走的。';
+    // ── ① 结局 ──
+    var finalHtml = '<section class="blk blk-final">' +
+      secLabel('这 一 生 是 怎 么 合 上 的' + (endNo ? '  ·  ' + endNo + ' / ' + endIds.length : '')) +
+      '<div class="fi-name">' + (ed ? ed.name : '一生') + '</div>' +
+      '<div class="fi-lines">' + ((ed && ed.line) ? ed.line.map(function (l) { return '<p>' + l + '</p>'; }).join('') : '') + '</div>' +
+      '</section>';
+
+    // ── ② 财富 ──
+    var mb = arc.moneyBox;
+    var cashNum = arc.stats ? arc.stats.cash : 0;
+    var moneyHtml = '<section class="blk blk-money">' + secLabel('财 富') +
+      '<div class="mp-top">' +
+      '<span class="mp-tier">' + (mb ? mb.label : (cashNum < 0 ? '欠着' : '攒下一些')) + '</span>' +
+      '<span class="mp-num' + (cashNum < 0 ? ' neg' : '') + '">' + money(arc, Math.abs(cashNum)) + '</span>' +
+      '</div>' +
+      (mb && mb.topTxt ? '<div class="mp-pct">本国存款 ' + mb.topTxt + '</div>' : '') +
+      '<p class="mp-line">' + (mb ? mb.line : (cashNum < 0 ? '走的时候，账上还是负的。' : '走的时候，账上没有欠谁。')) + '</p>' +
+      '</section>';
+
+    // ── ③ 回首 ──
+    var rows = recapRows(arc, 10);
+    var recapHtml = '<section class="blk blk-recap">' + secLabel('回 首') +
+      '<ol class="rc-list">' +
+      rows.map(function (r) {
+        return '<li' + (r.last ? ' class="last"' : '') + '><b>' + r.year + '</b><span>' + r.text + '</span></li>';
+      }).join('') +
+      '</ol></section>';
+
+    // ── 折叠区：其余的都在这里，不占首屏 ──
     var vA = (arc.verdict && arc.verdict.a) || '';
     var vB = (arc.verdict && arc.verdict.b) || '';
     if (vB && !/[。！？]$/.test(vB)) vB += '。';
-    if (arc.seen) saveDex(arc.seen);
-    var dex = dexStats();
-    var sealChars = arc.seal.split('').map(function (c) { return '<span>' + c + '</span>'; }).join('');
+    var ta = arc.sex === 'F' ? '她' : '他';
 
-    // ── 纹理：这一生的形状 ──
     var tex = arc.texture;
     var texHtml = '';
     if (tex) {
-      texHtml = '<div class="tex">' +
-        '<div class="tex-top"><span class="tex-k">这 段 人 生 的 纹 理</span>' +
-        '<b class="tex-name">' + tex.name + '</b></div>' +
-        '<div class="tex-line">' + tex.line + '</div>' +
-        (tex.axes && tex.axes.length ? '<div class="tex-axes">' +
-          tex.axes.map(function (x) {
-            return '<div class="tx"><span class="tx-l">' + x.l + '</span>' +
-              '<i class="tx-bar"><b style="left:' + x.pct + '%"></b></i>' +
-              '<span class="tx-r">' + x.r + '</span></div>';
-          }).join('') +
-          '</div>' : '') +
-        '</div>';
+      texHtml = '<div class="tex"><div class="tex-top"><span class="tex-k">这 段 人 生 的 纹 理</span>' +
+        '<b class="tex-name">' + tex.name + '</b></div><div class="tex-line">' + tex.line + '</div>' +
+        (tex.axes && tex.axes.length ? '<div class="tex-axes">' + tex.axes.map(function (x) {
+          return '<div class="tx"><span class="tx-l">' + x.l + '</span>' +
+            '<i class="tx-bar"><b style="left:' + x.pct + '%"></b></i>' +
+            '<span class="tx-r">' + x.r + '</span></div>';
+        }).join('') + '</div>' : '') + '</div>';
     }
 
-    // ── 回首：把里程碑连成一段话 ──
-    var recapHtml = (arc.recap && arc.recap.length)
-      ? '<div class="sec-label">回 首</div><div class="recap">' +
-        arc.recap.map(function (l) { return '<p>' + l + '</p>'; }).join('') + '</div>'
-      : '';
-
-    // ── 一生账单 ──
     var led = arc.ledger;
     var acctHtml = '';
     if (led && (led.earn > 0 || led.spend > 0)) {
-      var rows = [
+      var rws = [
         ['一辈子挣了', money(arc, led.earn), ''],
         ['日常开销', money(arc, led.spend), ''],
         ['大事进项', '+' + money(arc, led.gain), 'up'],
         ['大事花销', '-' + money(arc, led.loss), 'down']
       ];
-      acctHtml = '<div class="sec-label">一 生 账 单</div><div class="acct">' +
-        rows.map(function (r) {
-          return '<div class="acct-i"><span class="k">' + r[0] + '</span><span class="v ' + r[2] + '">' + r[1] + '</span></div>';
-        }).join('') + '</div>' +
+      acctHtml = secLabel('一 生 账 单') + '<div class="acct">' + rws.map(function (r) {
+        return '<div class="acct-i"><span class="k">' + r[0] + '</span><span class="v ' + r[2] + '">' + r[1] + '</span></div>';
+      }).join('') + '</div>' +
         '<div class="acct-note">' + (led.debtYears > 0
           ? '欠着钱的日子一共 ' + led.debtYears + ' 年，最深的时候欠了 ' + money(arc, led.peakDebt) + '。'
           : '这一生没有欠过钱。') + '</div>';
     }
 
-    // ── 做成了的 / 没来得及的：两栏对照 ──
-    // 左边这一栏以前是空的：整页只清点「缺什么」，不写「做成了什么」。
     var wishHtml = '';
     if (arc.done) {
       var doneRows = arc.done.slice(0, 3).map(function (d) { return '<li>' + d + '</li>'; }).join('');
       var miss = (arc.wishes && arc.wishes.length) ? arc.wishes.slice(0, 3) : ['一件也没有'];
-      wishHtml = '<div class="sec-label">做 成 了 的 &nbsp;/&nbsp; 没 来 得 及 的</div>' +
+      wishHtml = secLabel('做 成 了 的 &nbsp;/&nbsp; 没 来 得 及 的') +
         '<div class="cols">' +
         '<div class="col done"><h4>做 成 了</h4><ul>' + doneRows + '</ul></div>' +
-        '<div class="col miss"><h4>没 来 得 及</h4><ul>' +
-        miss.map(function (w) { return '<li>' + w + '</li>'; }).join('') + '</ul></div>' +
+        '<div class="col miss"><h4>没 来 得 及</h4><ul>' + miss.map(function (w) { return '<li>' + w + '</li>'; }).join('') + '</ul></div>' +
         '</div>';
-    } else if (arc.wishes && arc.wishes.length) {
-      // 旧存档没有 done 字段，退回原来的写法，别让两栏空着
-      wishHtml = '<div class="sec-label">没 做 成 的 事</div><div class="wishes">' +
-        arc.wishes.map(function (w) { return '<span>' + w + '</span>'; }).join('') + '</div>';
     }
 
-    // ── 编年：一年一年翻 ──
+    var obsHtml = '';
+    if (arc.obsession) {
+      obsHtml = secLabel('执 念') + '<div class="obsession ' + (arc.obsession.done ? 'done' : 'miss') + '">' +
+        '<div class="ob-t">' + arc.obsession.t + '</div>' +
+        '<div class="ob-l">' + (arc.obsession.line || (arc.obsession.done ? '后来真的做到了。' : '后来没有做到。')) + '</div></div>';
+    }
+
+    var turnsHtml = (arc.turns && arc.turns.length)
+      ? secLabel('三 个 转 折') + arc.turns.map(function (t) {
+        return '<div class="turn"><span class="y">' + t.year + '</span><span>' + t.text + '</span></div>';
+      }).join('')
+      : '';
+
     var chronHtml = '';
     if (arc.miles && arc.miles.length > 2) {
       chronHtml = '<details class="chron"><summary>这一年一年 · 共 ' + arc.miles.length + ' 条</summary>' +
-        '<div class="ch-body">' +
-        arc.miles.map(function (m) {
+        '<div class="ch-body">' + arc.miles.map(function (m) {
           return '<div class="ch-row" data-k="' + m.kind + '"><span class="ch-y">' + m.age + '</span>' +
             '<span class="ch-t">' + m.text + '</span></div>';
         }).join('') + '</div></details>';
     }
 
-    // ── 首屏四格：只放确实有的 ──
-    // 「0 个孩子」对当事人很刺眼，没有就不写。
-    var facts = [[arc.age + ' 年', '这一生'], [arc.decisions + '', '次决定']];
-    if (arc.stats.kids > 0) facts.push([arc.stats.kids + '', '个孩子']);
-    if (arc.house) facts.push(['1', '套房子']);
-    if (!arc.house && !(arc.stats.kids > 0)) facts.push([arc.stats.married ? '成家' : '未成家', '']);
-    var factsHtml = '<div class="end-facts">' + facts.map(function (x) {
-      return '<div class="ef"><div class="n">' + x[0] + '</div><div class="k">' + x[1] + '</div></div>';
-    }).join('') + '</div>';
-
-    // ── 终局：这一生最后被归成哪一类 ──
-    // 不再用「善终 / 寻常 / 未竟」判决，改成 24 种里的收藏序号。
-    var ed = arc.ending;
-    var finalHtml = '';
-    if (ed) {
-      var endIds = (C.ends || []).map(function (e) { return e.id; });
-      var endNo = endIds.indexOf(ed.id) + 1;
-      finalHtml = '<div class="sec-label">这 一 生 是 怎 么 合 上 的</div>' +
-        '<div class="final">' +
-        '<div class="fi-top"><span class="fi-tier">终 局 · ' + endNo + ' / ' + endIds.length + '</span></div>' +
-        '<div class="fi-name">' + ed.name + '</div>' +
-        '<div class="fi-lines">' + (ed.line || []).map(function (l) { return '<p>' + l + '</p>'; }).join('') + '</div>' +
-        '</div>';
-    }
-
-    // ── 三句话：回望 / 最重的那一步 / 一句画面 ──
-    var sayHtml = '<div class="sec-label">三 句 话</div><div class="say">' +
-      '<p>' + vA + '。</p>' +
-      '<p>' + vB + '</p>' +
-      (arc.proud ? '<p class="proud">你确实做到过一件事：<b>' + arc.proud + '</b>。</p>' : '') +
+    var statsHtml = '<div class="end-stats">' +
+      '<div class="end-stat"><div class="k">' + (cashNum < 0 ? '最后欠款' : '最后存款') + '</div>' +
+      '<div class="v' + (cashNum < 0 ? ' neg' : '') + '">' + money(arc, Math.abs(cashNum)) + '</div></div>' +
+      '<div class="end-stat"><div class="k">职业</div><div class="v">' + arc.stats.job + '</div></div>' +
+      '<div class="end-stat"><div class="k">学历</div><div class="v">' + arc.stats.edu + '</div></div>' +
+      '<div class="end-stat"><div class="k">家庭</div><div class="v">' +
+      (arc.stats.married ? '成家' + (arc.stats.kids ? ' · ' + arc.stats.kids + ' 孩' : '')
+        : arc.stats.kids ? '未婚 · ' + arc.stats.kids + ' 孩' : '未婚') + '</div></div>' +
       '</div>';
 
-    // ── 执念：成了和没成都写，没成的那句要带上它的副产品 ──
-    var obsHtml = '';
-    if (arc.obsession) {
-      obsHtml = '<div class="sec-label">执 念</div>' +
-        '<div class="obsession ' + (arc.obsession.done ? 'done' : 'miss') + '">' +
-        '<div class="ob-t">' + arc.obsession.t + '</div>' +
-        '<div class="ob-l">' + (arc.obsession.line || (arc.obsession.done ? '后来真的做到了。' : '后来没有做到。')) + '</div>' +
-        '</div>';
-    }
+    var moreHtml = '<details class="fold-more"><summary>再往下看 · 三句话 / 做成的事 / 账单 / 编年</summary>' +
+      '<div class="fm-body">' +
+      secLabel('三 句 话') + '<div class="say">' +
+      '<p>' + vA + '。</p><p>' + vB + '</p>' +
+      (arc.proud ? '<p class="proud">你确实做到过一件事：<b>' + arc.proud + '</b>。</p>' : '') + '</div>' +
+      wishHtml + obsHtml + texHtml + acctHtml + statsHtml +
+      (arc.road ? '<div class="road"><b>未走的路 · </b>' + (arc.road.text || '') + '</div>' : '') +
+      (arc.after ? '<div class="after-life"><b>身 后 · </b>' + arc.after + '</div>' : '') +
+      turnsHtml +
+      '<div class="dex-line">签谱 <b>' + dex.got + '</b> / ' + dex.all + ' · 这一支签走到了 ' + dex.pct + '%</div>' +
+      '</div></details>' + chronHtml;
 
-    // ── 钱这一栏：存款落在哪一档，在本国算什么位置 ──
-    // 参考原作：钱不单独给一个数，而是折成「本国前 X%」再加一句人话。
-    var mb = arc.moneyBox;
-    var moneyHtml = '';
-    if (mb) {
-      moneyHtml = '<div class="sec-label">钱 这 一 栏</div>' +
-        '<div class="moneypan">' +
-        '<div class="mp-top">' +
-        '<span class="mp-tier">' + mb.label + '</span>' +
-        '<span class="mp-num' + (mb.cash < 0 ? ' neg' : '') + '">' + money(arc, mb.cash) + '</span>' +
-        '<span class="mp-pct">' + (mb.topTxt ? '本国存款 ' + mb.topTxt : '账上是负数') + '</span>' +
-        '</div>' +
-        '<p class="mp-line">' + mb.line + '</p>' +
-        '</div>';
-    }
-
-    var html =
-      '<div class="end-top"><span class="ar-stamp">已 归 档</span><span>' + arc.id + '</span></div>' +
-      '<div class="end-main"><div class="end-left">' +
+    var head = '<div class="end-top"><span class="ar-stamp">已 归 档</span><span>' + arc.id + '</span></div>' +
+      '<div class="end-hero">' +
+      '<div class="eh-left">' +
       '<h1 class="end-name">' + arc.name + '</h1>' +
       '<div class="end-life"><b>' + arc.born + ' — ' + arc.died + '</b> · ' + arc.countryName + ' · ' +
       (arc.sex === 'F' ? '女' : '男') + ' · <b>' + arc.age + ' 岁</b>' +
+      (arc.era ? ' · ' + arc.era : '') +
       (arc.cause ? '<br>' + arc.cause.t : '') + '</div>' +
-      factsHtml +
-      finalHtml +
-      moneyHtml +
-      sayHtml +
-      recapHtml +
-      wishHtml +
-      obsHtml +
-      texHtml +
-      '<div class="sec-label">三 个 转 折</div>' + turns +
-      '<div class="road"><b>未走的路 · </b>' + road + '</div>' +
-      (arc.after ? '<div class="after-life"><b>身 后 · </b>' + arc.after + '</div>' : '') +
-      '</div><div class="end-right"><div class="seal">' + sealChars + '</div>' +
-      '<div class="seal-note">第 ' + (loadLives().length || 1) + ' 次抽样</div></div></div>' +
-      // ── 附录下沉：账、档、编年都收进折叠区，首屏只留人和话 ──
-      (function () {
-        var statsHtml = '<div class="end-stats">' +
-          (function () {
-            var owed = arc.stats.cash < 0;
-            return '<div class="end-stat"><div class="k">' + (owed ? '最后欠款' : '最后存款') + '</div><div class="v' + (owed ? ' neg' : '') + '">' +
-              money(arc, Math.abs(arc.stats.cash)) + '</div></div>';
-          })() +
-          '<div class="end-stat"><div class="k">职业</div><div class="v">' + arc.stats.job + '</div></div>' +
-          '<div class="end-stat"><div class="k">学历</div><div class="v">' + arc.stats.edu + '</div></div>' +
-          '<div class="end-stat"><div class="k">家庭</div><div class="v">' +
-            (arc.stats.married ? '成家' + (arc.stats.kids ? ' · ' + arc.stats.kids + ' 孩' : '')
-              : arc.stats.kids ? '未婚 · ' + arc.stats.kids + ' 孩' : '未婚') +
-          '</div></div>' +
-          '</div>';
-        if (!acctHtml) return '';
-        return '<details class="chron fold"><summary>账 与 档 · 一生账单 / 存款 / 职业 / 学历</summary>' +
-          '<div class="ch-body">' + acctHtml + statsHtml + '</div></details>';
-      })() +
-      chronHtml +
-      '<div class="dex-line">签谱 <b>' + dex.got + '</b> / ' + dex.all + ' · 这一支签走到了 ' + dex.pct + '%</div>' +
-      '<div class="end-actions">' +
-      '<button class="btn primary" id="end-again">再抽一次</button>' +
-      '<button class="btn" id="end-same">同一个起点</button>' +
-      '<button class="btn" id="end-share">复制这段签文</button>' +
       '</div>' +
-      '<div class="end-foot">卷宗 ' + arc.id + ' · ' + arc.name + ' · 共 ' +
-      (arc.miles ? arc.miles.length : 0) + ' 条记事 · 抽签第 ' + (loadLives().length || 1) + ' 次</div>';
+      '<div class="end-seal">' + (arc.seal || '').split('').map(function (c) { return '<span>' + c + '</span>'; }).join('') + '</div>' +
+      '</div>';
+
+    var actions = '<div class="end-actions">' +
+      '<button class="btn primary" id="end-poster">存 成 一 张 图</button>' +
+      '<button class="btn" id="end-again">再抽一次</button>' +
+      '<button class="btn" id="end-same">同一个起点</button>' +
+      '<button class="btn ghost" id="end-share">复制文字</button>' +
+      '</div>' +
+      '<div class="end-foot">卷宗 ' + arc.id + ' · ' + arc.name + ' · 抽签第 ' + (loadLives().length || 1) + ' 次</div>';
 
     var body = $('end-body');
     body.classList.add('dossier', 'end-dossier');
     body.setAttribute('data-stage', 'end');
-    body.innerHTML = '<div class="binding" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>' + html;
+    body.innerHTML = '<div class="binding" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>' +
+      head + finalHtml + moneyHtml + recapHtml + actions + moreHtml;
 
     $('end-again').addEventListener('click', function () { drawScreen(true); });
     $('end-same').addEventListener('click', function () {
-      S = E.newLife(newSeed(), arc.birth);
+      S = E.newLife(newSeed(), { year: arc.born, country: arc.country });
       startGame();
       toast('同一个起点，另一种走法');
     });
@@ -13990,6 +15178,163 @@ html, body {
         navigator.clipboard.writeText(txt).then(done, function () { fallbackCopy(txt, done); });
       } else fallbackCopy(txt, done);
     });
+    $('end-poster').addEventListener('click', function () { openPoster(arc); });
+  }
+
+  // ── 分享长图 ────────────────────────────────────────────
+  // 文字复制没人会发。做成一张 1080×1560 的图，右下角带二维码，
+  // 截个图发朋友圈就能把人带回来——这是这个游戏唯一可能的裂变口。
+  function cssFont(px, bold) {
+    return (bold ? '600 ' : '') + px + 'px "Songti SC","STSong","SimSun","Noto Serif CJK SC",serif';
+  }
+  function drawWrap(g, text, x, y, maxW, lh, maxLines) {
+    var line = '', lines = [], truncated = false;
+    for (var i = 0; i < text.length; i++) {
+      var test = line + text[i];
+      if (g.measureText(test).width > maxW && line) {
+        lines.push(line);
+        line = text[i];
+        if (lines.length === maxLines) { truncated = true; break; }
+      } else line = test;
+    }
+    if (!truncated && line) lines.push(line);
+    // 别让最后一行只剩一两个标点（读起来像排版出错）：从上一行末尾借几个字过来。
+    if (!truncated && lines.length > 1) {
+      var lastI = lines.length - 1;
+      var guard = 0;
+      while (lines[lastI].length < 5 && lines[lastI - 1] && lines[lastI - 1].length > 8 && guard++ < 6) {
+        lines[lastI] = lines[lastI - 1].slice(-1) + lines[lastI];
+        lines[lastI - 1] = lines[lastI - 1].slice(0, -1);
+      }
+    }
+    for (var k = 0; k < lines.length && k < maxLines; k++) g.fillText(lines[k], x, y + k * lh);
+    if (truncated) {
+      var last = lines[maxLines - 1] || '';
+      g.fillText(last.replace(/.$/, '…'), x, y + (maxLines - 1) * lh);
+      return y + maxLines * lh;
+    }
+    return y + lines.length * lh;
+  }
+
+  function drawPoster(arc, cb) {
+    var W = 1080, H = 1560;
+    var cv = document.createElement('canvas');
+    cv.width = W; cv.height = H;
+    var g = cv.getContext('2d');
+    var PAPER = '#F6F1E7', INK = '#221F1B', MUTED = '#6B6257', FAINT = '#A79B87', RULE = '#D9CFBC', RED = '#B33A2B';
+
+    g.fillStyle = PAPER; g.fillRect(0, 0, W, H);
+    g.strokeStyle = RULE; g.lineWidth = 2; g.strokeRect(42, 42, W - 84, H - 84);
+    g.strokeStyle = '#E4DACA'; g.lineWidth = 1; g.strokeRect(54, 54, W - 108, H - 108);
+
+    g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+    g.fillStyle = INK; g.font = cssFont(54, true);
+    g.fillText('此 生 签', W / 2, 150);
+    g.fillStyle = MUTED; g.font = cssFont(23);
+    g.fillText('一 次 人 生 的 随 机 抽 样', W / 2, 196);
+
+    g.strokeStyle = RULE; g.beginPath(); g.moveTo(120, 232); g.lineTo(W - 120, 232); g.stroke();
+
+    // 人名与生卒
+    g.textAlign = 'left';
+    g.fillStyle = INK; g.font = cssFont(58, true);
+    g.fillText(arc.name, 96, 320);
+    g.fillStyle = MUTED; g.font = cssFont(25);
+    g.fillText(arc.born + ' — ' + arc.died + ' · ' + (arc.countryName || '') + ' · ' +
+      (arc.sex === 'F' ? '女' : '男') + ' · ' + arc.age + ' 岁', 96, 364);
+
+    // ① 结局
+    var y = 440;
+    g.fillStyle = FAINT; g.font = cssFont(20); g.fillText('这 一 生 是 怎 么 合 上 的', 96, y);
+    y += 62;
+    g.fillStyle = INK; g.font = cssFont(66, true);
+    g.fillText(arc.ending ? arc.ending.name : '一生', 96, y);
+    y += 44;
+    g.fillStyle = '#3A342C'; g.font = cssFont(26);
+    var endLine = (arc.ending && arc.ending.line && arc.ending.line[0]) || '';
+    y = drawWrap(g, endLine, 96, y, W - 192, 42, 2);
+
+    // ② 财富
+    y += 40;
+    g.strokeStyle = RULE; g.beginPath(); g.moveTo(96, y); g.lineTo(W - 96, y); g.stroke();
+    y += 50;
+    g.fillStyle = FAINT; g.font = cssFont(20); g.fillText('财 富', 96, y);
+    y += 56;
+    var cash = (arc.stats && arc.stats.cash) || 0;
+    g.fillStyle = cash < 0 ? RED : INK; g.font = cssFont(52, true);
+    g.fillText(money(arc, Math.abs(cash)), 96, y);
+    g.fillStyle = MUTED; g.font = cssFont(23);
+    var tag = (arc.moneyBox && arc.moneyBox.label) ? arc.moneyBox.label : '';
+    if (arc.moneyBox && arc.moneyBox.topTxt) tag += ' · 本国存款 ' + arc.moneyBox.topTxt;
+    if (tag) g.fillText(tag, 96, y + 38);
+    // 档位那行和下面这句话差 42px 才不黏：字都是 23-25 号，38 会挤在一起。
+    y += tag ? 80 : 62;
+    g.fillStyle = '#3A342C'; g.font = cssFont(25);
+    y = drawWrap(g, (arc.moneyBox && arc.moneyBox.line) || '', 96, y, W - 192, 38, 2);
+
+    // ③ 回首
+    y += 44;
+    g.strokeStyle = RULE; g.beginPath(); g.moveTo(96, y); g.lineTo(W - 96, y); g.stroke();
+    y += 48;
+    g.fillStyle = FAINT; g.font = cssFont(20); g.fillText('回 首', 96, y);
+    y += 30;
+    var rows = recapRows(arc, 8);
+    for (var i = 0; i < rows.length; i++) {
+      y += 40;
+      if (rows[i].last) {
+        g.fillStyle = RED;
+        g.beginPath(); g.arc(80, y - 8, 5, 0, Math.PI * 2); g.fill();
+      }
+      g.fillStyle = FAINT; g.font = cssFont(21);
+      g.fillText(String(rows[i].year), 96, y);
+      g.fillStyle = rows[i].last ? MUTED : INK; g.font = cssFont(25);
+      var t = rows[i].text;
+      if (g.measureText(t).width > W - 300) {
+        while (g.measureText(t + '…').width > W - 300 && t.length > 4) t = t.slice(0, -1);
+        t += '…';
+      }
+      g.fillText(t, 226, y);
+    }
+
+    // 页脚 + 二维码（二维码收在内外边框里面，别被裁掉）
+    g.strokeStyle = RULE; g.beginPath(); g.moveTo(96, 1330); g.lineTo(W - 96, 1330); g.stroke();
+    g.fillStyle = INK; g.font = cssFont(26, true);
+    g.fillText('扫一扫，抽你自己的一签', 96, 1396);
+    g.fillStyle = MUTED; g.font = cssFont(21);
+    g.fillText('十来分钟，走完一生', 96, 1436);
+    g.fillStyle = FAINT; g.font = cssFont(18);
+    g.fillText('编号 ' + arc.id + ' · 此生签', 96, 1472);
+
+    function finish() { cb(cv.toDataURL('image/png')); }
+    if (!window.CSQ_QR) { finish(); return; }
+    var qr = new Image();
+    qr.onload = function () { g.drawImage(qr, W - 96 - 150, 1348, 150, 150); finish(); };
+    qr.onerror = function () { finish(); };
+    qr.src = window.CSQ_QR;
+  }
+
+  function openPoster(arc) {
+    var m = $('modal-share');
+    var box = $('share-preview');
+    box.innerHTML = '<div class="sp-loading">正在把这一生画下来…</div>';
+    m.classList.add('show');
+    posterData = null;
+    drawPoster(arc, function (data) {
+      posterData = data;
+      box.innerHTML = '<img alt="这一生的分享图" src="' + data + '">';
+      $('share-hint').textContent = '手机上长按图片保存；电脑上点下面的按钮下载。';
+    });
+  }
+
+  function downloadPoster() {
+    if (!posterData) { toast('图还没画好'); return; }
+    var a = document.createElement('a');
+    a.href = posterData;
+    a.download = '此生签-' + (saved && saved.name ? saved.name : '一生') + '.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    toast('图已存下，发出去吧');
   }
 
   function cabinet() {
@@ -14071,6 +15416,12 @@ html, body {
     $('btn-redraw').addEventListener('click', doDraw);
     $('btn-next').addEventListener('click', onNext);
     $('btn-more').addEventListener('click', onMore);
+    $('narrative').addEventListener('click', onReadTap);
+    window.addEventListener('resize', placePocket);
+    if (window.ResizeObserver) {
+      var footEl = document.querySelector('.game-foot');
+      if (footEl) new window.ResizeObserver(placePocket).observe(footEl);
+    }
     $('pocket-tab').addEventListener('click', function (e) {
       e.stopPropagation();
       $('pocket').classList.toggle('open');
@@ -14079,6 +15430,39 @@ html, body {
       var pk = $('pocket');
       if (pk.classList.contains('open') && !pk.contains(e.target)) pk.classList.remove('open');
     });
+
+    // 逐字期间点正文 = 全显。读得快的人不该等动画。
+    $('narrative').addEventListener('click', function () {
+      if (typingNow() && typer.finish) typer.finish();
+    });
+
+    // 年代选择：只改出生年的区间，其余照旧随机。
+    var eps = document.querySelectorAll('#era-pick .ep');
+    for (var i = 0; i < eps.length; i++) {
+      eps[i].addEventListener('click', function (e) {
+        var all = document.querySelectorAll('#era-pick .ep');
+        for (var j = 0; j < all.length; j++) all[j].classList.remove('on');
+        e.currentTarget.classList.add('on');
+        eraPick = e.currentTarget.getAttribute('data-era') || '';
+        if ($('birth-card').classList.contains('show')) doDraw();
+      });
+    }
+
+    // 四维说明：点那个问号
+    $('hud').addEventListener('click', function (e) {
+      if (e.target && e.target.id === 'hud-help') $('modal-stats').classList.add('show');
+    });
+    $('stats-close').addEventListener('click', function () { $('modal-stats').classList.remove('show'); });
+    $('modal-stats').addEventListener('click', function (e) {
+      if (e.target === $('modal-stats')) $('modal-stats').classList.remove('show');
+    });
+
+    $('share-close').addEventListener('click', function () { $('modal-share').classList.remove('show'); });
+    $('share-download').addEventListener('click', downloadPoster);
+    $('modal-share').addEventListener('click', function (e) {
+      if (e.target === $('modal-share')) $('modal-share').classList.remove('show');
+    });
+
     $('link-cabinet').addEventListener('click', cabinet);
     $('link-cabinet2').addEventListener('click', cabinet);
     $('cab-back').addEventListener('click', function () { show('screen-draw'); });
@@ -14090,12 +15474,16 @@ html, body {
     $('about-body').textContent = C.about;
 
     document.addEventListener('keydown', function (e) {
-      if ($('modal-about').classList.contains('show')) return;
+      if ($('modal-about').classList.contains('show') || $('modal-share').classList.contains('show') ||
+          $('modal-stats').classList.contains('show')) return;
       var tag = (e.target.tagName || '').toLowerCase();
       if (tag === 'input' || tag === 'textarea') return;
       if (e.key === 'Enter' || e.key === ' ') {
         var btn = $('btn-next');
-        // 长页还没读完时，空格/回车先当作「继续读」，别让玩家以为卡住
+        // 正文还在逐字时，空格/回车先当作「读完了，全显」
+        if ($('screen-game').classList.contains('active') && typingNow()) {
+          e.preventDefault(); if (typer.finish) typer.finish(); return;
+        }
         var more = $('btn-more');
         if ($('screen-game').classList.contains('active') && more && !more.classList.contains('hidden')) {
           e.preventDefault(); onMore();
@@ -14105,7 +15493,7 @@ html, body {
           e.preventDefault(); startGame();
         }
       }
-      if ($('screen-game').classList.contains('active') && /^[1-9]$/.test(e.key)) {
+      if ($('screen-game').classList.contains('active') && /^[1-9]$/.test(e.key) && !typingNow()) {
         var n = $('decision').querySelector('.option[data-i="' + (parseInt(e.key, 10) - 1) + '"]');
         if (n && !chosen) n.click();
       }
@@ -14117,7 +15505,8 @@ html, body {
     var q = new URLSearchParams(location.search);
     var seed = q.get('seed');
     if (!seed) return false;
-    if (q.get('nofx') === '1') {
+    if (q.get('nofx') === '1' || q.get('type') === '0' || q.get('auto') === '1' ||
+        q.get('at') || q.get('want') || q.get('end') === '1') {
       NOFX = true;
       var st = document.createElement('style');
       st.textContent = '*{animation:none!important;transition:none!important}';
@@ -14127,6 +15516,14 @@ html, body {
     var forced = {};
     if (q.get('c')) forced.country = q.get('c');
     if (q.get('fam')) forced.fam = parseInt(q.get('fam'), 10);
+    if (q.get('era')) {
+      eraPick = q.get('era');
+      forced.era = eraPick;
+      var eps = document.querySelectorAll('#era-pick .ep');
+      for (var ei = 0; ei < eps.length; ei++) {
+        eps[ei].classList.toggle('on', eps[ei].getAttribute('data-era') === eraPick);
+      }
+    }
     S = E.newLife(parseInt(seed, 10) >>> 0, Object.keys(forced).length ? forced : null);
     var ci = C.countries[S.country];
     document.getElementById('b-country').textContent = ci.name + ' · ' + (S.sex === 'F' ? '女' : '男');
