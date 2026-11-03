@@ -2,15 +2,12 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F6F1E7">
-<meta name="description" content="抽一支签，落到中国、德国或巴西的某个家庭，看这一生会怎么走。">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>此生签 · 一支签只活一次</title>
-<meta name="description" content="抽一支签，走完一生。三个国家、五百多个决定、二十四种终局，十来分钟，一次人生的随机抽样。">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>此生签 · 一次人生的随机抽样</title>
+<meta name="description" content="抽一支签，走完一生。三个国家、两千多个决定、二十四种终局，十来分钟，一次人生的随机抽样。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="此生签 · 一次人生的随机抽样">
-<meta property="og:description" content="抽一支签，走完一生。三个国家、五百多个决定、二十四种终局，十来分钟。">
+<meta property="og:description" content="抽一支签，走完一生。三个国家、两千多个决定、二十四种终局，十来分钟。">
 <meta property="og:image" content="https://ccx710-666.github.io/cishengqian-demo/share.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%232b2118'/%3E%3Crect x='25' y='12' width='14' height='42' rx='3' fill='%23c9a86a'/%3E%3Crect x='25' y='12' width='14' height='9' rx='3' fill='%238a6a3a'/%3E%3C/svg%3E">
@@ -1799,7 +1796,7 @@ html, body {
       </div>
 
       <div class="draw-foot">
-        <span>三个国家 · 五百多个决定 · 一支签只活一次</span>
+        <span>三个国家 · 两千多个决定 · 二十四种终局 · 一支签只活一次</span>
         <span>
           <button class="btn ghost" id="link-cabinet">档案柜</button>
           <button class="btn ghost" id="link-about">关于</button>
@@ -1915,7 +1912,7 @@ html, body {
 
   C.title = '此生签';
   C.subtitle = '一次人生的随机抽样';
-  C.version = '0.12.1 readable';
+  C.version = '0.13.0 modern';
 
   C.countries = {
     CHN: { code: 'CHN', name: '中国', weight: 1410, life: 78.2, cur: '元', sym: '¥', living: 18000, mortgage: 36000, pension: 0.42 },
@@ -2986,7 +2983,9 @@ html, body {
     b: '回头看，真正由自己决定的只有那么几步'
   };
 
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一套事，双减、分流、考研、灵活就业、租房、裁员、体检、房贷、自媒体、基金。原型版本 0.12.1，全部内容在本地运行，不联网、不上传。";
+  C.about = '《此生签》垂直切片 0.12。数值与本项目重构内核同形（分位、生命表、延迟后果、抽签），但不是原版 170 项 CAL 或 172 国生命表，也不含任何原版文案与素材。仅用于验证节奏与手感。'
+    + '这一版可以做三件事：正文逐字出现，读完了才给选项；选完先看结果，一步之内还能改选；结局只留「结局 / 财富 / 回首」三块，可以存成一张带二维码的图。'
+    + '抽签页可以指定年代：八九十年代、零零后、一零后，各自有一套自己的事。';
 
   root.CONTENT = C;
   if (typeof module !== 'undefined' && module.exports) module.exports = C;
@@ -5987,8 +5986,8 @@ html, body {
     return '晚年';
   };
 
-  C.version = '0.12.1 readable';
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一套事，双减、分流、考研、灵活就业、租房、裁员、体检、房贷、自媒体、基金。原型版本 0.12.1，全部内容在本地运行，不联网、不上传。";
+  C.version = '0.13.0 modern';
+  C.about = '《此生签》垂直切片 0.4.1。十四个必经的人生节点负责骨架（在职与自己是老板各有一条），八百多个事件负责质感，二十几种死法负责收场；中/德/巴三国各有自己的制度与场景。走完一生会得到一份人生档案：先是「终局」——这一生最后被归成哪一类（善终、寻常、未竟三类，共二十四种，从「寿终正寝」「儿孙绕膝」到「一个人」「没能长大」），然后是回首、这段人生的纹理（十六种组合）、一生账单、没做成的事，以及可以展开的一年一年。数值与本项目重构内核同形（分位、生命表、延迟后果、抽签），但不是原版 170 项 CAL 或 172 国生命表，也不含任何原版文案与素材。';
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -12172,7 +12171,7 @@ html, body {
 
   ev({
     id: 'md06_afterclass', a: [6, 11], w: 2.5,
-    when: onlyCN(SCHY(2021, 2035)),
+    when: onlyCN(SCHY(2021, 2110)),
     text: T('放学后要在学校多待两个小时。', '教室里写作业，走廊上有老师来回走。'),
     choices: [
       o('在学校写完', '你在学校把作业写完，回家书包一扔就没事了', { know: 3, health: -1 }),
@@ -12214,7 +12213,7 @@ html, body {
 
   ev({
     id: 'md08b_onetoone', a: [9, 15], w: 2.6,
-    when: onlyCN(SCHY(2022, 2040)),
+    when: onlyCN(SCHY(2022, 2110)),
     text: T('补习班没了，家里另找了个法子。', '每周三晚上，一个大学生坐在客厅餐桌对面。'),
     choices: [
       o('认真学', '两个小时里你不敢走神，期末名次进了前二十', { know: 6, health: -2, cash: -22000 }),
@@ -12257,7 +12256,7 @@ html, body {
 
   ev({
     id: 'md12_sport', a: [13, 16], w: 2.6,
-    when: onlyCN(SCHY(2020, 2045)),
+    when: onlyCN(SCHY(2020, 2110)),
     text: T('体育也算分了。', '一千米、跳绳、引体向上，一项一项测。'),
     choices: [
       o('每天放学练', '你在操场上跑了一个学期，最后那圈跑进了及格线', { health: 6, know: -1, cash: -800, flag: { md_fit: 1 } }),
@@ -12268,7 +12267,7 @@ html, body {
 
   ev({
     id: 'md13_schoolzone', a: [11, 13], w: 2.5,
-    when: onlyCN(yr(2012, 2045)),
+    when: onlyCN(yr(2012, 2110)),
     text: T('小升初不看考试了，看户口和房子。', '家里翻出一沓材料，房产证、户口本、水电单，一张一张对。'),
     choices: [
       o('进了划片的那所', '你进了家门口那所学校，走路十分钟', { know: 3, health: 1, rel: { mother: 3 }, flag: { md_zoned: 1 } }),
@@ -12279,7 +12278,7 @@ html, body {
 
   ev({
     id: 'md14_game', a: [12, 17], w: 2.5,
-    when: onlyCN(yr(2019, 2045)),
+    when: onlyCN(yr(2019, 2110)),
     text: T('游戏要实名了。', '晚上十点一到，屏幕上的字变灰，说今天的时间用完了。'),
     choices: [
       o('借大人的号继续玩', '你记住了家里那串身份证号，玩到后半夜', { health: -4, know: -2, rel: { friend: 4 }, flag: { md_bypass: 1 } }),
@@ -12290,7 +12289,7 @@ html, body {
 
   ev({
     id: 'md15_shortvideo', a: [13, 19], w: 2.6,
-    when: onlyCN(yr(2018, 2050)),
+    when: onlyCN(yr(2018, 2110)),
     text: T('你开始刷短视频。', '一晚上过去，手机发烫，你记不起看了什么。'),
     choices: [
       o('一刷就到半夜', '你把一条视频看了十几遍，天亮才睡', { health: -5, know: -3, rel: { mother: -3 }, flag: { md_scroll: 1 } }),
@@ -12335,7 +12334,7 @@ html, body {
 
   ev({
     id: 'md19_subject', a: [16, 17], w: 2.9,
-    when: onlyCN(SCHY(2018, 2050)),
+    when: onlyCN(SCHY(2018, 2110)),
     text: T('要选科了。', '一张表上列着六门，让你挑三门，剩下的只考合格。'),
     choices: [
       o('挑物理和化学', '你选了最难的那两门，班里只有十几个人这么选', { know: 7, health: -3, flag: { md_science: 1 } }),
@@ -12368,7 +12367,7 @@ html, body {
 
   ev({
     id: 'md23_kaoyan', a: [21, 25], w: 2.7,
-    when: onlyCN(yr(2016, 2050)),
+    when: onlyCN(yr(2016, 2110)),
     text: T('报名的人一年比一年多。', '自习室的座位要提前一天占，桌上摆着水杯和台灯。'),
     choices: [
       o('考了，考上了', '你考了两年，第二年进了复试', { edu: 'post', know: 8, health: -5, cash: -12000, flag: { md_post: 1 } }),
@@ -12451,7 +12450,7 @@ html, body {
 
   ev({
     id: 'md30_layoff', a: [28, 45], w: 2.7,
-    when: onlyCN(yr(2019, 2050)),
+    when: onlyCN(yr(2019, 2110)),
     text: T('部门开会，说业务要调整。', '名单在下午发到每个人邮箱，附件是一个 PDF。'),
     choices: [
       o('拿了补偿，重新找', '你签了字，拿到 N+1 的离职补偿，在家投了三个月简历', function (S) { return { cash: 40000, job: { tier: Math.max(1, (S.jobTier || 1) - 1), name: '新单位的职员' }, health: -3, know: 2, flag: { md_layoff: 1 } }; }),
@@ -12538,7 +12537,7 @@ html, body {
   // ═════════════ 中晚年 ═════════════
 
   ev({
-    id: 'md38_scan', a: [55, 85], w: 2.6, when: onlyCN(yr(2016, 2070)),
+    id: 'md38_scan', a: [55, 85], w: 2.6, when: onlyCN(yr(2016, 2110)),
     text: T('门口贴了一张纸，说现在都得先在手机上办。', '你把手机举远了一点，屏幕上的字还是不清楚。'),
     choices: [
       o('让孩子教你', '孩子给你装好了，还在纸上画了三个步骤', { know: 3, rel: { kids: 4 }, health: -1, cash: -2000, flag: { md_taught_phone: 1 } }, null, 'kid'),
@@ -12549,7 +12548,7 @@ html, body {
 
   ev({
     id: 'md39_care', a: [68, 90], w: 2.4,
-    when: onlyCN(yr(2010, 2080)),
+    when: onlyCN(yr(2010, 2110)),
     text: T('一个人住已经不太行了。', '上个月你在卫生间滑了一次，扶着墙起来的。'),
     choices: [
       o('去养老院', '你去看了一家，两人一间，院子里的树很高', { cash: -60000, health: 3, rel: { kids: -3 }, flag: { md_nursing: 1 } }),
@@ -12560,7 +12559,7 @@ html, body {
 
   ev({
     id: 'md40_digital', a: [62, 92], w: 2.2,
-    when: onlyCN(yr(2015, 2085)),
+    when: onlyCN(yr(2015, 2110)),
     text: T('手机里存着几千张照片。', '有一年换手机，那些照片差点全没了。'),
     choices: [
       o('让孩子帮忙存起来', '孩子把它们拷进一个硬盘，贴了标签', { rel: { kids: 4 }, know: 2, flag: { md_photos: 1 } }, null, 'kid'),
@@ -12604,6 +12603,3066 @@ html, body {
   patchText('unicity', function (S) {
     return ['录取通知书装在一个快递信封里，封面印着校名。',
       '母亲把它看了三遍，然后问你，那边冷不冷。'];
+  });
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function (root) {
+  'use strict';
+  // ─────────────────────────────────────────────────────────────
+  // 现代线的共用零件。
+  //
+  // content-modern.js 是最早那一批（39 条）。后来要按人生阶段把池子铺开，
+  // 每个阶段至少二十条可选，代码就拆成了几个文件；这里只放它们共用的东西，
+  // 免得六个文件各抄一遍 ev/o/T，改一处要改六处。
+  //
+  // 手感仍然是同一套：
+  //   短句、具体物件、白描；不写情绪词（难过/开心/崩溃），不评价选择，
+  //   不在正文里写死年龄（屏幕左上角有岁数，写死就会错位），
+  //   不给「正确选项」——三条路各有各的代价。
+  // ─────────────────────────────────────────────────────────────
+  var C = root.CONTENT;
+  if (!C || !C.events) return;
+  var E = C.events, M = C.M;
+
+  function ev(o) {
+    if (!o.a) o.a = [0, 120];
+    if (o.w === undefined) o.w = 2.6;
+    if (o.once === undefined) o.once = true;
+    o.newOnly = true;          // 只发给 2000 年以后出生的人
+    E.push(o);
+  }
+  // o(标题, 后果, 效果, 回味, 需要)
+  function o(t, s, eff, ghost, need) {
+    var r = { t: t, s: s, eff: eff, ghost: ghost };
+    if (need) r.need = need;
+    return r;
+  }
+  function T() {
+    var a = [].slice.call(arguments);
+    return function () { return a.slice(); };
+  }
+  function cn(S) { return !!S && S.country === 'CHN'; }
+  function onlyCN(fn) {
+    return function (S) { return cn(S) && (!fn || fn(S)); };
+  }
+  function inSchool(S) { return !(S && S.flag && S.flag.left_school); }
+  var SCH = function (fn) { return function (S) { return inSchool(S) && (!fn || fn(S)); }; };
+  var SCHY = function (a, b) {
+    return function (S) { return inSchool(S) && S.year >= a && S.year <= b; };
+  };
+  function yr(a, b) {
+    return function (S) { return S.year >= a && S.year <= b; };
+  }
+  function flag(k) {
+    return function (S) { return !!(S.flag && S.flag[k]); };
+  }
+  function noflag(k) {
+    return function (S) { return !(S.flag && S.flag[k]); };
+  }
+  // 家里有更小的孩子（弟弟妹妹）：出生时 sibs 里 d < 0。
+  function hasYounger(S) {
+    return !!(S.sibs && S.sibs.some(function (x) { return x.d < 0; }));
+  }
+  function hasElder(S) {
+    return !!(S.sibs && S.sibs.some(function (x) { return x.d > 0 && x.alive; }));
+  }
+  C.mdh = {
+    ev: ev, o: o, T: T, onlyCN: onlyCN, SCH: SCH, SCHY: SCHY, yr: yr,
+    flag: flag, noflag: noflag, hasYounger: hasYounger, hasElder: hasElder,
+    M: M, E: E, inSchool: inSchool
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function (root) {
+  'use strict';
+  // ═════════════════════════════════════════════════════════════
+  // 现代线 · 童年与小学（3–12 岁）
+  //
+  // 这一段能写的东西，和八十年代完全不是一回事：
+  // 入园要摇号，作业要拍照上传，体测要算分，
+  // 六岁的孩子有一块能定位的电话手表，十岁的孩子在群里看同学被拍。
+  // 道具换了，人也跟着换了。
+  //
+  // 池子：童年 22 条、小学 24 条。每局只抽得到三四条，
+  // 换一个种子，这个孩子的童年就是另一副样子。
+  // ═════════════════════════════════════════════════════════════
+  var C = root.CONTENT;
+  if (!C || !C.mdh) return;
+  var H = C.mdh, ev = H.ev, o = H.o, T = H.T;
+  var onlyCN = H.onlyCN, SCH = H.SCH, SCHY = H.SCHY, yr = H.yr;
+  var hasYounger = H.hasYounger, hasElder = H.hasElder;
+
+  // ═════════ 童年（3–7） ═════════
+
+  ev({
+    id: 'mk01_yey', a: [3, 5], w: 2.9, when: onlyCN(yr(2005, 2110)),
+    text: T('公办园在网上报名，名额比排队的人少。', '家里守着电脑到九点，页面卡了两分钟。'),
+    choices: [
+      o('摇上了', '你进了离家最近的那所，门口有两棵玉兰', { know: 2, rel: { mother: 3 }, flag: { md_statekg: 1 } }),
+      o('没摇上，去了私立', '家里把你送到三站地外的一所，一个月几千', { cash: -30000, know: 3, health: -1 }),
+      o('在家再待一年', '你跟着奶奶在家待了一年，认了几个字', { know: 1, health: 2, rel: { mother: -4 } })
+    ]
+  });
+
+  ev({
+    id: 'mk02_zaojiao', a: [2, 5], w: 2.5, when: onlyCN(),
+    text: T('商场三楼有一间铺了软垫的屋子。', '一节课四十五分钟，家长坐在玻璃外面看。'),
+    choices: [
+      o('每周去两次', '你在垫子上爬、跳、跟着唱，一年下来不怕生', { health: 3, rel: { friend: 4 }, cash: -12000 }),
+      o('去了两周就不去了', '你在门口哭，第三次家里就没再送', { rel: { mother: -3 }, health: 1, flag: { md_refuse: 1 } }),
+      o('不去，在小区里玩', '你每天在楼下的滑梯那儿待到晚饭', { health: 3, rel: { friend: 3 } })
+    ]
+  });
+
+  ev({
+    id: 'mk03_hfmd', a: [4, 6], w: 2.6, when: onlyCN(SCHY(2005, 2110)),
+    text: T('园里有两个孩子请了假。', '第三天，通知贴在门口：这个班先停一周。'),
+    choices: [
+      o('在家待着', '你看了一周动画片，回园时忘了老师姓什么', { know: -1, health: 1 }),
+      o('被传染了', '你烧到三十九度，嘴里长了泡，喝了一周粥', { health: -4, rel: { mother: 3 }, cash: -2000 }),
+      o('去姥姥家住了一周', '你学会了剥豆子，还认识了楼下一条黄狗', { health: 2, know: 1, rel: { mother: 2 } })
+    ]
+  });
+
+  ev({
+    id: 'mk04_haze', a: [3, 8], w: 2.4, when: onlyCN(yr(2013, 2022)),
+    text: T('客厅里多了一台会嗡嗡响的机器。', '窗户一整天关着，玻璃上落了一层灰。'),
+    choices: [
+      o('不出门', '你在家搭积木，一整个冬天没怎么下楼', { health: -1, know: 2, rel: { friend: -3 } }),
+      o('戴口罩下楼', '你在楼下跑了一圈，回来口罩里是黑的', { health: -2, rel: { friend: 3 } }),
+      o('家里买了两台', '机器整夜开着，声音像有人在隔壁呼吸', { health: 2, cash: -6000, flag: { md_purifier: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mk05_sibborn', a: [3, 8], w: 2.6, when: hasYounger,
+    text: T('家里多了一个人。', '他睡在你们那屋的婴儿床里，半夜哭三次。'),
+    choices: [
+      o('你帮着带', '你学会了冲奶粉、换尿布，抱他的姿势比大人还稳', { rel: { mother: 6 }, health: -2, know: 1, flag: { md_bigsib: 1 } }),
+      o('你的床挪去了阳台', '那间屋改成了他的，你的床支在封闭阳台里', { rel: { mother: -3, father: -1 }, know: 1, health: -1 }),
+      o('他哭你就关门', '你把门关上，戴上耳机', { rel: { mother: -6 }, health: 1, flag: { md_distant_sib: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mk06_er', a: [3, 9], w: 2.7, when: onlyCN(yr(2004, 2110)),
+    text: T('夜里咳得停不下来。', '急诊大厅的塑料椅坐满了人，挂号排到一百多号。'),
+    choices: [
+      o('挂完水回家', '你在输液室坐到天亮，手背上贴了胶布', { health: 2, rel: { mother: 4 }, cash: -1500, know: 1 }),
+      o('住了三天院', '六人一间，隔壁床的孩子整夜在哭', { health: 3, rel: { mother: 3 }, cash: -9000, know: 1 }),
+      o('回家吃药扛着', '咳了半个月，后来自己好了', { health: -3, rel: { mother: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'mk07_grandma', a: [4, 11], w: 2.7, when: onlyCN(),
+    text: T('爸妈下班晚，接你的是姥姥。', '她每天四点站在校门口，手里拎着一个保温桶。'),
+    choices: [
+      o('什么都跟她说', '你知道她年轻时候的事，比知道你爸妈的还多', { rel: { mother: 4 }, health: 2, know: 2, flag: { md_grandma: 1 } }),
+      o('嫌她走得慢', '你一个人在前面跑，隔一段回头催一句', { rel: { mother: -4 }, health: 1 }),
+      o('被送去她家住了一年', '老小区的孩子都认识你，楼下的槐树你爬过', { rel: { mother: 5, friend: 3 }, know: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mk08_camera', a: [5, 7], w: 2.3, when: onlyCN(SCHY(2012, 2110)),
+    text: T('教室角上装了一个摄像头。', '手机上能看见，家里人一天要看几次。'),
+    choices: [
+      o('你知道它在哪', '你举手的时候会朝那个角看一眼', { know: 1, rel: { mother: 2 } }),
+      o('当它不存在', '你在教室里该干嘛干嘛', { health: 1, rel: { friend: 2 } }),
+      o('你摔了一回，家里当天就来了', '他们看了回放，第二天找了老师', { rel: { mother: 5, father: -2 }, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mk09_balance', a: [3, 7], w: 2.4, when: onlyCN(),
+    text: T('小区里的孩子都有一辆。', '没有脚踏，用脚蹬着走。'),
+    choices: [
+      o('天天在楼下骑', '你摔了两次，膝盖上的疤留了很多年', { health: 3, rel: { friend: 4 }, cash: -800 }),
+      o('家里买了一辆能调高度的', '那辆车骑到七岁还能用，后来送了人', { cash: -2500, health: 2, rel: { friend: 2 } }),
+      o('等别人不玩了再上去', '你站在旁边看，轮到你的时候天快黑了', { rel: { friend: 2 }, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mk10_birthday', a: [5, 10], w: 2.4, when: onlyCN(yr(2008, 2110)),
+    text: T('同学的生日会在商场里的乐园办。', '邀请卡上印着时间，背面写着不用带礼物。'),
+    choices: [
+      o('去了', '你玩了两个小时，回家路上睡着了', { rel: { friend: 5 }, health: 1, cash: -300 }),
+      o('家里也给你办一场', '同一个地方，请了十个人，蛋糕剩了一半', { rel: { friend: 5 }, cash: -4000 }),
+      o('没去', '你那天发烧，卡片夹在书里，后来找不到了', { rel: { friend: -2 }, health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mk11_name', a: [4, 9], w: 2.2, when: onlyCN(),
+    text: T('你的名字里有一个字，系统里打不出来。', '买票的时候，那个位置是个方框。'),
+    choices: [
+      o('家里去改了名', '换了一个同音的字，学籍、医保、疫苗本都要重办', { cash: -1000, know: 1, rel: { mother: -2 } }),
+      o('将就着用', '你后来习惯了在方框下面写自己的名字', { know: 1, rel: { friend: 1 } }),
+      o('给自己起了个小名', '大家叫你的小名，一直叫到成年', { rel: { friend: 4 }, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mk12_vaccine', a: [3, 6], w: 2.2, when: onlyCN(),
+    text: T('入园要交一本绿色的小本子。', '上面缺了两针，保健老师说开学前补上。'),
+    choices: [
+      o('补上了', '你在社区卫生中心挨了两针，胳膊酸了三天', { health: 2, cash: -500 }),
+      o('开了张证明', '家里跑了一趟，最后盖了章放行', { rel: { mother: 2 }, cash: -300 }),
+      o('拖到开学才补', '你拖了两周才去，别的小孩已经熟了', { health: 1, rel: { friend: -1 } })
+    ]
+  });
+
+  ev({
+    id: 'mk13_pen', a: [4, 8], w: 2.3, when: onlyCN(),
+    text: T('家里买了一套书，配一支笔。', '点在纸上，笔会念出来。'),
+    choices: [
+      o('你天天点', '你自己点完了一整套，认了不少字', { know: 5, health: -1, cash: -1200 }),
+      o('当话筒用', '你对着它唱歌，录了很多条', { rel: { friend: 3 }, know: 1 }),
+      o('扔在抽屉里', '那支笔后来没电了，也没人换电池', { know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mk14_indoor', a: [4, 9], w: 2.2, when: onlyCN(),
+    text: T('海洋球池里全是人。', '你站在里面，球到膝盖。'),
+    choices: [
+      o('玩到关门', '你在滑梯上上去下来，回家睡了一路', { health: 3, rel: { friend: 3 }, cash: -200 }),
+      o('待了十分钟就出来', '你觉得吵，坐在外面等，看门口贴的画', { know: 1, health: 1 }),
+      o('和一个孩子抢滑梯', '你们推了一下，两边家长都过来了', { rel: { friend: -3 }, health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mk15_show', a: [5, 10], w: 2.5, when: onlyCN(SCH()),
+    text: T('班里排了一个节目。', '老师在你脸上扑了粉，眉毛画得很黑。'),
+    choices: [
+      o('站第一排', '你记住了所有动作，跳完家里拍了照', { rel: { mother: 4 }, know: 1, health: -1 }),
+      o('站最后一排', '你跟着比划，回家说不想再跳了', { rel: { friend: -1 }, health: 1 }),
+      o('去后台搬道具', '你拉幕布、搬椅子，老师说你有眼力', { know: 2, rel: { friend: 3 } })
+    ]
+  });
+
+  ev({
+    id: 'mk16_cartoon', a: [3, 8], w: 2.5, when: onlyCN(),
+    text: T('一集演完，片尾曲一响你就跟着唱。', '平板上的下一集自动开始。'),
+    choices: [
+      o('连着看了十几集', '你看到天黑，眼睛发干，喊你也不应', { health: -3, know: 1, rel: { mother: -3 }, flag: { md_screen: 1 } }),
+      o('一集就按暂停', '你把平板放回抽屉，自己去找别的事', { health: 1, know: 1, flag: { k_careful: 1 } }),
+      o('把剧情讲给楼下的小孩', '你在楼下复述了一遍，围了三个人', { rel: { friend: 5 }, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mk17_bed', a: [4, 8], w: 2.2, when: onlyCN(),
+    text: T('家里说，从这周开始你自己睡。', '房间的门留了一条缝，走廊的灯开着。'),
+    choices: [
+      o('一个人睡了', '你抱着一个玩偶睡了一整年', { health: 1, know: 1, rel: { mother: 2 } }),
+      o('半夜跑回去', '你抱着枕头站在他们床边，站了一会儿', { rel: { mother: 3 }, health: 1 }),
+      o('开着灯睡', '灯亮到天亮，电费多了一点，你不怕了', { health: -1, cash: -200 })
+    ]
+  });
+
+  ev({
+    id: 'mk18_trip', a: [5, 12], w: 2.5, when: onlyCN(yr(2010, 2110)),
+    text: T('放七天假。', '高速上堵了四个小时，后备箱里塞着折叠椅。'),
+    choices: [
+      o('去了海边', '你捡了一瓶贝壳，回来摆在窗台上', { health: 2, know: 2, cash: -6000, rel: { mother: 3 } }),
+      o('回了老家', '你在院子里追鸡，被啄了一口，哭着吃了两个鸡蛋', { health: 2, rel: { mother: 3 }, cash: -2000 }),
+      o('哪儿也没去', '你在家写了七天作业，最后一天抄完了', { know: 3, health: -1, rel: { mother: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'mk19_allergy', a: [3, 10], w: 2.2, when: onlyCN(),
+    text: T('你身上起了一片红点。', '医生说要查过敏原，抽了一管血。'),
+    choices: [
+      o('查了，开始忌口', '你有三年没吃虾，出门吃饭要先问一句', { health: 3, cash: -2000, know: 1 }),
+      o('没查，抹点药', '那片红点断断续续，到小学才好', { health: -2 }),
+      o('家里把地毯和毛绒玩具都收了', '屋子空了一半，你晚上睡得沉了', { health: 4, cash: -3000, rel: { mother: -1 } })
+    ]
+  });
+
+  ev({
+    id: 'mk20_left', a: [6, 11], w: 2.6, when: onlyCN(),
+    text: T('爸妈在外面打工，一年回来两次。', '你跟着爷爷奶奶住在村里。'),
+    choices: [
+      o('在村里上学', '你走二十分钟到村小，班里有十一个人', { health: 3, know: 1, rel: { mother: -4, friend: 4 }, flag: { md_leftbehind: 1 } }),
+      o('转到城里借读', '借读费交了一笔，你坐在最后一排', { know: 3, cash: -15000, rel: { mother: 2, friend: -2 } }),
+      o('跟着他们出去', '你转学到他们打工的城市，学籍办了两个月', { know: 2, cash: -8000, health: -1, rel: { mother: 6 } })
+    ]
+  });
+
+  ev({
+    id: 'mk21_newyear', a: [5, 11], w: 2.3, when: onlyCN(),
+    text: T('过年回老家，一屋子人。', '有人问你考多少分，有人问你记不记得他。'),
+    choices: [
+      o('老老实实答', '你被问了一下午，收了一叠红包', { rel: { mother: 3 }, cash: 2000, health: -1 }),
+      o('躲进里屋玩手机', '你在炕上坐了两个小时，等人散了才出来', { rel: { mother: -4 }, health: 1 }),
+      o('跟着表哥表姐出去', '你们在村口放了半盒炮，回来挨了一顿说', { rel: { friend: 4 }, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mk22_teeth', a: [6, 11], w: 2.3, when: onlyCN(yr(2012, 2110)),
+    text: T('牙医说，牙长得挤，得戴牙套。', '诊室的墙上贴着一张收费表，按难度分了几档。'),
+    choices: [
+      o('戴了', '你戴了两年，每个月去紧一次，吃饭要摘', { health: 2, cash: -20000, rel: { friend: -3 }, know: 1 }),
+      o('家里说太贵，先不戴', '你笑的时候习惯抿着嘴', { health: -1, cash: 0, rel: { friend: -2 } }),
+      o('等自己挣钱再说', '你把那张收费表记到了成年', { know: 2, flag: { md_teeth_wait: 1 } })
+    ]
+  });
+
+  // ═════════ 小学（7–12） ═════════
+
+  ev({
+    id: 'mp01_class', a: [6, 8], w: 2.6, when: onlyCN(SCH()),
+    text: T('开学第一天，名单贴在校门口。', '一年级八个班，家长围在前面找自己孩子的名字。'),
+    choices: [
+      o('分在了一班', '班主任姓王，教语文，字写得很好看', { know: 2, rel: { mother: 2 } }),
+      o('分在了最后一个班', '教室在顶楼，夏天很热', { health: -1, know: 2 }),
+      o('家里托人调了班', '你换到了那个据说教得好的老师班上', { know: 4, rel: { mother: 3, father: 2 }, flag: { md_classpick: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mp02_group', a: [7, 11], w: 2.5, when: onlyCN(SCH()),
+    text: T('家长群里一天几百条。', '老师发一条通知，下面一排「收到」。'),
+    choices: [
+      o('家里每条都回', '他们的手机整晚在响，回得比谁都快', { know: 1, rel: { mother: 3 }, health: -1 }),
+      o('家里设了免打扰', '有一次漏了通知，第二天你忘了带手工材料', { rel: { mother: -3 }, know: 1 }),
+      o('你自己替他们回', '你学会了用他们的口气打字', { know: 2, rel: { mother: 2 }, flag: { md_impersonate: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mp03_checkin', a: [7, 12], w: 2.6, when: onlyCN(SCHY(2014, 2110)),
+    text: T('作业要拍照上传。', '写完、拍照、点提交，一天三科。'),
+    choices: [
+      o('每天按时传', '你养成了先写完再玩的习惯，手指上总有铅笔印', { know: 4, health: -1 }),
+      o('攒到晚上一起传', '你十点才开始拍，拍到手机发烫', { know: 1, health: -2, rel: { mother: -3 } }),
+      o('有一次忘带了，第二天站着补', '你在教室后面站着写完，全班都看着', { know: 2, rel: { friend: -2 }, health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mp04_rope', a: [7, 12], w: 2.5, when: onlyCN(SCHY(2014, 2110)),
+    text: T('体测要算进成绩。', '跳绳一分钟，及格线写在墙上。'),
+    choices: [
+      o('天天练', '你从一分钟八十个练到一百六，鞋底磨平了一双', { health: 5, know: -1, cash: -300, flag: { md_fit: 1 } }),
+      o('考试那天借了根轻的绳', '你跳完喘了很久，成绩刚过线', { health: 2 }),
+      o('开了张免测单', '你在树荫下看别人跳，手里捏着一张纸', { health: -2, rel: { mother: -2 }, flag: { md_exempt: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mp05_code', a: [8, 12], w: 2.4, when: onlyCN(yr(2015, 2110)),
+    text: T('少年宫新开了一个班，教小孩拼积木一样的代码。', '招生简章上写着「赢在起跑线」。'),
+    choices: [
+      o('报了，学得起劲', '你拼出一个能避障的小车，拿去参加了区里的比赛', { know: 6, cash: -9000, health: -1, flag: { md_code: 1 } }),
+      o('报了，上了三节', '你把零件带回家，拼成了一辆不会动的车', { know: 2, cash: -9000, rel: { mother: -3 } }),
+      o('没报', '你放学在楼下拍卡片，拍赢了一沓', { rel: { friend: 4 }, health: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mp06_piano', a: [6, 11], w: 2.4, when: onlyCN(),
+    text: T('客厅里多了一台琴。', '每周六上午有一节课，老师住在这个小区的另一栋。'),
+    choices: [
+      o('考到了十级', '你考了六年，最后那张证书压在抽屉最下面', { know: 6, cash: -30000, health: -2, rel: { mother: 4 }, flag: { md_piano: 1 } }),
+      o('学了两年不学了', '琴盖合上，后来成了放东西的地方', { know: 2, cash: -12000, rel: { mother: -4 } }),
+      o('改学吉他', '你换了一样便宜的，背着去学校', { know: 3, cash: -2000, rel: { friend: 5 }, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mp07_study_tour', a: [8, 12], w: 2.3, when: onlyCN(yr(2016, 2110)),
+    text: T('学校组织去外地三天。', '行程表上写着两个博物馆和一个大学。'),
+    choices: [
+      o('去了', '你在大学门口拍了照，回来写了一篇作文', { know: 4, cash: -3000, health: 1, rel: { friend: 3 } }),
+      o('家里没让去', '你在那三天里，每天照常上学', { know: 1, rel: { mother: -2, friend: -2 } }),
+      o('自己攒钱去了', '你把压岁钱拿出来，交了那笔费用', { cash: -3000, know: 3, health: 1, flag: { md_saved: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mp08_lunch', a: [8, 12], w: 2.3, when: onlyCN(SCHY(2004, 2110)),
+    text: T('中午在学校吃。', '餐盘里三样菜，米饭可以添。'),
+    choices: [
+      o('每顿都吃干净', '你一年长高了六厘米，饭量比同桌大', { health: 4, cash: -3000 }),
+      o('嫌难吃，偷偷倒掉', '你下午饿，去小卖部买了两包辣条', { health: -3, cash: -800 }),
+      o('家里送饭', '他们每天中午骑电动车送到门口', { health: 3, cash: -6000, rel: { mother: 4 } })
+    ]
+  });
+
+  ev({
+    id: 'mp09_cards', a: [7, 11], w: 2.4, when: onlyCN(yr(2014, 2110)),
+    text: T('校门口的文具店里有一盒盒的卡。', '五块钱一包，拆开之前不知道里面是谁。'),
+    choices: [
+      o('攒了一整本', '你把重复的换出去，最稀的那张夹在语文书里', { cash: -1500, rel: { friend: 5 }, know: -1 }),
+      o('拆了两包就不买了', '你觉得没意思，把钱买了文具', { cash: -100, know: 1, flag: { k_careful: 1 } }),
+      o('从别人那儿收', '你用一顿早饭换了三张，后来被要回去两张', { rel: { friend: 2 }, health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mp10_monitor', a: [7, 12], w: 2.4, when: onlyCN(SCH()),
+    text: T('班里要选班干部。', '老师让想当的站起来，念自己的名字。'),
+    choices: [
+      o('举手，当上了', '你管纪律，记名字的本子用了两个', { rel: { friend: -3 }, know: 3, flag: { md_monitor: 1 } }),
+      o('举手，没选上', '你站了一会儿，最后坐下了', { rel: { friend: 1 }, know: 1, health: -1 }),
+      o('没举手', '你低头翻书，等人选完', { know: 2, rel: { friend: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mp11_redscarf', a: [6, 9], w: 2.2, when: onlyCN(SCH()),
+    text: T('入队仪式在操场上。', '红领巾发下来，有人教你怎么系。'),
+    choices: [
+      o('第一批入队', '你站在前排，举了手，念了誓词', { know: 2, rel: { mother: 4 } }),
+      o('第二批', '你等到下半学期，那天下了小雨', { know: 1, rel: { friend: 1 } }),
+      o('系不好，一直歪着', '同桌每天帮你系一次', { rel: { friend: 4 }, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mp12_choir', a: [8, 12], w: 2.2, when: onlyCN(SCH()),
+    text: T('合唱队招人，音乐老师让你唱两句。', '你唱完，她让你留下。'),
+    choices: [
+      o('留下来，练到比赛', '你们去区里比了一场，拿了二等奖', { know: 3, rel: { friend: 5 }, health: -1, cash: -500 }),
+      o('唱完就走了', '你说作业多，没再去', { know: 1, rel: { friend: -1 } }),
+      o('去了两次，嫌站着累', '你请了假，后来名单上没你的名字', { health: 1, rel: { friend: -3 } })
+    ]
+  });
+
+  ev({
+    id: 'mp13_transfer', a: [7, 12], w: 2.3, when: onlyCN(),
+    text: T('家里换了房子。', '新家在城另一头，你转学过去，班里有四十七个人。'),
+    choices: [
+      o('很快就熟了', '你同桌带你认了食堂和厕所，一周就没人拿你当新来的', { rel: { friend: 6 }, health: 1 }),
+      o('半年没说话', '你下课坐在座位上，作业写得比谁都整齐', { know: 4, rel: { friend: -5 } }),
+      o('每天回原来的学校门口等', '你坐公交回去找旧同学，来回两个小时', { rel: { friend: 4 }, health: -2, cash: -1000 })
+    ]
+  });
+
+  ev({
+    id: 'mp14_english', a: [7, 12], w: 2.4, when: onlyCN(yr(2010, 2110)),
+    text: T('英语课换了一个外国老师。', '他一节课只说英文，说得很慢。'),
+    choices: [
+      o('跟着他学口音', '你敢开口了，虽然语法还是错', { know: 5, rel: { friend: 2 } }),
+      o('听不懂就低头', '你在课本上画了一节课的小人', { know: -2, rel: { friend: 1 } }),
+      o('下课去问他问题', '他记住了你的名字，每次进门都跟你打招呼', { know: 4, rel: { friend: 4 } })
+    ]
+  });
+
+  ev({
+    id: 'mp15_growth', a: [9, 13], w: 2.2, when: onlyCN(),
+    text: T('体检表发下来，你的身高在班里排倒数。', '家里开始量墙，每一道都写着日期。'),
+    choices: [
+      o('每天跳绳、早睡', '一年长了八厘米，墙上的线越画越高', { health: 5, know: -1 }),
+      o('家里带你去看了门诊', '医生拍了个片子，说骨龄还小，让再等等', { health: 2, cash: -2000, know: 1 }),
+      o('不管它', '你在第一排坐到了毕业', { health: -2, rel: { friend: -2 }, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mp16_asthma', a: [7, 12], w: 2.2, when: onlyCN(),
+    text: T('跑完八百米，你蹲在跑道边喘。', '校医给你喷了两下，让你去查一查。'),
+    choices: [
+      o('查了，是哮喘', '你书包里从此有个喷雾，体育课可以少跑一圈', { health: -3, cash: -3000, know: 1, flag: { md_asthma: 1 } }),
+      o('没查，说没事', '你每次跑完都蹲一会儿，慢慢学会了怎么喘', { health: -2 }),
+      o('改练游泳', '你在水里反而不喘，一个夏天游得很顺', { health: 5, cash: -4000, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mp17_spring', a: [7, 12], w: 2.2, when: onlyCN(SCHY(2016, 2110)),
+    text: T('春游的通知发下来了。', '要走的路不长，不让带零食以外的钱。'),
+    choices: [
+      o('带了一书包零食', '你和同学换了半天吃的，回来拉了两天肚子', { rel: { friend: 5 }, health: -2, cash: -200 }),
+      o('只带了水和面包', '你走得最远，回来还帮老师拎了包', { health: 3, know: 1, rel: { friend: 2 } }),
+      o('请假没去', '你在家写了一天的卷子', { know: 4, health: -1, rel: { friend: -4 } })
+    ]
+  });
+
+  ev({
+    id: 'mp18_fair', a: [8, 12], w: 2.1, when: onlyCN(),
+    text: T('学校办义卖，让自己带东西来卖。', '操场上一排桌子，摆着旧书、手工作品和零食。'),
+    choices: [
+      o('把旧书全卖了', '你卖了三十块，全投进了捐款箱', { rel: { friend: 3 }, know: 2, cash: 300 }),
+      o('卖自己折的纸', '你折了一中午，卖出去七只', { know: 3, rel: { friend: 4 }, cash: 200 }),
+      o('只逛不卖', '你花十块钱买了三本漫画', { know: 1, cash: -100, rel: { friend: 2 } })
+    ]
+  });
+
+  ev({
+    id: 'mp19_sign', a: [7, 12], w: 2.5, when: onlyCN(SCH()),
+    text: T('期中卷子发下来，要家长签字。', '分数写在最上面，红笔画的圈。'),
+    choices: [
+      o('如实拿回去', '家里看了很久，最后签了字，说下次注意', { know: 2, rel: { mother: 2 } }),
+      o('自己模仿签字', '你练了三遍，签得比真的还像', { know: 1, rel: { mother: -5 }, flag: { md_forge: 1 } }),
+      o('说老师没发', '你把卷子折起来塞进书包夹层', { rel: { mother: -4 }, know: -1, flag: { md_hide: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mp20_video', a: [9, 13], w: 2.3, when: onlyCN(yr(2018, 2110)),
+    text: T('你在班里出了个丑，被人拍下来发到了群里。', '视频只有九秒，转了三个群。'),
+    choices: [
+      o('让家里找老师说', '老师在班上说了这件事，视频被删了，但有人存了', { rel: { friend: -5, mother: 3 }, health: -2, flag: { md_memed: 1 } }),
+      o('自己也发一条，把话头接过来', '你拍了一条自嘲的，反而有人说你大方', { rel: { friend: 6 }, health: -2, know: 1, flag: { md_selfmock: 1 } }),
+      o('装作没看见', '你那一周没怎么看手机，走路低着眼', { health: -3, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'mp21_guka', a: [9, 13], w: 2.2, when: onlyCN(yr(2019, 2110)),
+    text: T('同桌有一本贴满贴纸的本子。', '她让你看，翻页的时候很小心。'),
+    choices: [
+      o('自己也做了一本', '你攒了半年贴纸，本子带去了学校又带回来', { rel: { friend: 5 }, cash: -600, know: 1 }),
+      o('帮她一起贴', '你们午休时凑在一张桌子上', { rel: { friend: 6 }, health: -1 }),
+      o('觉得没意思', '你去操场打球了', { health: 3, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'mp22_reading', a: [7, 12], w: 2.3, when: onlyCN(SCHY(2016, 2110)),
+    text: T('老师让每天读半小时，家长签字。', '书架上的书都是新的，塑封还没拆。'),
+    choices: [
+      o('真的读了', '你一年读完了二十几本，作文越写越长', { know: 6, health: -1, flag: { k_bookworm: 1 } }),
+      o('只签不读', '签字本上满满一页，书还是新的', { know: -1, rel: { mother: -3 } }),
+      o('读自己找的', '你把家里一本旧杂志翻烂了，上面的字认了一半', { know: 4, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mp23_relatives', a: [8, 13], w: 2.2, when: onlyCN(),
+    text: T('饭桌上有亲戚问，你将来想干什么。', '满桌的人都停下来，等你回答。'),
+    choices: [
+      o('说了个大人爱听的', '他们点头，说这孩子有出息', { rel: { mother: 3 }, know: 1 }),
+      o('说不知道', '桌上有人笑了一声，你妈给你夹了块肉', { rel: { mother: -2 }, know: 2 }),
+      o('说了个真想的', '有个人说这行不挣钱，你记住了这句话', { know: 3, rel: { mother: -1 }, flag: { md_dream: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mp24_quarrel', a: [8, 13], w: 2.3, when: onlyCN(),
+    text: T('半夜你听见客厅在吵。', '声音不大，但持续了很久，最后门响了一下。'),
+    choices: [
+      o('装作睡着了', '第二天早上，桌上照常摆着早饭', { know: 1, health: -2, flag: { md_parents_fight: 1 } }),
+      o('出去倒水', '你站在客厅门口，两个人都不说话了', { rel: { mother: 2, father: -2 }, health: -2 }),
+      o('第二天问了', '你妈说没事，你爸没抬头', { know: 2, rel: { mother: 1 }, health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mp25_eye', a: [8, 13], w: 2.5, when: onlyCN(SCH()),
+    text: T('学校筛查，你的视力那一栏写着要复查。', '黑板上的小字，你上个月就开始看不清了。'),
+    choices: [
+      o('配了眼镜，坐回第一排', '你第一次看清黑板上的粉笔灰', { cash: -1200, know: 3, rel: { friend: -1 } }),
+      o('没配，抄同桌的笔记', '你抄了两年，字越写越大', { know: 2, health: -3, rel: { friend: 3 }, flag: { md_squint: 1 } }),
+      o('每天去户外待两小时', '你在操场上写作业，视力没再降', { health: 4, know: 1 })
+    ]
+  });
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function (root) {
+  'use strict';
+  // ═════════════════════════════════════════════════════════════
+  // 现代线 · 初中与高中（13–18 岁）
+  //
+  // 这一段的关键词是「分流」和「选科」：
+  // 中考先分一次，高考再分一次，中间还夹着一个十五六岁的人
+  // 要在六门课里挑三门，挑完就决定了后面几十年能报哪些专业。
+  //
+  // 池子：初中 22 条、高中 23 条。
+  // ═════════════════════════════════════════════════════════════
+  var C = root.CONTENT;
+  if (!C || !C.mdh) return;
+  var H = C.mdh, ev = H.ev, o = H.o, T = H.T;
+  var onlyCN = H.onlyCN, SCH = H.SCH, SCHY = H.SCHY, yr = H.yr;
+
+  // ═════════ 初中（13–15） ═════════
+
+  ev({
+    id: 'mj01_stream', a: [13, 15], w: 2.8, when: onlyCN(SCHY(2018, 2110)),
+    text: T('班主任在班会上说了一句普高率。', '教室里安静了一下，有人低头翻书。'),
+    choices: [
+      o('把名次往前挪', '你每天多做一套卷子，期末进了年级前五十', { know: 7, health: -4, rel: { friend: -2 }, flag: { md_grind: 1 } }),
+      o('觉得读职校也行', '你去问了一个读职校的表哥，他说学门手艺不丢人', { know: 2, health: 2, rel: { mother: -4 }, flag: { md_voc_ok: 1 } }),
+      o('不去想这件事', '你照常打球、照常写作业，排名在中间', { health: 2, know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mj02_keyclass', a: [13, 14], w: 2.6, when: onlyCN(SCHY(2015, 2110)),
+    text: T('开学要重新分班。', '一张名单贴在走廊，前两个班的名字挨在一起。'),
+    choices: [
+      o('进了重点班', '班上讲课快一截，你晚上要补到十一点', { know: 6, health: -3, rel: { friend: -3 }, flag: { md_keyclass: 1 } }),
+      o('留在普通班', '你成了班里的前几名，老师常点你回答', { know: 3, rel: { friend: 3 }, health: 1 }),
+      o('家里找了关系', '你进了重点班，坐在最后一排，跟不太上', { know: 3, health: -3, rel: { mother: 3 }, flag: { md_backdoor: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mj03_board', a: [13, 16], w: 2.5, when: onlyCN(SCHY(2016, 2110)),
+    text: T('宿舍八个人，熄灯以后才开始说话。', '有人打手电看小说，有人躲在被子里打电话。'),
+    choices: [
+      o('跟着聊到半夜', '你们聊到两点，第二天早读全趴下了', { rel: { friend: 6 }, health: -3, know: -2 }),
+      o('戴耳塞睡觉', '你睡得着，也慢慢跟她们没什么话说', { health: 3, know: 2, rel: { friend: -4 } }),
+      o('熄灯前去操场跑两圈', '你练出了一副好身体，还认识了隔壁班的人', { health: 5, rel: { friend: 4 }, know: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mj04_phoneban', a: [13, 16], w: 2.6, when: onlyCN(SCHY(2020, 2110)),
+    text: T('手机不许带进教室了。', '班主任拿着一个金属探测的板子，站在门口。'),
+    choices: [
+      o('交上去，放抽屉里', '你一天不碰手机，作业写得快了不少', { know: 4, health: 2, rel: { friend: -2 } }),
+      o('带了个旧的交上去', '你把旧机交了，新的藏在书包夹层', { know: 1, health: -2, rel: { friend: 3 }, flag: { md_smuggle: 1 } }),
+      o('干脆不带了', '你把手机留在家里，放学再说', { know: 3, health: 2, rel: { friend: -4 } })
+    ]
+  });
+
+  ev({
+    id: 'mj05_anime', a: [13, 17], w: 2.4, when: onlyCN(yr(2016, 2110)),
+    text: T('同学拉你去了一次漫展。', '场馆里全是人，有人穿着很复杂的衣服，站在墙边让人拍。'),
+    choices: [
+      o('自己也弄了一套', '你攒了三个月，穿了一次，照片存了很多年', { cash: -2000, rel: { friend: 6 }, know: 1, flag: { md_anime: 1 } }),
+      o('只去逛，不扮', '你买了两张海报，卷着带回家', { cash: -300, rel: { friend: 3 }, know: 2 }),
+      o('去了就出来了', '你在门口等他们，觉得里面太吵', { rel: { friend: -2 }, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mj06_guzi', a: [13, 18], w: 2.3, when: onlyCN(yr(2022, 2110)),
+    text: T('同桌的书包上挂着七八个徽章。', '她说这叫谷子，一个几十块，限量的要抢。'),
+    choices: [
+      o('自己也入坑', '你抢到过一个限量的，后来又收了七个', { cash: -1200, rel: { friend: 5 }, know: 1, flag: { md_guzi: 1 } }),
+      o('只买了一个', '你买了一个最便宜的，挂在笔袋上', { cash: -60, rel: { friend: 2 } }),
+      o('觉得不值', '你算了算，那够吃十顿食堂', { know: 2, cash: 0, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'mj07_fandom', a: [13, 17], w: 2.3, when: onlyCN(SCHY(2019, 2110)),
+    text: T('班里有人在为一个选秀节目投票。', '群里发着链接，说一天能投几十次。'),
+    choices: [
+      o('跟着投了一个月', '你把零花钱换成了票，最后那个人没出道', { cash: -800, rel: { friend: 5 }, know: -2, health: -1 }),
+      o('投了两天就忘了', '你后来在热搜上看到那个人', { rel: { friend: 1 } }),
+      o('说这种事没意义', '你在群里发了一句，没人接', { know: 2, rel: { friend: -5 } })
+    ]
+  });
+
+  ev({
+    id: 'mj08_mind', a: [13, 18], w: 2.5, when: onlyCN(SCHY(2020, 2110)),
+    text: T('学校做了一次心理问卷。', '有一道题问：最近两周，你有没有觉得做什么都没意思。'),
+    choices: [
+      o('如实填了', '心理老师找你去聊了两次，那间办公室有沙发', { health: 3, know: 2, rel: { friend: 1 }, flag: { md_counsel: 1 } }),
+      o('全填了「没有」', '你把表交了，回教室继续做题', { health: -3, know: -1 }),
+      o('跟家里说了', '他们沉默了一会儿，说别想太多，然后给你热了饭', { rel: { mother: 3 }, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mj09_milktea', a: [13, 18], w: 2.2, when: onlyCN(yr(2018, 2110)),
+    text: T('学校门口那家奶茶店，第二杯半价。', '放学的时候，队排到人行道上。'),
+    choices: [
+      o('一周喝四五次', '你一年胖了十斤，体检表上多了个箭头', { health: -4, cash: -2000, rel: { friend: 4 } }),
+      o('只在天热的时候买', '你一个月喝两杯，都是最便宜的', { health: 0, cash: -300, rel: { friend: 1 } }),
+      o('跟人拼单，只出一半', '你们轮流请，最后算不清谁欠谁', { cash: -800, rel: { friend: 4 } })
+    ]
+  });
+
+  ev({
+    id: 'mj10_reward', a: [13, 18], w: 2.2, when: onlyCN(yr(2019, 2110)),
+    text: T('你半夜看直播，屏幕上一直有人在刷礼物。', '主播念了一个名字，说谢谢大哥。'),
+    choices: [
+      o('也刷了一点', '你刷了五十块，屏幕上闪过你的名字', { cash: -500, rel: { friend: 2 }, health: -2, flag: { md_tipped: 1 } }),
+      o('刷了一个月的生活费', '你后来不敢看账单，把软件删了又装回来', { cash: -3000, health: -3, know: -1, flag: { md_tipped_big: 1 } }),
+      o('只看不刷', '你看完就关了，第二天照常上课', { health: -1, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mj11_novel', a: [13, 18], w: 2.3, when: onlyCN(),
+    text: T('你在手机上看一本很长的小说。', '一章三千字，看到第三百章，主角还在同一个境界。'),
+    choices: [
+      o('追到完结', '你看了半年，眼睛近视了一百度', { know: 2, health: -3, cash: -200, flag: { md_webnovel: 1 } }),
+      o('自己也写', '你写了两万字，发上去有十几个人收藏', { know: 4, rel: { friend: 2 }, health: -2, flag: { md_write: 1 } }),
+      o('看了开头就弃了', '你觉得套路，把手机收了起来', { know: 1, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mj12_oi', a: [13, 17], w: 2.3, when: onlyCN(yr(2015, 2110)),
+    text: T('信息学竞赛的培训班在周末。', '教室里十几台电脑，屏幕上是黑白的一道题。'),
+    choices: [
+      o('学下去了', '你拿了个省二，后来靠这个进了不错的高中', { know: 8, cash: -12000, health: -2, flag: { md_oi: 1 } }),
+      o('学了一学期', '你能写出简单的程序，够用了', { know: 4, cash: -6000, health: -1 }),
+      o('去了两次就没去', '你更喜欢在电脑上打游戏', { rel: { friend: 3 }, health: 1, cash: -2000 })
+    ]
+  });
+
+  ev({
+    id: 'mj13_signed', a: [14, 15], w: 2.5, when: onlyCN(SCHY(2018, 2110)),
+    text: T('有几所高中提前来学校挑人。', '一模成绩排在前面的，被叫去谈了一次。'),
+    choices: [
+      o('签了直升', '你不用中考了，最后半年过得比谁都松', { know: 2, health: 4, rel: { friend: -2 }, flag: { md_direct: 1 } }),
+      o('没签，想冲更好的', '你继续做题，志愿表上填了市里最好的那所', { know: 5, health: -3 }),
+      o('签了又后悔', '你后来想毁约，违约金赔了一笔', { cash: -5000, know: 3, rel: { mother: -3 } })
+    ]
+  });
+
+  ev({
+    id: 'mj14_special', a: [13, 15], w: 2.2, when: onlyCN(SCHY(2018, 2110)),
+    text: T('你练了六年的特长，今年不算加分了。', '文件上说，从这一届起取消。'),
+    choices: [
+      o('继续练', '你还是每周去练，不为加分，只因为练惯了', { health: 3, know: 3, rel: { friend: 2 }, cash: -6000 }),
+      o('停了，全力读书', '你把琴收了，成绩往前挪了一截', { know: 6, health: -2, rel: { friend: -3 } }),
+      o('转去考艺术特长班', '你换了一条路，去了另一所学校考试', { know: 2, cash: -8000, rel: { friend: 2 }, flag: { md_art_track: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mj15_holiday', a: [13, 15], w: 2.2, when: onlyCN(SCHY(2021, 2110)),
+    text: T('暑假学校开了托管班。', '自愿报名，一天二十块，管一顿午饭。'),
+    choices: [
+      o('报了，写了两个月作业', '你把下学期的课本预习完了', { know: 5, health: -2, cash: -800 }),
+      o('没报，在家', '你一个人在家，中午自己煮面', { health: -1, know: 1, rel: { friend: -2 } }),
+      o('报了，但天天打球', '你在体育馆待了一暑假，晒黑了一层', { health: 5, rel: { friend: 5 }, cash: -800 })
+    ]
+  });
+
+  ev({
+    id: 'mj16_look', a: [13, 17], w: 2.3, when: onlyCN(),
+    text: T('你脸上开始长东西。', '镜子照了很久，上学前用手挤了一颗。'),
+    choices: [
+      o('去医院看了', '医生开了两支药膏，说别挤，你听了', { health: 2, cash: -600, know: 1 }),
+      o('不管，戴口罩', '你戴了一年口罩，上课也不摘', { health: -2, rel: { friend: -3 }, flag: { md_mask: 1 } }),
+      o('跟着网上买护肤品', '你买了三瓶，用完一瓶就懒得用了', { cash: -800, health: -1, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mj17_parttime', a: [14, 17], w: 2.1, when: onlyCN(SCHY(2015, 2110)),
+    text: T('同学说他周末在发传单，一天一百二。', '他问你去不去。'),
+    choices: [
+      o('去了两次', '你站了八个小时，回来腿肿了，攒下两百四', { cash: 240, health: -2, know: 2, flag: { md_teenwork: 1 } }),
+      o('去了一个月', '你每周末都去，钱存起来买了一双鞋', { cash: 900, health: -3, know: 2, rel: { friend: 3 } }),
+      o('没去', '你在家看书，那学期名次往前挪了十名', { know: 4, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mj18_volunteer', a: [14, 17], w: 2.2, when: onlyCN(SCHY(2019, 2110)),
+    text: T('综评系统里要填志愿服务时长。', '家长群里在问，哪里能盖章。'),
+    choices: [
+      o('去社区扫了三天地', '你在小区里捡垃圾，盖章表上多了十二小时', { rel: { friend: 3 }, health: 1, know: 1 }),
+      o('家里找了个地方盖章', '那张表上写着四十小时，你一天没去', { rel: { mother: 2 }, know: -1, flag: { md_fakehours: 1 } }),
+      o('去图书馆整理书', '你干了一个暑假，认识了一个常来的老人', { know: 3, rel: { friend: 4 }, health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mj19_choose', a: [14, 16], w: 2.4, when: onlyCN(SCHY(2020, 2110)),
+    text: T('填志愿的表发下来，只有几个空。', '第一批、第二批，每一批后面都有一行「是否服从调剂」。'),
+    choices: [
+      o('全填了服从', '你被分到一所没听过的学校，好在是普高', { know: 3, rel: { mother: 2 }, flag: { md_obey: 1 } }),
+      o('只填想去的', '你按分数排了四个，最后一个空了', { know: 3, health: -2, flag: { md_picky: 1 } }),
+      o('听家里的填', '他们填的，你抄了一遍', { rel: { mother: 4 }, know: 1, flag: { md_family_pick: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mj20_vocvisit', a: [14, 15], w: 2.2, when: onlyCN(SCHY(2018, 2110)),
+    text: T('学校组织去一所职校参观。', '车间里摆着一排数控机床，学生在旁边站着。'),
+    choices: [
+      o('觉得挺好', '你问了半天，回来跟家里说想去学这个', { know: 3, rel: { mother: -5, friend: 1 }, flag: { md_voc_ok: 1 } }),
+      o('更想读普高', '你回来以后做题更用功了', { know: 5, health: -2 }),
+      o('没当回事', '你在车上睡了一路', { know: -1, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mj21_english', a: [13, 16], w: 2.2, when: onlyCN(SCHY(2018, 2110)),
+    text: T('英语改成机考了，戴上耳机对着麦克风说话。', '考场里全是低声念题的声音。'),
+    choices: [
+      o('练了一个月', '你每天跟读半小时，最后那部分拿了高分', { know: 5, health: -1, flag: { md_english_ok: 1 } }),
+      o('考前才看了题型', '你对着麦克风结巴了两次', { know: 1, health: -1 }),
+      o('紧张，几乎没说话', '出考场的时候手心全是汗', { health: -2, know: -1, rel: { mother: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'mj22_bullyn', a: [13, 17], w: 2.3, when: onlyCN(SCH()),
+    text: T('后排几个人给你起了个外号。', '他们每天叫，叫到全班都跟着叫。'),
+    choices: [
+      o('跟他们对骂', '你在走廊上骂回去，推了一把，被叫去办公室', { rel: { friend: -4 }, health: -2, know: 1, flag: { md_fought: 1 } }),
+      o('告诉班主任', '老师把几个人叫去谈了，外号没再叫，但你也没了朋友', { rel: { friend: -6 }, know: 2, health: -1 }),
+      o('忍了一年', '你学会了低着头走路，那一年成绩掉了二十名', { health: -4, know: -2, rel: { friend: -2 } })
+    ]
+  });
+
+  // ═════════ 高中（16–18） ═════════
+
+  ev({
+    id: 'mh01_qiangji', a: [17, 18], w: 2.6, when: onlyCN(SCHY(2020, 2110)),
+    text: T('班主任在讲台上念了一份文件。', '基础学科、本硕博连读、不能转专业，三个条件一个一个念。'),
+    choices: [
+      o('报了名', '你填了数学，面试那天被问了一道没做出来的题', { know: 6, health: -2, flag: { md_qiangji: 1 } }),
+      o('看了看，没报', '你觉得自己不适合做研究', { know: 2, flag: {} }),
+      o('报了冷门的基础学科', '你选了古文字，家里问了三次这是学什么', { know: 7, rel: { mother: -3 }, flag: { md_qiangji: 1, md_niche: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mh02_contest', a: [16, 18], w: 2.5, when: onlyCN(SCHY(2015, 2110)),
+    text: T('竞赛班只剩八个人。', '每周三晚上，老师讲的东西已经超出课本很远。'),
+    choices: [
+      o('拼一把', '你拿了省一，进了省队，最后差两分没进集训队', { know: 8, health: -5, cash: -15000, flag: { md_contest: 1 } }),
+      o('退出了', '你回去跟正常进度，成绩慢慢追上来', { know: 4, health: 1, rel: { friend: 2 } }),
+      o('两边都抓着', '你既做题又上课，一天睡五个小时', { know: 6, health: -6, flag: { md_overwork: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mh03_art', a: [16, 18], w: 2.3, when: onlyCN(SCHY(2016, 2110)),
+    text: T('画室的老师说，现在转还来得及。', '集训在城郊，一天画十二个小时，一学期几万。'),
+    choices: [
+      o('去了', '你在画室待了半年，手上一直有炭笔灰', { know: 5, cash: -60000, health: -4, flag: { md_art: 1 } }),
+      o('没去，老实高考', '你把画具收进柜子，只有周末拿出来', { know: 3, health: -1 }),
+      o('家里不同意，还是去了', '你自己借了钱交的学费', { cash: -60000, rel: { mother: -6 }, health: -3, flag: { md_art: 1, md_debt_start: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mh04_intl', a: [16, 18], w: 2.2, when: onlyCN(yr(2012, 2110)),
+    text: T('中介说，那边的学校不难进，就是贵。', '一张纸上是学费、住宿费和汇率。'),
+    choices: [
+      o('家里决定送你出去', '你考了语言，办了一堆公证，走的时候箱子超重', { cash: -300000, know: 6, rel: { mother: -4, father: 2 }, flag: { md_abroad_edu: 1 } }),
+      o('算了，留在国内', '你把那几张纸夹进书里，继续做卷子', { know: 3 }),
+      o('自己考奖学金', '你考了三年，最后一次差了十分', { know: 6, health: -3, flag: { md_scholarship_try: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mh05_sleep', a: [16, 18], w: 2.6, when: onlyCN(SCH()),
+    text: T('早读六点半，晚自习到十点。', '宿舍的灯关了以后，被子里还有几块亮着的屏幕。'),
+    choices: [
+      o('跟着熬', '你一天睡五个小时，白天靠咖啡撑着', { health: -6, know: 5, cash: -500, flag: { md_sleepless: 1 } }),
+      o('到点就睡', '你是宿舍里唯一十一点前睡着的人', { health: 4, know: 1, rel: { friend: -3 } }),
+      o('中午补一觉', '你把午休睡满，下午的效率高一些', { health: 2, know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mh06_rent', a: [16, 18], w: 2.4, when: onlyCN(SCHY(2016, 2110)),
+    text: T('家里在学校旁边租了一间房。', '一室一厅，一个月两千多，妈妈辞了工作来陪读。'),
+    choices: [
+      o('接受，专心读', '你每天回家吃上热饭，晚上学到十二点', { know: 6, health: 1, cash: -30000, rel: { mother: 6 } }),
+      o('让家里回去', '你说自己住宿舍就行，他们走的那天你没送', { rel: { mother: -4 }, know: 3, health: -1 }),
+      o('自己也做家务', '你周末洗衣服做饭，成绩没掉', { know: 4, health: 2, rel: { mother: 5 }, cash: -30000 })
+    ]
+  });
+
+  ev({
+    id: 'mh07_mock', a: [17, 18], w: 2.6, when: onlyCN(SCH()),
+    text: T('一模的成绩单贴在教室后面。', '你的名字在上面，后面跟着一个数字。'),
+    choices: [
+      o('把排名记下来', '你每天早上看一眼，然后坐下做题', { know: 6, health: -3 }),
+      o('把成绩单撕了', '你不想每天看着它', { know: 1, health: 2, rel: { mother: -2 } }),
+      o('找老师聊了一次', '老师说你的问题在选择题，不在难题', { know: 5, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mh08_repeat', a: [18, 20], w: 2.4, when: onlyCN(yr(2015, 2110)),
+    text: T('分数出来了，比模拟低了三十分。', '复读班的招生简章就贴在学校门口。'),
+    choices: [
+      o('回去复读', '你又读了一年，教室里的钟比去年慢', { know: 7, health: -5, cash: -20000, flag: { md_repeat: 1 } }),
+      o('走了，读专科', '你去了一个专科，学了个能找工作的专业', { edu: 'voc', know: 3, health: 1 }),
+      o('不读了，先工作', '你去了一家店，一个月三千五', { know: 1, cash: 2000, health: -2, flag: { md_left_school: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mh09_military', a: [17, 19], w: 2.3, when: onlyCN(yr(2015, 2110)),
+    text: T('招飞的来学校宣讲，要求写在黑板上。', '视力、身高、成绩，一条一条往下刷。'),
+    choices: [
+      o('去体检了', '你过了初检，复检那天紧张得一夜没睡', { health: 3, know: 2, flag: { md_pilot_try: 1 } }),
+      o('报了军校', '你填了提前批，后来政审跑了一个月', { know: 4, health: 3, rel: { father: 6 }, flag: { md_military: 1 } }),
+      o('没去', '你觉得自己近视这一条就过不了', { know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mh10_teacher', a: [17, 19], w: 2.4, when: onlyCN(yr(2016, 2110)),
+    text: T('公费师范的招生简章上写着：免学费，毕业有编。', '下面一行小字：服务期六年，去县里。'),
+    choices: [
+      o('签了', '你四年不用交学费，毕业去了一所县中', { know: 4, cash: 0, rel: { mother: 5 }, flag: { md_free_teacher: 1 } }),
+      o('想读，但不想被绑六年', '你报了普通的师范', { know: 4, cash: -30000 }),
+      o('不读师范', '你觉得站在讲台上说话这件事，自己干不了', { know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mh11_volunteer_fill', a: [18, 19], w: 2.7, when: onlyCN(SCHY(2016, 2110)),
+    text: T('查分那晚，家里三个人守着两台设备。', '分数跳出来，比预估高了十二分。'),
+    choices: [
+      o('冲一冲', '你填了一个往年分数更高的学校，服从调剂', { know: 4, health: -2, flag: { md_reach: 1 } }),
+      o('稳妥，按分数填', '你去了一个分数刚够的学校，专业是自己挑的', { know: 3, flag: { md_safe_pick: 1 } }),
+      o('听家里的填了热门专业', '你报了计算机，四年后这行开始挤', { know: 3, rel: { father: 4 }, flag: { md_cs: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mh12_physical', a: [17, 18], w: 2.2, when: onlyCN(SCH()),
+    text: T('高考体检，医生让你看一本色卡。', '有几页你认不出来，医生在本子上写了一行字。'),
+    choices: [
+      o('问了才知道有限报专业', '你把想报的那几个划掉了', { know: 2, health: -1, rel: { mother: -2 }, flag: { md_colorblind: 1 } }),
+      o('没当回事', '你后来填志愿时，系统直接挡住了两个专业', { know: 2, health: -1 }),
+      o('去大医院复查', '复查结果一样，你回家坐了一晚上', { cash: -800, know: 3, health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mh13_hk', a: [18, 19], w: 2.1, when: onlyCN(yr(2012, 2110)),
+    text: T('港澳的学校也来招人，宣讲会在酒店。', '学费写在第一页，奖学金写在第二页。'),
+    choices: [
+      o('申请了，也拿到了', '你去了，第一年住在山上，回家要坐飞机', { cash: -120000, know: 6, rel: { mother: -3 }, flag: { md_hk: 1 } }),
+      o('申请了，没拿到奖学金', '家里算了一笔账，最后没去', { know: 3, rel: { mother: -2 } }),
+      o('没申请', '你觉得太远', { know: 1, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mh14_composition', a: [17, 18], w: 2.3, when: onlyCN(SCH()),
+    text: T('语文老师说，今年作文可能考这个方向。', '她在黑板上写了三个词，让你各写一篇。'),
+    choices: [
+      o('背了很多素材', '你准备了十几个例子，考场上正好用上', { know: 5, health: -2 }),
+      o('按自己的写法写', '你写了一件小事，老师说风险大，但没让你改', { know: 4, health: 1, flag: { md_own_voice: 1 } }),
+      o('写了个稳妥的', '你用了最保险的结构，分数不高不低', { know: 3 })
+    ]
+  });
+
+  ev({
+    id: 'mh15_waiting', a: [18, 18], w: 2.4, when: onlyCN(SCH()),
+    text: T('考场外拉了警戒线。', '家长站了一整条街，有人穿着旗袍，有人拿着向日葵。'),
+    choices: [
+      o('让家里别来', '你自己走进考场，出来时他们还是在门口', { know: 2, rel: { mother: 2 }, health: 1 }),
+      o('考完跟他们对答案', '有一道大题你和他们算的不一样', { know: 3, health: -1, rel: { mother: 2 } }),
+      o('两天没跟任何人说话', '你考完就回房间，把门关上', { know: 2, health: -2, rel: { mother: -3 } })
+    ]
+  });
+
+  ev({
+    id: 'mh16_gap', a: [18, 19], w: 2.2, when: onlyCN(yr(2016, 2110)),
+    text: T('录取结果出来，专业被调剂了。', '那个专业你没填过，也没听过。'),
+    choices: [
+      o('去读，进去再说', '你读了一学期，发现转专业要年级前百分之十', { know: 3, health: -1, flag: { md_major_adj: 1 } }),
+      o('不去，复读', '你把通知书收进抽屉，回了学校', { know: 5, health: -4, cash: -15000, flag: { md_repeat: 1 } }),
+      o('不读了，找工作', '你去了一个厂，先干着', { know: -1, cash: 3000, health: -2 })
+    ]
+  });
+
+  ev({
+    id: 'mh17_gapyear', a: [18, 19], w: 2.1, when: onlyCN(yr(2018, 2110)),
+    text: T('你说想先停一年。', '家里问了三次「停了做什么」，你答不上来。'),
+    choices: [
+      o('出去走了一年', '你去了几个城市，打零工换住处', { cash: -10000, know: 5, health: -2, rel: { mother: -6 }, flag: { md_gapyear: 1 } }),
+      o('在家待着', '你在家待了一年，看完了半个书架', { know: 4, health: -2, rel: { father: -6 } }),
+      o('改了主意，去上学', '你还是去了学校，晚了一年', { know: 2, rel: { mother: 3 } })
+    ]
+  });
+
+  ev({
+    id: 'mh18_classmate', a: [16, 18], w: 2.3, when: onlyCN(SCH()),
+    text: T('同桌的成绩一直比你好，人也不讨厌。', '每次出分，他都先说自己的，再问你。'),
+    choices: [
+      o('跟他一起学', '你们互相讲题，两个人的名次都往前挪', { know: 5, rel: { friend: 6 }, health: -2 }),
+      o('暗地里较劲', '你偷偷买了三本他没买的资料', { know: 5, health: -3, rel: { friend: -3 } }),
+      o('不跟他比', '你按自己的节奏走', { know: 2, health: 2, rel: { friend: 3 } })
+    ]
+  });
+
+  ev({
+    id: 'mh19_sport', a: [16, 18], w: 2.2, when: onlyCN(SCHY(2018, 2110)),
+    text: T('体育老师问，有没有人想走单招。', '每天下午训练，文化课只要过线。'),
+    choices: [
+      o('练了', '你每天下午在操场，晚上补课到十点', { health: 4, know: 2, cash: -8000, flag: { md_sport_track: 1 } }),
+      o('没练，专心文化课', '你坐在教室里，听着操场上的哨声', { know: 4, health: -2 }),
+      o('练了半年，伤了膝盖', '你在家躺了一个月，回来后两边都落下了', { health: -6, know: 1, cash: -8000 })
+    ]
+  });
+
+  ev({
+    id: 'mh20_phone', a: [16, 18], w: 2.3, when: onlyCN(SCHY(2018, 2110)),
+    text: T('你的手机被班主任收了。', '他说高考完再还。'),
+    choices: [
+      o('认了', '那半年你只能借同学的手机给家里打电话', { know: 5, health: 2, rel: { friend: -3 } }),
+      o('又买了一台', '你在网上买了台二手的，藏得比上次好', { cash: -800, know: -2, health: -2, rel: { friend: 3 }, flag: { md_smuggle: 1 } }),
+      o('让家里去要', '家里去了学校，手机拿回来了，班主任不再管你', { rel: { mother: 2 }, know: -1, flag: { md_teacher_gap: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mh21_insomnia', a: [17, 18], w: 2.4, when: onlyCN(SCH()),
+    text: T('躺下两个小时还醒着。', '你数了几遍呼吸，窗外的路灯一直亮着。'),
+    choices: [
+      o('跟家里说了', '他们带你去看了医生，开了一点药', { health: 3, cash: -1200, rel: { mother: 4 }, flag: { md_sleep_help: 1 } }),
+      o('自己扛', '你白天靠咖啡，晚上靠熬', { health: -6, know: 2 }),
+      o('开始夜跑', '你每天下晚自习跑二十分钟，回来倒头就睡', { health: 5, know: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mh22_friend_gone', a: [16, 18], w: 2.2, when: onlyCN(SCH()),
+    text: T('一个同学转学了，走之前没跟谁说。', '他的座位空了一周，后来搬来一张新桌子。'),
+    choices: [
+      o('给他发了条消息', '他回得很快，说新学校管得更严', { rel: { friend: 5 }, know: 1 }),
+      o('什么也没做', '你后来在群里看到他发的照片', { rel: { friend: -1 }, health: -1 }),
+      o('把他的笔记留了下来', '那本笔记你用到毕业', { know: 4, rel: { friend: 2 } })
+    ]
+  });
+
+  ev({
+    id: 'mh23_summer', a: [17, 18], w: 2.2, when: onlyCN(SCH()),
+    text: T('高考完的那个暑假，长得不知道做什么。', '同学在群里约着去旅游，也有人在打工。'),
+    choices: [
+      o('去打工', '你在奶茶店站了两个月，攒下四千', { cash: 4000, know: 2, health: -2, flag: { md_summer_job: 1 } }),
+      o('考了驾照', '你每天早上去练车，晒得很黑', { cash: -4000, know: 2, health: 1, flag: { md_license: 1 } }),
+      o('在家躺着', '你把三年的觉补了回来，也把游戏打通了', { health: 4, know: -2 })
+    ]
+  });
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function (root) {
+  'use strict';
+  // ═════════════════════════════════════════════════════════════
+  // 现代线 · 大学与初入社会（18–26 岁）
+  //
+  // 这一段是一代人最挤的地方：
+  // 大学四年读完，前面是考研、考公、考编、出国、进厂、跑单，
+  // 六条路同时在招人，每一条都有人说「今年最难」。
+  //
+  // 池子：大学 22 条、初入社会 23 条。
+  // ═════════════════════════════════════════════════════════════
+  var C = root.CONTENT;
+  if (!C || !C.mdh) return;
+  var H = C.mdh, ev = H.ev, o = H.o, T = H.T;
+  var onlyCN = H.onlyCN, SCH = H.SCH, SCHY = H.SCHY, yr = H.yr;
+
+  // ═════════ 大学（18–22） ═════════
+
+  ev({
+    id: 'mu01_junxun', a: [18, 19], w: 2.6,
+    when: onlyCN(function (S) { return S.edu === 'uni' || S.edu === 'voc'; }),
+    text: T('军训在操场上，晒了十四天。', '教官比你们大不了几岁，最后一天有人哭了。'),
+    choices: [
+      o('认真练，进了方队', '你被挑去走分列式，脚上磨了两个泡', { health: 3, rel: { friend: 5 }, know: 1 }),
+      o('装病躲了几天', '你在宿舍躺着，回来时大家都熟了，只有你面生', { health: 1, rel: { friend: -5 } }),
+      o('跟教官混熟了', '他教了你怎么叠被子，还说以后有事可以找他', { rel: { friend: 3 }, know: 2, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mu02_club', a: [18, 21], w: 2.5,
+    when: onlyCN(function (S) { return S.edu === 'uni' || S.edu === 'voc'; }),
+    text: T('开学那周，操场边上摆满了桌子。', '每个社团都让你扫码进群，说加学分。'),
+    choices: [
+      o('进了学生会', '你从干事做起，学会了写通知和排表', { know: 3, rel: { friend: 6 }, health: -2, flag: { md_union: 1 } }),
+      o('进了个兴趣社团', '你们每周聚一次，后来一起去了外地比赛', { rel: { friend: 6 }, know: 3, cash: -1000 }),
+      o('一个都没进', '你下课就回宿舍，把想看的书看完了', { know: 5, rel: { friend: -4 } })
+    ]
+  });
+
+  ev({
+    id: 'mu03_baoyan', a: [20, 22], w: 2.6,
+    when: onlyCN(function (S) { return S.edu === 'uni'; }),
+    text: T('推免的名额下来了，班里两个。', '绩点表贴在群里，你排在第三。'),
+    choices: [
+      o('去争那两个名额', '你补了一个学期的课，最后差 0.02', { know: 6, health: -4, rel: { friend: -3 } }),
+      o('算了，去考', '你把书翻出来，进了自习室', { know: 4, health: -2 }),
+      o('不读了，找工作', '你开始改简历', { know: 1, cash: 2000, flag: { md_directwork: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mu04_loan', a: [18, 22], w: 2.4,
+    when: onlyCN(function (S) { return S.edu === 'uni' || S.edu === 'voc'; }),
+    text: T('室友换了一台新电脑，用的是分期。', '他说一个月只要还三百。'),
+    choices: [
+      o('也分期买了', '你买了手机和电脑，一个月还七百', { cash: -8000, health: -2, know: 1, flag: { md_installment: 1 } }),
+      o('没买，用旧的', '你那台开机要三分钟，但能写论文', { know: 2, health: 1 }),
+      o('去借了校园贷', '钱到账很快，利息你没看懂', { cash: -15000, health: -4, rel: { mother: -6 }, flag: { md_badloan: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mu05_cet', a: [18, 21], w: 2.4,
+    when: onlyCN(function (S) { return S.edu === 'uni' || S.edu === 'voc'; }),
+    text: T('四级考了两次，都是三百多。', '第三次报名的时候，你在图书馆借了本真题。'),
+    choices: [
+      o('认真刷了一个月', '你过了，分数不高，但够了毕业线', { know: 5, health: -2, flag: { md_cet: 1 } }),
+      o('考完就算了', '你第四次没过，毕业前用别的证抵了', { know: 1, health: 1, flag: { md_no_cet: 1 } }),
+      o('改考雅思', '你花了几千块报班，考了六分', { know: 6, cash: -8000, health: -2 })
+    ]
+  });
+
+  ev({
+    id: 'mu06_teacher_cert', a: [19, 23], w: 2.3,
+    when: onlyCN(function (S) { return S.edu === 'uni'; }),
+    text: T('室友在准备教资，书摊了一桌。', '她说多一个证，多一条路。'),
+    choices: [
+      o('一起考了', '你背了两个月，两门都过了', { know: 5, cash: -1200, health: -2, flag: { md_teacher_cert: 1 } }),
+      o('没考', '你觉得讲台那件事干不来', { know: 1, health: 1 }),
+      o('考了，面试没过', '你站在讲台上讲了十分钟，评委没抬头', { know: 3, cash: -1200, health: -2 })
+    ]
+  });
+
+  ev({
+    id: 'mu07_ai_paper', a: [20, 26], w: 2.5,
+    when: onlyCN(function (S) { return (S.edu === 'uni' || S.edu === 'post') && S.year >= 2023; }),
+    text: T('论文写到第三章，写不动了。', '有个工具能把一段话换个说法，读起来还挺顺。'),
+    choices: [
+      o('用它润色', '你一句一句改，查重过了，答辩也过了', { know: 3, cash: 0, flag: { md_ai_paper: 1 } }),
+      o('让它整段生成', '查重率不高，但答辩老师问了一个你没想过的问题', { know: 1, health: -2, flag: { md_ai_ghost: 1 } }),
+      o('一个字一个字写', '你写到凌晨四点，最后那一章写得最好', { know: 6, health: -4 })
+    ]
+  });
+
+  ev({
+    id: 'mu08_lockdown', a: [18, 22], w: 2.5,
+    when: onlyCN(function (S) { return (S.edu === 'uni' || S.edu === 'voc') && S.year >= 2020 && S.year <= 2022; }),
+    text: T('校门关了，快递只能送到栅栏外。', '宿舍楼下一排桌子，放着各班的饭。'),
+    choices: [
+      o('在宿舍上网课', '你一个学期没进过教室，绩点掉了', { know: -2, health: -1, rel: { friend: 2 } }),
+      o('开始自己学', '你把网课当音频听，另外找书看', { know: 6, health: 1, flag: { k_bookworm: 1 } }),
+      o('去当了志愿者', '你每天搬箱子、送饭，认识了整栋楼的人', { rel: { friend: 7 }, health: -3, know: 1, flag: { md_volunteer: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mu09_wall', a: [18, 22], w: 2.2,
+    when: onlyCN(function (S) { return S.edu === 'uni' || S.edu === 'voc'; }),
+    text: T('有人在校园墙上发了你的照片。', '配的字不长，下面已经有几十条评论。'),
+    choices: [
+      o('去找管理员删了', '帖子删了，但有人截图发到了别的群', { rel: { friend: -4 }, health: -3, flag: { md_wall: 1 } }),
+      o('自己发一条回应', '你把事情说清楚，有人信，有人不信', { rel: { friend: 2 }, know: 2, health: -2 }),
+      o('不管', '你关了评论，一周没上那个号', { health: -2, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'mu10_fail', a: [18, 22], w: 2.3,
+    when: onlyCN(function (S) { return S.edu === 'uni' || S.edu === 'voc'; }),
+    text: T('高数挂了。', '补考在开学第一周，同一间教室。'),
+    choices: [
+      o('暑假补了一个月', '补考过了，你还把那本书留着', { know: 5, health: -2, cash: -500 }),
+      o('补考又没过', '你重修了一年，交了一笔重修费', { know: 2, cash: -2000, health: -2, rel: { father: -5 } }),
+      o('找老师说了情况', '老师让你交了一份额外的作业', { know: 3, rel: { friend: 1 }, health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mu11_grant', a: [18, 22], w: 2.3,
+    when: onlyCN(function (S) { return S.edu === 'uni' || S.edu === 'voc'; }),
+    text: T('助学金的表要自己填，还要上台讲。', '班里开会，申请的人一个一个上去说家里的情况。'),
+    choices: [
+      o('上去讲了', '你讲了三分钟，拿到了二等，一年三千', { cash: 3000, health: -2, rel: { friend: -2 }, flag: { md_grant: 1 } }),
+      o('没申请', '你不想在班里说这些', { rel: { friend: 1 }, health: 1, cash: 0 }),
+      o('去做了勤工俭学', '你在图书馆整理书，一个月四百', { cash: 4000, know: 2, health: -2, flag: { md_workstudy: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mu12_internet_plus', a: [19, 22], w: 2.3,
+    when: onlyCN(function (S) { return S.edu === 'uni'; }),
+    text: T('学院在组织报一个创业比赛。', '组队群里一天几十条，说要改变一个行业。'),
+    choices: [
+      o('组了个队', '你们做了个 PPT，进了校赛，没进省赛', { know: 4, rel: { friend: 5 }, health: -2, cash: -1000 }),
+      o('当了队长', '你熬了三个通宵，最后拿了个校三等奖', { know: 5, health: -4, rel: { friend: 3 }, flag: { md_contest_biz: 1 } }),
+      o('没参加', '你去图书馆看自己的书', { know: 4, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mu13_volunteer_teach', a: [19, 22], w: 2.3,
+    when: onlyCN(function (S) { return S.edu === 'uni'; }),
+    text: T('暑期支教的招募贴在食堂门口。', '去的地方要坐六个小时的车，管住不管钱。'),
+    choices: [
+      o('去了', '你在一间漏风的教室里教了二十天，走的时候有人送你到村口', { know: 3, rel: { friend: 6 }, health: -3, cash: -2000, flag: { md_taught_rural: 1 } }),
+      o('报名了，没被选上', '你在候补名单里，最后没轮到你', { know: 1, health: 1 }),
+      o('留在家准备考试', '你把那个暑假用来刷题', { know: 5, health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mu14_army', a: [18, 22], w: 2.2, when: onlyCN(yr(2016, 2110)),
+    text: T('学校在征兵，公告栏上贴着条件。', '服役两年，回来可以转专业、考研加分。'),
+    choices: [
+      o('报了名，去了', '你在部队待了两年，回来晒得谁都认不出', { health: 6, know: 3, cash: 20000, rel: { friend: -4 }, flag: { md_veteran: 1 } }),
+      o('体检没过', '你视力差了一点，回来继续上课', { know: 2, health: 1 }),
+      o('没报', '你觉得两年太长', { know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mu15_change_major', a: [19, 21], w: 2.4,
+    when: onlyCN(function (S) { return S.edu === 'uni'; }),
+    text: T('转专业的通知下来了，要求年级前百分之十。', '你想去的那个专业，只收五个人。'),
+    choices: [
+      o('拼了一把，转成了', '你补了两门课，新班里没人认识你', { know: 6, health: -3, rel: { friend: -4 }, flag: { md_major_changed: 1 } }),
+      o('没转成', '你留在原专业，开始自学想学的', { know: 4, health: -1 }),
+      o('没去申请', '你觉得折腾', { know: 1, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mu16_love_uni', a: [19, 23], w: 2.3,
+    when: onlyCN(function (S) { return !S.partner && !S.married && (S.edu === 'uni' || S.edu === 'voc'); }),
+    text: T('有个人每天在图书馆同一层。', '你们占到相邻的座位，谁也没先开口。'),
+    choices: [
+      o('先开口了', '你们一起吃了顿饭，后来一起上自习', { rel: { friend: 6 }, know: 1, health: 1, flag: { md_uni_love: 1 } }),
+      o('一直没开口', '考完试，那个座位空了', { know: 2, health: -1, flag: { md_unsaid: 1 } }),
+      o('先忙自己的事', '你把那段时间用来准备考试', { know: 5, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'mu17_fitness', a: [19, 23], w: 2.2, when: onlyCN(),
+    text: T('学校的健身房一年三百。', '镜子前面站满了人，深蹲架要排队。'),
+    choices: [
+      o('办了卡，练了两年', '你的体测成绩从中游变成前几名', { health: 7, cash: -600, know: 1, flag: { md_fit: 1 } }),
+      o('办了卡，去了五次', '卡在钱包里放到过期', { cash: -600, health: 0 }),
+      o('不办，去操场跑', '你每天晚上跑五圈，跑了两年', { health: 6, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mu18_delivery', a: [19, 23], w: 2.2, when: onlyCN(),
+    text: T('宿舍楼下的快递堆成了山。', '驿站招人，一小时十五块。'),
+    choices: [
+      o('去了', '你每天晚上分拣两个小时，一个月挣八百', { cash: 8000, health: -3, know: 1, flag: { md_parttime: 1 } }),
+      o('帮同学代取，一次两块', '你跑上跑下，一个月挣了三百', { cash: 3000, health: -1, rel: { friend: 3 } }),
+      o('没去', '你把时间用在了别处', { know: 3, health: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mu19_esports', a: [18, 22], w: 2.2, when: onlyCN(yr(2018, 2110)),
+    text: T('宿舍五个人开黑，从十点打到凌晨三点。', '有人说，这游戏要是能打职业就好了。'),
+    choices: [
+      o('天天打', '你的段位很高，绩点很低', { know: -2, health: -5, rel: { friend: 6 }, flag: { md_gamer: 1 } }),
+      o('只在周末打', '周五晚上打两局，其余时间照常', { rel: { friend: 4 }, health: 1 }),
+      o('去做游戏代练', '你接单挣钱，一个月一千多，眼睛熬坏了', { cash: 6000, health: -5, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mu20_thesis', a: [21, 24], w: 2.4,
+    when: onlyCN(function (S) { return S.edu === 'uni' || S.edu === 'post'; }),
+    text: T('毕设的题目是导师定的，你没太看懂。', '开题报告下周三交。'),
+    choices: [
+      o('去问了三次', '导师给你画了一张图，你照着做完了', { know: 5, rel: { friend: 2 }, health: -2 }),
+      o('自己硬做', '你做出来的结果和预期不一样，答辩时说成了新发现', { know: 3, health: -3 }),
+      o('找学长要了份模板', '你改了两周，查重过了', { know: 1, health: 1, flag: { md_template: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mu21_graduate_trip', a: [21, 23], w: 2.2,
+    when: onlyCN(function (S) { return S.edu === 'uni' || S.edu === 'voc'; }),
+    text: T('毕业前，宿舍商量着出去玩一趟。', '预算一人一千五，去的地方要坐一夜火车。'),
+    choices: [
+      o('去了', '你们在山顶看了一次日出，照片里的人都笑得很傻', { cash: -1500, rel: { friend: 8 }, health: -1, flag: { md_grad_trip: 1 } }),
+      o('没去，找实习', '你去了公司，那几天学会了怎么用打印机', { cash: 1500, know: 3 }),
+      o('没去，在家', '你说家里有事，其实是不想花那个钱', { cash: 0, rel: { friend: -3 }, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mu22_roommate', a: [18, 22], w: 2.3,
+    when: onlyCN(function (S) { return S.edu === 'uni' || S.edu === 'voc'; }),
+    text: T('室友的作息和你完全反着。', '他半夜打游戏，你早上六点起床。'),
+    choices: [
+      o('跟他谈了一次', '你们定了几条规矩，后来处得还行', { rel: { friend: 4 }, know: 1 }),
+      o('忍了四年', '你买了耳塞和眼罩，四年没睡过一个整觉', { health: -4, rel: { friend: 2 } }),
+      o('申请换了宿舍', '你换到另一间，和原来那几个人再没说过话', { rel: { friend: -3 }, health: 2, know: 1 })
+    ]
+  });
+
+  // ═════════ 初入社会（22–26） ═════════
+
+  ev({
+    id: 'mw01_autumn', a: [22, 26], w: 2.7,
+    // 21 岁那条主线一定会给一份工作，所以这里不能再要求「没工作」，
+    // 否则这一整段求职的条目在真跑里一次都抽不到（实测 120 局 0 次）。
+    // 改成「在职也会去转一圈」，文案跟着换，选项里换工作/进去都说得通。
+    when: onlyCN(function (S) { return !S.jobPending && S.year >= 2015; }),
+    text: T('公司楼下在办招聘会，来了三十几家企业。', '你请了半天假，下去转了一圈。'),
+    choices: [
+      o('投了四十家', '你面了六家，拿到两个 offer', { know: 3, health: -3, cash: 2000, flag: { md_autumn: 1 } }),
+      o('只投了想去的三家', '两家没回音，一家进了终面', { know: 4, health: -2, rel: { friend: 2 } }),
+      o('转了一圈就上去了', '你把传单扔了，回去继续做手上的活', { know: 2, health: 1, flag: { md_exam_only: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mw02_bigtech', a: [22, 28], w: 2.6,
+    when: onlyCN(function (S) { return !S.jobPending && S.year >= 2014 && S.year <= 2040; }),
+    text: T('一家大公司在招人，面试有四轮。', '最后一轮问的是：你能接受加班吗。'),
+    choices: [
+      o('说能', '你进去了，工资不低，工位一米二', { job: { tier: 3, name: '大厂工程师' }, cash: 12000, health: -4, know: 3, flag: { md_bigtech: 1 } }),
+      o('说看情况', '你没被录用，去了另一家小公司', { job: { tier: 2, name: '小公司职员' }, cash: 4000, know: 2 }),
+      o('没去面', '你觉得自己不喜欢那种楼', { know: 1, cash: 0 })
+    ]
+  });
+
+  ev({
+    id: 'mw03_state', a: [22, 28], w: 2.6,
+    when: onlyCN(function (S) { return !S.jobPending; }),
+    text: T('国企的招聘公告挂在网站上，报名截止三天。', '笔试在一所中学的教室里，两个考场。'),
+    choices: [
+      o('考上了', '你去了一个不太忙的部门，工资不高，五险一金齐', { job: { tier: 2, name: '国企职员' }, cash: 3000, know: 2, health: 1, flag: { md_soe: 1 } }),
+      o('笔试过了，面试没过', '你在门口等结果，等到天黑', { know: 2, health: -2, rel: { father: -3 } }),
+      o('没报名', '你觉得那种地方待不住', { know: 1, flag: { md_no_soe: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mw04_teacher_exam', a: [22, 30], w: 2.4,
+    when: onlyCN(function (S) { return !S.jobPending; }),
+    text: T('区里招老师，一个岗位两百人报名。', '公告上写着：师范类优先。'),
+    choices: [
+      o('考上了', '你被分到一所小学，教三年级', { job: { tier: 2, name: '小学老师' }, jobDelay: 1, know: 3, cash: -8000, rel: { mother: 6 }, flag: { md_teacher: 1 } }),
+      o('没考上', '你去了一所私立学校，工资高一截，没有编制', { job: { tier: 1, name: '民办学校老师' }, cash: 2000, health: -3, know: 2 }),
+      o('考了两年，放弃了', '你把资料装进箱子，去做了别的', { know: 3, cash: -12000, health: -3, rel: { mother: -4 } })
+    ]
+  });
+
+  ev({
+    id: 'mw05_west', a: [22, 27], w: 2.2,
+    when: onlyCN(function (S) { return !S.jobPending; }),
+    text: T('公告栏上贴着西部计划的招募。', '服务两年，回来考公有加分。'),
+    choices: [
+      o('报了名，去了', '你去了一个县里，住的是单位宿舍', { job: { tier: 1, name: '基层服务人员' }, cash: -5000, health: -2, know: 4, rel: { friend: 3 }, flag: { md_west: 1 } }),
+      o('想了想，没报', '你留在了本地', { know: 1 }),
+      o('报了，家里不同意', '你最后没去，报名表存在手机里', { rel: { mother: -3 }, know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mw06_second_kaoyan', a: [22, 27], w: 2.5,
+    when: onlyCN(function (S) { return !S.jobPending && S.year >= 2016; }),
+    text: T('分数出来，差十二分。', '有人已经在准备复试了。'),
+    choices: [
+      o('再来一年', '你在学校旁边租了间房，每天六点起', { know: 7, health: -5, cash: -20000, flag: { md_second_exam: 1 } }),
+      o('去工作', '你投了简历，先上了班', { job: { tier: 1 }, cash: 2000, know: 1 }),
+      o('一边工作一边考', '你白天上班，晚上看书，两边都勉强', { job: { tier: 1 }, know: 4, health: -6, cash: 1000, flag: { md_work_study: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mw07_abroad_grad', a: [22, 27], w: 2.2,
+    when: onlyCN(function (S) { return !S.jobPending && S.year >= 2012; }),
+    text: T('留学中介报了一个价：一年三十万起。', '他说读完回来，起点不一样。'),
+    choices: [
+      o('家里出了这笔钱', '你出去读了两年，回来找工作投了三个月', { cash: -600000, know: 7, health: -2, rel: { father: -8 }, flag: { md_abroad_grad: 1 } }),
+      o('自己申请了奖学金', '你套了二十个教授，有一个回了邮件', { know: 6, cash: -80000, health: -3, flag: { md_abroad_grad: 1 } }),
+      o('没去', '你觉得那笔钱不如留着', { know: 3, cash: 0 })
+    ]
+  });
+
+  ev({
+    id: 'mw08_arranged', a: [22, 28], w: 2.3,
+    when: onlyCN(function (S) { return !S.jobPending; }),
+    text: T('家里说，你舅舅那边有个位置。', '去了先做助理，工资四千，学东西靠自己。'),
+    choices: [
+      o('去了', '你去了，办公室里的人都认识你舅舅', { job: { tier: 1, name: '亲戚公司的职员' }, cash: 2000, know: 2, rel: { father: 5 }, flag: { md_nepotism: 1 } }),
+      o('没去，自己找', '你继续投简历，两个月后上了一家小公司', { job: { tier: 1 }, cash: 0, know: 3, rel: { father: -4 } }),
+      o('去了半年就出来了', '你受不了那种眼神，自己重新找', { job: { tier: 1 }, know: 3, health: -2, rel: { father: -5 } })
+    ]
+  });
+
+  ev({
+    id: 'mw09_first_salary', a: [22, 27], w: 2.5, need: 'job',
+    when: onlyCN(),
+    text: function (S) {
+      return ['第一个月工资到账，短信里是一个四位数。',
+        '你算了一遍房租、饭钱和要给家里寄的那部分。'];
+    },
+    choices: [
+      o('给家里转了两千', '你妈在电话里说不用，第二天又问你钱够不够花', { rel: { mother: 8 }, cash: -2000 }),
+      o('全存着', '你一分没花，账上第一次有了五位数', { cash: 5000, know: 1, rel: { mother: -2 } }),
+      o('给自己买了个东西', '你买了一直想要的那件，用了三年', { cash: -3000, health: 2, rel: { friend: 2 } })
+    ]
+  });
+
+  ev({
+    id: 'mw10_pdd', a: [22, 30], w: 2.3, when: onlyCN(yr(2019, 2110)),
+    text: T('同事发了个链接，说这个便宜一半。', '你点进去，首页全是「百亿补贴」。'),
+    choices: [
+      o('开始在上面买日用品', '你一个月省下几百，也买了一堆用不上的', { cash: 3000, health: -1, flag: { md_frugal: 1 } }),
+      o('只在上面买小东西', '大件还是去店里看，一年省下一些', { cash: 1000, know: 1 }),
+      o('觉得质量不行', '你退了两单，后来不点了', { cash: 500, know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mw11_credit', a: [22, 30], w: 2.4, when: onlyCN(yr(2016, 2110)),
+    text: T('信用卡的额度提到了五万。', '短信说，随时可以取现。'),
+    choices: [
+      o('刷了一台电脑', '你分了十二期，每个月还一千', { cash: -7000, know: 1, health: -1, flag: { md_credit: 1 } }),
+      o('只用来买菜，按月还清', '你养成了记账的习惯，一年省下几百', { cash: 500, know: 2, flag: { k_careful: 1 } }),
+      o('取现去投了个东西', '那个东西半年后没了下文', { cash: -20000, health: -4, rel: { mother: -5 }, flag: { md_badloan: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mw12_checkup', a: [22, 30], w: 2.3, need: 'job', when: onlyCN(),
+    text: T('入职体检，报告上标了三个箭头。', '医生说，你这个年纪不该有这几个数。'),
+    choices: [
+      o('开始跑步、早睡', '你跑了半年，指标回去了两个', { health: 6, cash: -800 }),
+      o('没管', '你把报告塞进抽屉', { health: -4, flag: { md_ignore_checkup: 1 } }),
+      o('去复查了', '医生让你少吃外卖，你听了一半', { health: 2, cash: -1200 })
+    ]
+  });
+
+  ev({
+    id: 'mw13_996', a: [22, 32], w: 2.6, need: 'job', when: onlyCN(),
+    text: T('组里默认九点后走。', '十点打车能报销，工位下面放着折叠床。'),
+    choices: [
+      o('跟着熬', '你连着三个月十一点下班，年底拿了个好绩效', { cash: 15000, health: -7, know: 3, flag: { md_996: 1 } }),
+      o('到点就走', '领导找你谈了一次，那年绩效是 C', { health: 3, cash: -3000, rel: { friend: -2 } }),
+      o('换了个不加班的部门', '工资降了两成，晚上能自己做饭', { health: 4, cash: -6000, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mw14_remote', a: [23, 40], w: 2.3,
+    when: onlyCN(function (S) { return !!S.job && S.year >= 2020; }),
+    text: T('公司说，以后一周可以两天在家。', '你把餐桌清出来，放了台显示器。'),
+    choices: [
+      o('在家效率更高', '你省下两个小时通勤，多接了一个活', { know: 3, cash: 6000, health: 3, flag: { md_remote: 1 } }),
+      o('在家反而更累', '你从早到晚都在回消息，分不清几点下班', { health: -4, know: 1 }),
+      o('还是去公司', '你觉得家里待不住', { health: -1, know: 2, rel: { friend: 3 } })
+    ]
+  });
+
+  ev({
+    id: 'mw15_hukou', a: [23, 32], w: 2.3, when: onlyCN(yr(2017, 2110)),
+    text: T('落户的分数够了。', '窗口的人说，材料要重新准备一遍。'),
+    choices: [
+      o('办了', '你跑了四趟，户口本上换了一个地址', { cash: -3000, know: 1, rel: { mother: 3 }, flag: { md_hukou: 1 } }),
+      o('没办', '你觉得那张纸没什么用', { cash: 0, know: 1, flag: { md_no_hukou: 1 } }),
+      o('办到一半放弃了', '有一份证明要回老家开，你请不出假', { cash: -1000, health: -2 })
+    ]
+  });
+
+  ev({
+    id: 'mw16_drift', a: [22, 30], w: 2.4, when: onlyCN(),
+    text: T('你在一间十平米的房里住了两年。', '窗外是另一栋楼的墙，白天也要开灯。'),
+    choices: [
+      o('攒钱，准备回去', '你每个月存下一半，账上的数字慢慢往上走', { cash: 30000, health: -3, rel: { friend: -3 }, flag: { md_saving_hard: 1 } }),
+      o('把钱花在城里', '你去看展、吃饭、买衣服，觉得这才叫生活', { cash: -10000, health: 1, rel: { friend: 5 } }),
+      o('搬去远一点的地方', '通勤变成一小时，房租少了一半', { cash: 12000, health: -4, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mw17_deposit', a: [22, 32], w: 2.3,
+    when: onlyCN(function (S) { return !S.flag.house; }),
+    text: T('中介跑了。', '押金和三个月的房租一起没了，门锁被人换过。'),
+    choices: [
+      o('报了警，等结果', '你等了半年，钱没回来', { cash: -12000, health: -4, know: 2, flag: { md_scammed: 1 } }),
+      o('自己找人换了锁', '你花了八百，先住下再说', { cash: -13000, health: -1, know: 1 }),
+      o('搬去朋友那儿挤了一个月', '你在沙发上睡了一个月，后来找到了房', { cash: -8000, rel: { friend: 5 }, health: -2 })
+    ]
+  });
+
+  ev({
+    id: 'mw18_commute', a: [22, 35], w: 2.3, need: 'job', when: onlyCN(),
+    text: T('早高峰的地铁，第一趟没挤上去。', '第二趟你被后面的人推了进去。'),
+    choices: [
+      o('买了辆电动车', '你骑车四十分钟，冬天手冻得握不住把', { cash: -3000, health: -2, know: 1 }),
+      o('搬到了公司附近', '房租涨了两千，早上能多睡一个小时', { cash: -24000, health: 4, know: 1 }),
+      o('忍着', '你在车上看完了十几本书', { know: 5, health: -3 })
+    ]
+  });
+
+  ev({
+    id: 'mw19_team_build', a: [22, 40], w: 2.1, need: 'job', when: onlyCN(),
+    text: T('团建安排在周六，去郊外拓展。', '通知上写着「自愿参加」。'),
+    choices: [
+      o('去了，玩得还行', '你爬了绳网，晚上跟同事喝了两杯', { rel: { friend: 5 }, health: 1, cash: -200 }),
+      o('请了假', '你在家睡了一天，周一有人问你怎么没来', { rel: { friend: -3 }, health: 3 }),
+      o('去了，但提前走', '你搭了个顺风车回城，路上没人说话', { rel: { friend: 1 }, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mw20_probation', a: [22, 28], w: 2.3, need: 'job', when: onlyCN(),
+    text: T('试用期三个月，工资打八折。', '转正答辩在下周五。'),
+    choices: [
+      o('认真准备', '你做了二十页 PPT，讲完领导点了头', { know: 4, cash: 3000, rel: { friend: 3 }, flag: { md_promoted_early: 1 } }),
+      o('没准备，照着念', '你念完了，领导问了三个问题', { know: 1, health: -2 }),
+      o('试用期没过', '你被延长了一个月，那一个月很难熬', { cash: -2000, health: -3, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'mw21_side', a: [23, 40], w: 2.3, need: 'job', when: onlyCN(yr(2018, 2110)),
+    text: T('同事说他下班后在跑网约车。', '一个月多挣三千。'),
+    choices: [
+      o('也去了', '你每天跑到十二点，一个月多两千', { cash: 24000, health: -5, flag: { md_sidejob: 1 } }),
+      o('做了点别的', '你接设计的私活，一单几百', { cash: 12000, know: 3, health: -2 }),
+      o('没做', '你下班就回家，把时间留给自己', { health: 3, know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mw22_cousin_wedding', a: [23, 35], w: 2.2, when: onlyCN(),
+    text: T('表姐结婚，请你去。', '红包要包多少，家里讨论了一晚上。'),
+    choices: [
+      o('按家里的意思包', '你包了两千，坐在角落吃完了那顿饭', { cash: -2000, rel: { mother: 3 } }),
+      o('包了个大的', '你包了五千，后来自己吃了半个月泡面', { cash: -5000, rel: { mother: 5, friend: 2 } }),
+      o('没去，托人带了红包', '你说公司走不开', { cash: -1000, rel: { mother: -4 } })
+    ]
+  });
+
+  ev({
+    id: 'mw23_classgroup', a: [23, 35], w: 2.2, when: onlyCN(),
+    text: T('同学群里有人发了张合影。', '下面一排「混得不错」，你也点了个赞。'),
+    choices: [
+      o('也发了一张', '你挑了最好看的一张，等了半小时没人回', { health: -1, rel: { friend: 1 }, flag: { md_showoff: 1 } }),
+      o('退了群', '你把群设成不提醒，后来再没打开', { rel: { friend: -4 }, know: 1 }),
+      o('私聊了几个老朋友', '你们约了一顿饭，聊到店里打烊', { rel: { friend: 6 }, cash: -300, health: 1 })
+    ]
+  });
+  // ── 没上大学的那一半人 ─────────────────────────────────────
+  // 大学那一段的事件大多挂着 edu === 'uni'，可真跑起来，
+  // 走职校、复读、直接进厂的人占了一半，十八到二十二岁这几年
+  // 反而没有条目可抽。这里补的是那几年，跟学历无关。
+
+  ev({
+    id: 'mu23_factory', a: [18, 22], w: 2.5,
+    when: onlyCN(function (S) { return S.edu !== 'uni' && S.edu !== 'post'; }),
+    text: T('高中（中职）毕业，没再往下读。', '镇上广场摆了两张桌子，招工的人坐在后面。'),
+    choices: [
+      o('进了电子厂', '你在流水线上站了两年，学会了看图纸', { job: { tier: 1, name: '流水线工人' }, cash: 12000, health: -4, know: 2, flag: { md_factory: 1 } }),
+      o('跟人去了工地', '你干了一年小工，晒得脱了一层皮', { job: { tier: 1, name: '工地小工' }, cash: 16000, health: -6, rel: { friend: 3 } }),
+      o('在家再想想', '你在家待了半年，帮着看店', { cash: -2000, health: -1, know: 2, rel: { father: -4 } })
+    ]
+  });
+
+  ev({
+    id: 'mu24_wait', a: [18, 23], w: 2.4,
+    when: onlyCN(function (S) { return S.edu !== 'uni' && S.edu !== 'post'; }),
+    text: T('你在家待了半年。', '每天睡到十点，起来吃现成的。'),
+    choices: [
+      o('去跑单', '你注册了账号，第一个月跑了四千', { job: { tier: 1, name: '外卖骑手' }, cash: 4000, health: -4, flag: { gig: 1 } }),
+      o('报了个培训班', '你学了三个月，考了张证', { cash: -8000, know: 5, health: -1, flag: { md_trained: 1 } }),
+      o('继续待着', '你爸开始不跟你说话', { cash: -3000, health: -2, rel: { father: -8, mother: -4 } })
+    ]
+  });
+
+  ev({
+    id: 'mu25_voc', a: [18, 21], w: 2.4,
+    when: onlyCN(function (S) { return S.edu === 'voc'; }),
+    text: T('学校安排去厂里顶岗实习半年。', '流水线一天站十个小时，管住，一个月两千。'),
+    choices: [
+      o('跟着师傅学', '你把整条线的工序都摸了一遍，师傅留了电话', { know: 5, cash: 12000, health: -3, flag: { md_skill: 1 } }),
+      o('干满就行', '你熬完了半年，回学校拿了毕业证', { know: 1, cash: 12000, health: -3 }),
+      o('干了两个月就跑了', '你回家待着，毕业证拖了一年才拿', { cash: 4000, health: -2, rel: { father: -5 } })
+    ]
+  });
+
+  ev({
+    id: 'mu26_firstrent', a: [18, 24], w: 2.3,
+    when: onlyCN(function (S) { return S.edu !== 'uni'; }),
+    text: T('你在城里租了第一间房。', '押一付三，中介费半个月房租。'),
+    choices: [
+      o('租了个单间', '十四平，有窗，晚上能听见马路', { cash: -12000, health: 1, know: 1, flag: { md_rented: 1 } }),
+      o('和人合租', '两个人一间，中间拉了一道帘子', { cash: -6000, rel: { friend: 4 }, health: -1 }),
+      o('住公司宿舍', '八个人一间，晚上有人打呼', { cash: 0, health: -2, rel: { friend: 2 } })
+    ]
+  });
+
+  ev({
+    id: 'mu27_selfstudy', a: [18, 26], w: 2.2,
+    when: onlyCN(function (S) { return S.edu !== 'uni' && S.edu !== 'post'; }),
+    text: T('成人高考的广告贴在公交站牌上。', '两年半，周末上课。'),
+    choices: [
+      o('报了，读完了', '你周末上了两年半的课，拿到一张本科证', { know: 6, cash: -12000, health: -3, flag: { md_selfstudy: 1 } }),
+      o('报了，没坚持', '你去了两个月，后来加了班就不去了', { cash: -4000, know: 1 }),
+      o('没报', '你觉得那张纸没什么用', { know: 1, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mu28_sendhome', a: [18, 24], w: 2.4,
+    when: onlyCN(function (S) { return S.edu !== 'uni'; }),
+    text: T('第一个月的工资，你转了一半回家。', '剩下的刚够吃饭和房租。'),
+    choices: [
+      o('一直寄', '你寄了五年，家里把老房翻修了一次', { cash: -40000, rel: { mother: 10, father: 6 }, flag: { md_support_home: 1 } }),
+      o('只寄头一年', '后来你自己也要用钱', { cash: -8000, rel: { mother: 2 } }),
+      o('一分没寄', '你妈在电话里说没事，你自己留着', { cash: 20000, rel: { mother: -8 } })
+    ]
+  });
+  // 十八到二十二岁这几条不挂学历：在校、在职、在家都成立。
+  ev({
+    id: 'mu29_netfriend', a: [18, 24], w: 2.2, when: onlyCN(yr(2012, 2110)),
+    text: T('你在网上认识了一个人，聊了半年。', '他说想见一面，约在市中心。'),
+    choices: [
+      o('去了', '你们在商场门口见了，比照片瘦', { rel: { friend: 6 }, health: -1, cash: -300, flag: { md_netfriend: 1 } }),
+      o('没去', '你把那个号删了，后来又加回来', { rel: { friend: -1 }, know: 1 }),
+      o('约在白天，带了朋友', '你们四个人吃了顿饭，后来成了朋友', { rel: { friend: 5 }, cash: -200, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mu30_trip_alone', a: [18, 26], w: 2.2, when: onlyCN(yr(2014, 2110)),
+    text: T('你买了一张硬座票，一个人去了很远的地方。', '二十六个小时，下车时腿是肿的。'),
+    choices: [
+      o('玩了一周', '你住青旅，认识了三个同行的人', { cash: -5000, know: 4, rel: { friend: 5 }, health: -2, flag: { md_solo_trip: 1 } }),
+      o('到了就回来了', '你在车站坐了一夜，第二天买了返程票', { cash: -1500, health: -2, know: 1 }),
+      o('在那边打了两个月工', '你在一家店里帮忙，包住', { cash: 4000, know: 3, rel: { friend: 4 }, health: -3 })
+    ]
+  });
+
+  ev({
+    id: 'mu31_moveout', a: [18, 26], w: 2.3, when: onlyCN(),
+    text: T('你和家里吵了一架。', '起因是一件很小的事，最后说到了搬出去。'),
+    choices: [
+      o('真搬了', '你租了间房，第一晚躺在床板上看天花板', { cash: -10000, health: -2, rel: { mother: -5 }, know: 3, flag: { md_movedout: 1 } }),
+      o('没搬，第二天就好了', '你们谁也没提那件事', { rel: { mother: 3 }, health: 1 }),
+      o('搬出去，一个月后回去', '你妈做了你爱吃的菜，什么也没问', { cash: -3000, rel: { mother: 4 }, know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mu32_firstphone', a: [18, 24], w: 2.1, when: onlyCN(),
+    text: T('你自己挣钱买了第一部手机。', '不贵，但你选了颜色。'),
+    choices: [
+      o('用到不能用了才换', '那台用了五年，边框磨得发亮', { cash: -2000, know: 1, flag: { md_frugal: 1 } }),
+      o('买了当时最好的', '你分了十二期，每个月还五百', { cash: -7000, health: -1, flag: { md_installment: 1 } }),
+      o('把旧的留给家里', '你妈学会了视频，一周打三次', { cash: -3000, rel: { mother: 7 } })
+    ]
+  });
+
+  ev({
+    id: 'mu33_night', a: [18, 26], w: 2.2, when: onlyCN(),
+    text: T('你上了一个夜班，回来时天刚亮。', '路边的早餐摊刚支起来。'),
+    choices: [
+      o('买了碗豆浆', '你坐在小凳上吃完，回去睡了六个小时', { cash: -10, health: -1, know: 1 }),
+      o('直接去上班', '你在工位上撑了一天，晚上八点就睡了', { cash: 100, health: -4 }),
+      o('开始想换个活法', '你在那碗豆浆前坐了很久', { know: 3, health: -1, flag: { md_rethink: 1 } })
+    ]
+  });
+  ev({
+    id: 'mu34_wage', a: [18, 28], w: 2.1,
+    when: onlyCN(function (S) { return S.edu !== 'uni' && S.edu !== 'post'; }),
+    text: T('干了两个月，老板说下个月一起结。', '到了下个月，人找不到了。'),
+    choices: [
+      o('去了劳动监察', '你填了表，提供了聊天记录，三个月后拿回一半', { cash: 3000, know: 3, health: -3, flag: { md_labor_case: 1 } }),
+      o('认了', '那笔钱就当买个教训', { cash: -6000, health: -2, know: 2 }),
+      o('叫了几个同乡去要', '钱要回来了，你也上了那个厂的黑名单', { cash: 6000, health: -3, rel: { father: -3 }, flag: { md_tough: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mu35_express', a: [18, 30], w: 2.2,
+    when: onlyCN(function (S) { return S.edu !== 'uni' && S.edu !== 'post' && !S.job; }),
+    text: T('快递站招夜班分拣，一晚两百。', '从晚上八点干到早上六点。'),
+    choices: [
+      o('干了半年', '你瘦了十斤，攒下两万', { cash: 24000, health: -6, know: 1, flag: { md_nightjob: 1 } }),
+      o('只干了一个月', '你觉得身体受不了', { cash: 5000, health: -3 }),
+      o('没去', '你继续找白天的活', { cash: -3000, health: 1, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mu36_roomshare', a: [18, 30], w: 2.1,
+    when: onlyCN(function (S) { return S.edu !== 'uni'; }),
+    text: T('两个同事在找合租，问你要不要一起。', '一套两居，三个人分，一人九百。'),
+    choices: [
+      o('搬进去了', '你们轮流做饭，谁晚回来谁洗碗', { cash: -10800, rel: { friend: 6 }, health: 2 }),
+      o('没去，自己住', '你多花钱，但清静', { cash: -20000, health: 1, rel: { friend: -2 } }),
+      o('住进去，后来闹翻了', '为了水电费吵了两次，第三个月就搬了', { cash: -5000, rel: { friend: -5 }, health: -2 })
+    ]
+  });
+
+  ev({
+    id: 'mu37_idol', a: [18, 28], w: 2.1, when: onlyCN(yr(2015, 2110)),
+    text: T('你抢到了一张演唱会的票。', '票价一千二，位置在看台。'),
+    choices: [
+      o('去了', '你跟着唱了一晚上，回来嗓子哑了三天', { cash: -1500, rel: { friend: 6 }, health: -1, flag: { md_concert: 1 } }),
+      o('转手卖了', '你赚了四百，看着别人发的视频', { cash: 400, know: 1 }),
+      o('去了，还买了周边', '你排了两个小时队，买了两件', { cash: -2500, rel: { friend: 4 } })
+    ]
+  });
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function (root) {
+  'use strict';
+  // ═════════════════════════════════════════════════════════════
+  // 现代线 · 职场与成家（26–40 岁）
+  //
+  // 这一段绕不开几个数：三十五岁、房贷月供、孩子的班、父母的体检单。
+  // 每一样都不是灾难，只是每个月都要再交一次。
+  //
+  // 池子：职场 23 条、成家 22 条。
+  // ═════════════════════════════════════════════════════════════
+  var C = root.CONTENT;
+  if (!C || !C.mdh) return;
+  var H = C.mdh, ev = H.ev, o = H.o, T = H.T;
+  var onlyCN = H.onlyCN, SCH = H.SCH, SCHY = H.SCHY, yr = H.yr;
+
+  // ═════════ 职场（26–35） ═════════
+
+  ev({
+    id: 'mc01_jump', a: [25, 34], w: 2.6, need: 'job', when: onlyCN(),
+    text: T('猎头发来一个职位，工资高三成。', '那边的项目刚起步，人手只有三个。'),
+    choices: [
+      o('跳了', '你换了工牌，头三个月天天十点后回家', { job: { tier: 3, name: '新公司的骨干' }, cash: 15000, health: -4, know: 3, flag: { md_jumped: 1 } }),
+      o('拿这个去谈了加薪', '领导给你涨了一千五，活也多了一倍', { cash: 6000, health: -3, rel: { friend: -2 } }),
+      o('没动', '你留在原处，第二年升了一级', { cash: 4000, know: 3, rel: { friend: 3 } })
+    ]
+  });
+
+  ev({
+    id: 'mc02_review', a: [26, 38], w: 2.5, need: 'job', when: onlyCN(),
+    text: T('年底述职，每人十分钟。', '你在会议室外面等着，手里的稿子改到第五版。'),
+    choices: [
+      o('讲数据', '你把一年的活列成了表，领导问了两句就过了', { cash: 8000, know: 3, health: -2, flag: { md_review_good: 1 } }),
+      o('讲难处', '你说人手不够，领导说大家都知道', { know: 1, health: -1, rel: { friend: -2 } }),
+      o('没讲完就被打断', '你在第八分钟被叫停，后面坐着的人已经站起来', { health: -3, rel: { friend: -3 }, flag: { md_review_bad: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mc03_age35', a: [32, 38], w: 2.7, need: 'job', when: onlyCN(yr(2018, 2110)),
+    text: T('招聘要求上写着：三十五岁以下。', '你今年三十四。'),
+    choices: [
+      o('赶紧找下家', '你半年面了十几家，最后靠一个老同事介绍进去了', { job: { tier: 2, name: '新单位的职员' }, cash: 3000, health: -4, rel: { friend: 6 }, flag: { md_agegate: 1 } }),
+      o('留在原处不动', '你把手上的事做得更细，谁也不敢轻易换你', { know: 4, health: -2, flag: { md_indispensable: 1 } }),
+      o('转去做管理', '你带了三个人，开会比干活多', { job: { tier: 3, name: '小组主管' }, cash: 6000, health: -3, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'mc04_mba', a: [27, 40], w: 2.2, need: 'job', when: onlyCN(yr(2016, 2110)),
+    text: T('在职研究生的招生老师说，周末上课就行。', '学费二十几万，分两年交。'),
+    choices: [
+      o('读了', '你两年的周末都在教室里，同学里有一半是同行', { cash: -220000, know: 7, health: -3, rel: { friend: 6 }, flag: { md_mba: 1 } }),
+      o('没读', '你把钱留着，第二年换了辆车', { cash: -80000, know: 1, health: 1 }),
+      o('读了个便宜的', '你在网上读了个课，证书没人认', { cash: -8000, know: 3 })
+    ]
+  });
+
+  ev({
+    id: 'mc05_car', a: [26, 40], w: 2.4, when: onlyCN(yr(2015, 2110)),
+    text: T('摇号摇了三年，中签了。', '短信发过来的时候，你在开会。'),
+    choices: [
+      o('买了辆十几万的', '你提了车，第一次自己开回家绕了两圈', { cash: -120000, health: 2, rel: { friend: 3 }, flag: { md_car: 1 } }),
+      o('把指标让给了家里', '你爸买了车，你回家时他开车来接', { rel: { father: 8 }, cash: 0 }),
+      o('没买，指标过期了', '你算了算停车费和保险，觉得不值', { cash: 0, know: 2, flag: { md_nocar: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mc06_prepay', a: [28, 45], w: 2.6, need: 'house', when: onlyCN(yr(2022, 2110)),
+    text: T('银行的 App 上多了一个按钮：提前还款。', '排队的人很多，预约排到了三个月后。'),
+    choices: [
+      o('把积蓄都还进去', '你一次还了二十万，月供少了八百，账上只剩几千', { cash: -200000, health: -2, know: 2, flag: { md_prepaid: 1 } }),
+      o('只还一部分', '你还了五万，留着钱应急', { cash: -50000, know: 1 }),
+      o('不还，钱留着做别的', '你把那笔钱放进了理财，收益比房贷利率低', { cash: 5000, know: 2, flag: { md_holdcash: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mc07_insurance', a: [27, 45], w: 2.2, when: onlyCN(yr(2015, 2110)),
+    text: T('一个做保险的同学约你喝咖啡。', '他摊开一张表，列了重疾、医疗和意外。'),
+    choices: [
+      o('买了一份', '你每年交八千，交二十年，条款看了三遍', { cash: -8000, know: 2, health: 1, flag: { md_insurance: 1 } }),
+      o('没买', '你觉得那笔钱不如自己存着', { cash: 0, know: 1, flag: { md_no_insurance: 1 } }),
+      o('只买了百万医疗', '一年几百块，你妈说这个划算', { cash: -600, know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mc08_hair', a: [26, 40], w: 2.1, need: 'job', when: onlyCN(),
+    text: T('洗头的时候，手上多了几根。', '你对着镜子看了一会儿发际线。'),
+    choices: [
+      o('去看了皮肤科', '医生说是压力引起的，让你早点睡', { health: 3, cash: -800, know: 1 }),
+      o('买了生发的', '你用了一年，花了三千，长出来一点', { cash: -3000, health: 1 }),
+      o('剃了个短的', '你把头发剪短，看起来精神了', { health: 2, rel: { friend: 3 } })
+    ]
+  });
+
+  ev({
+    id: 'mc09_marathon', a: [26, 45], w: 2.2, when: onlyCN(yr(2016, 2110)),
+    text: T('同事在跑马拉松，说报名要抽签。', '他给你看了自己的完赛奖牌。'),
+    choices: [
+      o('练了半年，跑了个半马', '你在关门时间前到了终点，腿疼了一周', { health: 7, cash: -2500, rel: { friend: 4 }, flag: { md_runner: 1 } }),
+      o('报了名，弃赛了', '你跑到十公里，坐地铁回了家', { health: 2, cash: -1200 }),
+      o('不跑，改游泳', '你每周去三次泳池，肩背结实了', { health: 6, cash: -3000 })
+    ]
+  });
+
+  ev({
+    id: 'mc10_pet2', a: [26, 45], w: 2.2, when: onlyCN(yr(2016, 2110)),
+    text: T('你在楼下遇到一只猫，它跟着你走了两层。', '你开门的时候，它坐在门口没动。'),
+    choices: [
+      o('养了', '你带它去打了针、做了绝育，一个月花五百', { cash: -6000, health: 3, rel: { friend: 2 }, flag: { pet: 1, md_cat: 1 } }),
+      o('喂了几次，没带回家', '它后来常在楼下等你', { rel: { friend: 2 }, health: 1, flag: { stray: 1 } }),
+      o('把它送到了救助站', '你留了电话，后来没接到回访', { rel: { friend: 1 }, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mc11_alone', a: [26, 40], w: 2.3,
+    when: onlyCN(function (S) { return !S.married && !S.partner; }),
+    text: T('你一个人住，冰箱里放着三天前的菜。', '周末两天没跟人说过话。'),
+    choices: [
+      o('养成了自己的作息', '你六点起、十点睡，把屋子收拾得很干净', { health: 4, know: 3, rel: { friend: -1 } }),
+      o('周末约人', '你把朋友一个一个约了一遍，饭局排到了下个月', { rel: { friend: 6 }, cash: -2000, health: -1 }),
+      o('开始觉得闷', '你晚上开着电视睡觉，声音很小', { health: -3, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'mc12_blame', a: [26, 40], w: 2.3, need: 'job', when: onlyCN(),
+    text: T('项目出了事，会上有人说这块是你负责的。', '其实那部分上周被转给了别人。'),
+    choices: [
+      o('当场说明', '你翻出了聊天记录，会议室安静了一会儿', { know: 2, rel: { friend: -4 }, health: -2, flag: { md_spoke_up: 1 } }),
+      o('认了', '你在会上说了句是我的问题，事后补了两周', { health: -4, rel: { friend: 2 }, cash: -2000 }),
+      o('会后找领导单独说', '领导听完没表态，那个人的活少了一块', { know: 3, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'mc13_gender_q', a: [26, 34], w: 2.2, need: 'job', when: onlyCN(),
+    text: T('面试官问：你这两年有结婚的打算吗。', '表格上还有一栏，写着婚育情况。'),
+    choices: [
+      o('如实说了', '你说还没想好，那个岗位最后给了别人', { health: -3, rel: { friend: -2 }, know: 2, flag: { md_asked_marriage: 1 } }),
+      o('说近几年不考虑', '你拿到了 offer，进去以后还是被问了三次', { cash: 3000, health: -2 }),
+      o('反问了回去', '你问这和工作有什么关系，面试提前结束了', { know: 3, rel: { friend: -4 }, flag: { md_pushed_back: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mc14_boss_change', a: [27, 45], w: 2.3, need: 'job', when: onlyCN(),
+    text: T('部门换了领导，是从外面来的。', '他第一次开会，让每个人写一份自己的价值。'),
+    choices: [
+      o('认真写了一页', '他记住了你的名字，半年后给了你一个项目', { know: 4, cash: 5000, rel: { friend: 3 }, flag: { md_newboss_ok: 1 } }),
+      o('写了半页敷衍', '他在会上念了你的那几句，语气不太好', { health: -3, rel: { friend: -3 } }),
+      o('开始找下家', '你一边上班一边投简历', { know: 2, health: -2, flag: { md_looking: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mc15_relocate', a: [26, 40], w: 2.3, need: 'job', when: onlyCN(),
+    text: T('公司在另一个城市开了分部，问谁愿意去。', '去了职级升一级，补贴另算。'),
+    choices: [
+      o('去了', '你搬到一个陌生城市，第一年过年才回家', { job: { tier: 3, name: '分公司负责人' }, cash: 20000, health: -3, rel: { father: -5, mother: -5 }, flag: { moved: 1, md_relocated: 1 } }),
+      o('没去', '你留在原地，那个位置给了别人', { know: 1, health: 1 }),
+      o('家里不同意，还是去了', '你走的那天，家里没人送你', { cash: 20000, rel: { mother: -8, partner: -6 }, flag: { md_relocated: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mc16_nomad', a: [26, 40], w: 2.1, when: onlyCN(yr(2020, 2110)),
+    text: T('有人在群里晒了一张在海边的工位照。', '他说，只要有网，在哪儿都一样。'),
+    choices: [
+      o('试了半年', '你在一个小城租了房，接远程的活，收入少了两成', { job: { tier: 2, name: '远程工作者' }, cash: -6000, health: 4, know: 3, flag: { md_nomad: 1 } }),
+      o('觉得不靠谱', '你继续上班', { know: 1 }),
+      o('把工作辞了去做', '你辞了职，半年后接不到活，又投简历', { cash: -20000, health: -2, know: 3 })
+    ]
+  });
+
+  ev({
+    id: 'mc17_stall', a: [26, 45], w: 2.2, when: onlyCN(yr(2020, 2110)),
+    text: T('夜市摆摊要抽签，一个月三百。', '隔壁卖烤肠的一天能卖两百根。'),
+    choices: [
+      o('摆了一个夏天', '你每天晚上出摊到十一点，挣了一万多', { cash: 12000, health: -4, rel: { friend: 5 }, flag: { md_stall: 1 } }),
+      o('摆了两周就收了', '剩下一箱货堆在阳台上', { cash: -3000, health: -2 }),
+      o('只在周末摆', '你一个月多挣两千，认识了几个摊主', { cash: 6000, health: -2, rel: { friend: 4 } })
+    ]
+  });
+
+  ev({
+    id: 'mc18_option', a: [26, 40], w: 2.2, need: 'job', when: onlyCN(yr(2015, 2110)),
+    text: T('公司说准备上市，给了一部分期权。', '协议上写着四年成熟，一年一行小字。'),
+    choices: [
+      o('签了，等', '你等了三年，公司没上，期权成了一张纸', { cash: -5000, health: -3, know: 2, flag: { md_option_void: 1 } }),
+      o('签了，后来行权赚了', '上市那天，你把期权卖了一部分', { cash: 180000, know: 3, flag: { md_option_win: 1 } }),
+      o('换成了现金', '你多要了两个月工资，没要期权', { cash: 20000, know: 1, flag: { md_cash_over_option: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mc19_friend_wedding', a: [26, 40], w: 2.2, when: onlyCN(),
+    text: T('这个月有三场婚礼。', '红包、路费、伴郎服，加起来比一个月工资多。'),
+    choices: [
+      o('都去了', '你跑了三个城市，最后一场喝多了', { cash: -6000, rel: { friend: 8 }, health: -2 }),
+      o('只去了一个', '你推了两个，说公司忙', { cash: -1500, rel: { friend: -3 } }),
+      o('一个都没去，红包到了', '你在群里发了祝福，没人回', { cash: -1500, rel: { friend: -5 } })
+    ]
+  });
+
+  ev({
+    id: 'mc20_emigrate', a: [28, 45], w: 2.1, when: onlyCN(yr(2015, 2110)),
+    text: T('大学同学在群里说他办下来了。', '配图是一张签证，还有一张机票。'),
+    choices: [
+      o('也去了解了一下', '你查了半年，最后觉得门槛太高', { know: 3, cash: -3000, flag: { md_thought_leave: 1 } }),
+      o('开始准备', '你考了语言，递了材料，等了两年', { cash: -80000, know: 5, health: -2, flag: { md_applied_abroad: 1 } }),
+      o('没动', '你在群里回了个恭喜', { know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mc21_crash', a: [26, 45], w: 2.2, need: 'job', when: onlyCN(),
+    text: T('新闻里说，有个同行在工位上倒了。', '年纪和你差不多。'),
+    choices: [
+      o('去做了个体检', '报告上多了两个箭头，你开始吃药', { health: 3, cash: -2000, know: 1 }),
+      o('把加班推了一半', '你跟领导说了，活分给了别人，年底绩效降了', { health: 5, cash: -5000, rel: { friend: -3 } }),
+      o('照旧', '你觉得那是别人的事', { health: -5, cash: 3000 })
+    ]
+  });
+
+  ev({
+    id: 'mc22_cert', a: [26, 45], w: 2.2, when: onlyCN(),
+    text: T('同事在考一个证，说考下来挂出去一年有几万。', '报名费两千，教材三本。'),
+    choices: [
+      o('考了，考过了', '你考了两次，证拿到手，行情已经不如从前', { cash: -4000, know: 6, health: -3, flag: { md_cert: 1 } }),
+      o('考了，没过', '你把书放在书架最上面', { cash: -4000, know: 2, health: -2 }),
+      o('没考', '你觉得那笔钱不如买点别的', { cash: 0, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mc23_rent_cut', a: [26, 40], w: 2.2,
+    when: onlyCN(function (S) { return !S.flag.house && S.year >= 2021; }),
+    text: T('房东说，今年的房租可以降两百。', '同一栋楼，空了三间。'),
+    choices: [
+      o('续租，谈到了降四百', '你在那间房里又住了三年', { cash: 14400, health: 1, know: 1 }),
+      o('趁机换了个更好的', '房租贵了五百，房子朝南', { cash: -18000, health: 3 }),
+      o('搬去和朋友合租', '两个人分一套，各住一间', { cash: 12000, rel: { friend: 4 }, health: -1 })
+    ]
+  });
+
+  // ═════════ 成家（28–40） ═════════
+
+  ev({
+    id: 'mf01_decorate', a: [27, 40], w: 2.3, need: 'house', when: onlyCN(),
+    text: T('装修队报了个价：八百一平。', '设计师说，加两万可以做成你想要的那种。'),
+    choices: [
+      o('按报价装', '你盯了三个月，最后多花了四万', { cash: -100000, health: -3, know: 2, flag: { md_decorated: 1 } }),
+      o('自己找人装', '你跑了二十趟建材市场，省了三万', { cash: -70000, health: -5, know: 3 }),
+      o('简装，先住', '墙刷白，家具买的二手', { cash: -30000, health: 1, rel: { partner: -3 } })
+    ]
+  });
+
+  ev({
+    id: 'mf02_wedding', a: [26, 36], w: 2.5, need: 'partner', when: onlyCN(),
+    text: T('两边家里坐下来谈了一次。', '桌上有一张纸，写着彩礼、酒席和房子的名字。'),
+    choices: [
+      o('按两家的意思办', '办了二十桌，你敬酒敬到腿软', { cash: -150000, rel: { partner: 6, mother: 5 }, health: -3, married: true, flag: { md_wedding: 1 } }),
+      o('只领证，不办酒', '你们去了民政局，回来吃了顿火锅', { cash: -9000, rel: { partner: 4, mother: -6 }, married: true, flag: { md_nobanquet: 1 } }),
+      o('旅行结婚', '你们去了一个海岛，照片只有两个人的', { cash: -40000, rel: { partner: 7, mother: -4 }, health: 2, married: true, flag: { md_elope: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mf03_betrothal', a: [26, 35], w: 2.4, need: 'nopartner', when: onlyCN(yr(2016, 2110)),
+    text: T('家里说，彩礼那边要二十八万八。', '媒人说这个数是行价，一分不能少。'),
+    choices: [
+      o('给了', '你把积蓄掏空，还借了一笔', { cash: -288000, rel: { mother: 6 }, health: -3, married: true, flag: { md_betrothal_paid: 1 } }),
+      o('谈了几轮，降到了十八万', '两家人吃了三顿饭，最后各让一步', { cash: -180000, rel: { mother: 2, partner: 2 }, married: true }),
+      o('谈不拢，散了', '你把戒指退了，那笔钱留着', { cash: 0, rel: { mother: -8 }, health: -2, flag: { md_broke_up: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mf04_yuesao', a: [28, 38], w: 2.4, need: 'kid', when: onlyCN(yr(2016, 2110)),
+    text: T('月子中心报价六万八，住二十八天。', '育儿嫂一个月八千，包吃住。'),
+    choices: [
+      o('去了月子中心', '你在里面住了一个月，回来什么都不会', { cash: -68000, health: 4, rel: { partner: 3 }, flag: { md_yuezi: 1 } }),
+      o('请了育儿嫂', '阿姨来了三个月，走的时候孩子认她', { cash: -24000, health: 2, rel: { partner: 2 } }),
+      o('两边老人来帮', '两家人挤在一起，厨房一天到晚有人', { cash: -5000, health: -2, rel: { mother: 4, partner: -5 }, flag: { md_grandparent_care: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mf05_kinder', a: [30, 40], w: 2.3, need: 'kid', when: onlyCN(yr(2016, 2110)),
+    text: T('幼儿园报名那天，系统崩了两次。', '民办一个月四千，公办要摇号。'),
+    choices: [
+      o('摇上了公办', '孩子进了家门口那所，你妈说省了一大笔', { cash: -8000, rel: { mother: 4, kids: 3 } }),
+      o('去了民办', '一个月四千，班里二十个孩子', { cash: -48000, rel: { kids: 3 }, know: 1 }),
+      o('送回老家读', '孩子跟着爷爷奶奶，你每个月回去一次', { cash: -6000, rel: { kids: -6, mother: 3 }, flag: { md_kid_left: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mf06_school_district', a: [31, 40], w: 2.5, need: 'kid', when: onlyCN(yr(2016, 2110)),
+    text: T('小学的划片范围改了。', '你们那栋楼，正好被划到了线外。'),
+    choices: [
+      o('换房', '你们卖了现在的，换了一套老破小，贷款又加了二十年', { cash: -300000, rel: { partner: -6 }, health: -3, flag: { house: 1, md_schoolhouse: 1 } }),
+      o('去考民办', '孩子考了一次，没考上，又找了关系', { cash: -60000, rel: { kids: -2, friend: 3 } }),
+      o('就上划片的', '学校一般，走路十分钟', { cash: 0, health: 2, rel: { kids: 2 } })
+    ]
+  });
+
+  ev({
+    id: 'mf07_kid_sick', a: [28, 42], w: 2.4, need: 'kid', when: onlyCN(),
+    text: T('孩子半夜发烧，三十九度五。', '急诊排到六十多号，走廊里全是抱着的孩子。'),
+    choices: [
+      o('守了一夜', '你抱着他在塑料椅上坐到天亮，第二天照常上班', { health: -4, rel: { kids: 5, partner: 2 } }),
+      o('请了三天假', '你在家陪着，单位那边扣了钱', { cash: -3000, rel: { kids: 6 }, health: -1 }),
+      o('让老人来带', '你妈连夜坐车过来，第二天你去了公司', { rel: { kids: -2, mother: 4 }, cash: -1000 })
+    ]
+  });
+
+  ev({
+    id: 'mf08_kid_phone', a: [33, 45], w: 2.4, need: 'kid6', when: onlyCN(),
+    text: T('孩子说，班里只有他没有手机。', '他说得很平静，说完就回屋了。'),
+    choices: [
+      o('买了一台，定了规矩', '你们约好每天一小时，执行了三个月', { cash: -3000, rel: { kids: 3 }, know: 1 }),
+      o('没买', '他开始借同学的玩，后来你也管不住', { rel: { kids: -5 }, cash: 0 }),
+      o('买了台旧的', '他把旧机刷了机，装了一堆东西', { cash: -800, rel: { kids: 2 }, health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mf09_kid_class', a: [32, 45], w: 2.5, need: 'kid6', when: onlyCN(SCHY(2018, 2110)),
+    text: T('家长群里在接龙报班。', '一个暑假四个班，一万二。'),
+    choices: [
+      o('报了三个', '孩子一个暑假没歇，开学考进了前十', { cash: -12000, rel: { kids: -3 }, know: 2, flag: { md_kid_classes: 1 } }),
+      o('一个都没报', '孩子在家看了两个月的书和电视', { cash: 0, rel: { kids: 5 }, health: 2 }),
+      o('只报了他想学的', '他选了篮球，练得比上课认真', { cash: -4000, rel: { kids: 6 }, health: 3 })
+    ]
+  });
+
+  ev({
+    id: 'mf10_divorce', a: [30, 50], w: 2.4, need: 'married', when: onlyCN(),
+    text: T('你们已经两个月没好好说过话。', '客厅的灯坏了，谁也没换。'),
+    choices: [
+      o('去做了咨询', '你们去了六次，最后一次谁也没哭', { cash: -6000, rel: { partner: 8 }, health: 1, flag: { md_counsel_marriage: 1 } }),
+      o('离了', '房子卖了分掉，孩子跟她（他）', function (S) { return { cash: -100000, rel: { partner: -30, kids: -10 }, health: -5, married: false, flag: { md_divorced: 1 } }; }),
+      o('各过各的', '你们住在一套房子里，各用各的房间', { rel: { partner: -12 }, health: -3, flag: { md_cold_war: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mf11_motherinlaw', a: [28, 45], w: 2.3, need: 'married', when: onlyCN(),
+    text: T('婆婆（岳母）搬来住了一段时间。', '厨房里的东西换了位置，你找了三天。'),
+    choices: [
+      o('忍了下来', '你学会了在她来的时候早出晚归', { rel: { partner: 3, mother: -2 }, health: -3, flag: { md_endured: 1 } }),
+      o('说清楚了', '你们开了一次家庭会议，定了几条', { rel: { partner: -3, mother: 2 }, know: 2 }),
+      o('让伴侣去说', '伴侣说了，两边都不高兴', { rel: { partner: -5, mother: -3 }, health: -2 })
+    ]
+  });
+
+  ev({
+    id: 'mf12_mortgage', a: [28, 45], w: 2.5, need: 'house', when: onlyCN(),
+    text: T('月供占了这个月收入的六成。', '还款日是每月十五号。'),
+    choices: [
+      o('省着过', '你把能砍的都砍了，一年没买过新衣服', { cash: 24000, health: -2, rel: { friend: -3 }, flag: { md_tight: 1 } }),
+      o('接了份兼职', '你晚上接活，月供之外还能剩一点', { cash: 30000, health: -5 }),
+      o('找家里帮了一段', '两边老人每个月贴两千，贴了两年', { cash: 24000, rel: { mother: 2, father: -3 } })
+    ]
+  });
+
+  ev({
+    id: 'mf13_second_kid', a: [32, 42], w: 2.3, need: 'kid married', when: onlyCN(yr(2016, 2110)),
+    text: T('政策放开以后，两边家里又开始问。', '他们说，一个孩子太孤单。'),
+    choices: [
+      o('要了第二个', '家里多了一张床，也多了一个人', { kids: 1, cash: -80000, health: -4, rel: { partner: 4, mother: 6 }, flag: { md_two_kids: 1 } }),
+      o('不要', '你们说一个就够了，说得很坚决', { cash: 20000, rel: { mother: -6, partner: 3 }, flag: { md_one_kid: 1 } }),
+      o('再等等', '你们说等条件好一点，后来没再提', { cash: 10000, rel: { mother: -3 } })
+    ]
+  });
+
+  ev({
+    id: 'mf14_family_trip', a: [30, 45], w: 2.2, need: 'kid', when: onlyCN(yr(2015, 2110)),
+    text: T('孩子说想去那个有很多人的地方。', '你在网上看了票价，假期涨了一倍。'),
+    choices: [
+      o('去了', '排了两个小时队，孩子在里面玩了一整天', { cash: -12000, health: -2, rel: { kids: 7, partner: 3 } }),
+      o('改去了近郊', '你们爬了一座小山，中午在农家院吃饭', { cash: -1500, health: 2, rel: { kids: 4 } }),
+      o('没去，说下次', '孩子哦了一声，回屋了', { rel: { kids: -4 }, cash: 0 })
+    ]
+  });
+
+  ev({
+    id: 'mf15_lend', a: [28, 48], w: 2.2, when: onlyCN(),
+    text: T('表哥打电话来，说周转一下，十万。', '他说三个月就还。'),
+    choices: [
+      o('借了', '三个月后他没提，半年后你问了一次', { cash: -100000, rel: { mother: -3 }, health: -2, flag: { md_lent: 1 } }),
+      o('借了一半', '你转了五万，说自己也紧', { cash: -50000, rel: { mother: 1 } }),
+      o('没借', '你说钱都在房贷里，他在电话那头沉默了一会儿', { rel: { mother: -6 }, know: 1, flag: { md_refused_lend: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mf16_newyear_visit', a: [26, 45], w: 2.3, need: 'married', when: onlyCN(),
+    text: T('过年回谁家，成了一个每年都要谈的问题。', '两边都在问哪天到。'),
+    choices: [
+      o('一年一轮', '你们定了个规矩，后来执行了十年', { rel: { partner: 5, mother: 2 }, cash: -6000 }),
+      o('各回各家', '你们分开过年，孩子轮流带', { rel: { partner: 2, mother: -4 }, cash: -3000, health: 2 }),
+      o('把两边都接来', '一屋子七个人，住了五天，厨房没停过', { cash: -12000, health: -3, rel: { mother: 6, partner: 2 } })
+    ]
+  });
+
+  ev({
+    id: 'mf17_kid_rebel', a: [35, 50], w: 2.4, need: 'kid10', when: onlyCN(),
+    text: T('孩子把门反锁了，一整天没出来。', '门缝底下塞着一张纸，写着别管我。'),
+    choices: [
+      o('坐在门口等', '你坐了两个小时，门开了，他出来吃了饭', { rel: { kids: 5 }, health: -1 }),
+      o('把门撬了', '你们吵了一架，之后一个月没说话', { rel: { kids: -8 }, health: -3 }),
+      o('找了老师', '老师说他在学校也这样，建议去看看', { cash: -2000, rel: { kids: 1 }, know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mf18_kid_exam', a: [38, 50], w: 2.4, need: 'kid10', when: onlyCN(SCHY(2018, 2110)),
+    text: T('孩子的模考成绩出来了，比上一次低了四十分。', '他把成绩单放在桌上，没说话。'),
+    choices: [
+      o('没提成绩，带他出去吃了顿好的', '回来的路上他主动说了几句学校的事', { cash: -300, rel: { kids: 7 } }),
+      o('坐下来一起看错题', '你们看到十二点，他后来自己会整理了', { know: 2, rel: { kids: 4 }, health: -2 }),
+      o('说了他几句', '他把门关上，第二天照常上学，成绩没变', { rel: { kids: -6 }, health: -2 })
+    ]
+  });
+
+  ev({
+    id: 'mf19_career_pause', a: [30, 42], w: 2.2, need: 'kid', when: onlyCN(),
+    text: T('孩子三岁前，家里必须有一个人退一步。', '两个人的工资，请一个阿姨要花掉一半。'),
+    choices: [
+      o('你退了', '你辞了职，在家带孩子，三年后想回去，位置没了', function (S) { return { job: null, cash: -30000, rel: { kids: 7, partner: 2 }, health: -2, flag: { md_career_break: 1 } }; }),
+      o('伴侣退了', '他（她）辞了职，家里的开销全靠你', { rel: { partner: -4, kids: 4 }, health: -3, flag: { md_partner_break: 1 } }),
+      o('两个人都上班，请人带', '阿姨换过三个，孩子跟谁都亲', { cash: -90000, rel: { kids: -2 }, health: -3 })
+    ]
+  });
+
+  ev({
+    id: 'mf20_house_sell', a: [35, 55], w: 2.3, need: 'house', when: onlyCN(yr(2022, 2110)),
+    text: T('中介说，同户型上个月成交价比你买的时候低了一截。', '他问你要不要挂出去。'),
+    choices: [
+      o('挂着，降价卖了', '你亏了一笔，但贷款清了', { cash: -150000, health: -3, rel: { partner: -3 }, flag: { house: false, md_sold_house: 1 } }),
+      o('不卖，自己住', '你把房子重新刷了一遍', { cash: -20000, health: 1, flag: { md_stay_house: 1 } }),
+      o('租出去', '一个月租金刚好抵一半月供', { cash: 24000, know: 2, flag: { md_landlord: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mf21_parent_help', a: [30, 45], w: 2.2, need: 'kid', when: onlyCN(),
+    text: T('你妈来帮你带孩子，一住就是两年。', '她每天五点起来做饭，晚上等你回来才睡。'),
+    choices: [
+      o('每月给她钱', '你每月转两千，她收下，又都花在孩子身上', { cash: -48000, rel: { mother: 6, kids: 3 } }),
+      o('不带钱，多陪她', '你每周带她出去一趟，她说不用', { rel: { mother: 8 }, cash: -2000 }),
+      o('让她回去了', '你说自己带得过来，她走的那天屋里空了一块', { rel: { mother: -5 }, health: -3, cash: 0 })
+    ]
+  });
+
+  ev({
+    id: 'mf22_second_home', a: [32, 50], w: 2.2,
+    when: onlyCN(function (S) { return !!S.flag.house && S.year >= 2015 && S.year <= 2045; }),
+    text: T('老家那边有人说，现在买还有补贴。', '一套房，你一年回去住不了十天。'),
+    choices: [
+      o('买了一套', '你在老家有了房，钥匙给了你妈一把', { cash: -200000, rel: { mother: 8 }, flag: { md_homehouse: 1 } }),
+      o('没买', '你把那笔钱放进了定期', { cash: 20000, know: 2, flag: { md_saver: 1 } }),
+      o('帮父母把老房翻新了', '花了十几万，院子重新铺了砖', { cash: -120000, rel: { mother: 10, father: 8 }, flag: { md_renovated_home: 1 } })
+    ]
+  });
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function (root) {
+  'use strict';
+  // ═════════════════════════════════════════════════════════════
+  // 现代线 · 中年与晚年（38 岁以后）
+  //
+  // 这一段的事，多数不是「事件」，是「账单」：
+  // 父母的住院费、孩子的首付、自己的体检报告、
+  // 还有一张写着「渐进式延迟」的通知。
+  //
+  // 池子：中年 22 条、中晚年 20 条、老年 20 条。
+  // ═════════════════════════════════════════════════════════════
+  var C = root.CONTENT;
+  if (!C || !C.mdh) return;
+  var H = C.mdh, ev = H.ev, o = H.o, T = H.T;
+  var onlyCN = H.onlyCN, SCH = H.SCH, SCHY = H.SCHY, yr = H.yr;
+
+  // ═════════ 中年（38–52） ═════════
+
+  ev({
+    id: 'mm01_midlevel', a: [36, 48], w: 2.5, need: 'job', when: onlyCN(),
+    text: T('你带了一个十人的组。', '上面要结果，下面要说法，中间只有你。'),
+    choices: [
+      o('把活分下去，自己盯进度', '你学会了开会和写周报，头发少了一些', { cash: 15000, know: 4, health: -3, rel: { friend: 4 }, flag: { md_manager: 1 } }),
+      o('什么都自己干', '你干得比谁都多，组里的人越来越闲', { cash: 5000, health: -6, rel: { friend: -4 } }),
+      o('往上争一个位置', '你争到了，坐进了那间有窗的办公室', { job: { tier: 4, name: '部门负责人' }, cash: 30000, health: -4, rel: { friend: -3 } })
+    ]
+  });
+
+  ev({
+    id: 'mm02_pivot', a: [36, 50], w: 2.4, when: onlyCN(yr(2018, 2110)),
+    text: T('行业在往下走，同组的人一个个走了。', '有人去做了别的，有人回了老家。'),
+    choices: [
+      o('转行，从低的做起', '你去了一家小公司，工资少了一半，重新学', function (S) { return { job: { tier: Math.max(1, (S.jobTier || 2) - 1), name: '新行业的职员' }, cash: -20000, know: 5, health: -3, flag: { md_pivot: 1 } }; }),
+      o('留下来等', '你留到了最后，部门缩到三个人', { cash: -10000, health: -3, know: 2, flag: { md_stayed: 1 } }),
+      o('自己出来做', '你用积蓄开了个小店，第一年没赚到钱', { job: { tier: 1, name: '小店老板' }, cash: -80000, health: -4, rel: { friend: 4 }, flag: { selfEmployed: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mm03_nodule', a: [38, 55], w: 2.6, when: onlyCN(yr(2016, 2110)),
+    text: T('体检报告上写着：结节，建议复查。', '报告最后一行是「必要时进一步检查」。'),
+    choices: [
+      o('马上去复查', '医生说良性，半年后再看，你那天晚上睡得很好', { health: 4, cash: -3000, know: 1 }),
+      o('拖了半年', '半年后复查，还是那个大小，你松了口气', { health: -2, cash: -2000 }),
+      o('没去', '你把报告放进抽屉，第二年体检还在', { health: -5, flag: { md_ignore_checkup: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mm04_parent_op', a: [38, 58], w: 2.6, need: 'father', when: onlyCN(),
+    text: T('父亲要做个手术，医生说风险不大，但要签字。', '手术排在周四上午，押金先交五万。'),
+    choices: [
+      o('请了假，全程陪着', '你在手术室外面坐了四个小时，手机没电了', { cash: -50000, health: -4, rel: { father: 10, mother: 5 }, flag: { md_parent_op: 1 } }),
+      o('交了钱，让家里人去', '你转钱过去，晚上打了三个电话', { cash: -60000, rel: { father: 2, mother: -4 } }),
+      o('用了医保和借的钱', '报销了一部分，剩下的凑了两个月', { cash: -30000, rel: { father: 6 }, health: -2 })
+    ]
+  });
+
+  ev({
+    id: 'mm05_kid_gaokao', a: [38, 52], w: 2.5, need: 'kid10', when: onlyCN(SCHY(2018, 2110)),
+    text: T('孩子高考，你在考场外面站了两天。', '旁边有家长带了折叠凳和保温壶。'),
+    choices: [
+      o('两天都去了', '你什么都没问，考完就带他去吃了顿好的', { rel: { kids: 8 }, health: -2, cash: -500 }),
+      o('没去，怕给他压力', '你在公司上班，那一整天没看手机', { rel: { kids: 2 }, cash: 0 }),
+      o('去了，还带了复习资料', '他在进考场前翻了十分钟', { rel: { kids: -3 }, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mm06_kid_major', a: [40, 54], w: 2.5, need: 'kid10', when: onlyCN(SCHY(2018, 2110)),
+    text: T('填志愿那天，孩子把电脑让给你。', '他说，你们定吧。'),
+    choices: [
+      o('按就业填', '你选了那个好找工作的，他四年后没干这行', { rel: { kids: -6 }, know: 2, flag: { md_parents_major: 1 } }),
+      o('让他自己填', '他填了一个你没听过的专业，读得挺起劲', { rel: { kids: 8 }, know: 1 }),
+      o('折中，选了个稳妥的', '你们各让一步，他读了师范', { rel: { kids: 3 }, cash: 0, flag: { md_kid_teacher: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mm07_empty_nest', a: [45, 60], w: 2.3, need: 'kid', when: onlyCN(),
+    text: T('孩子去外地上学了。', '他的房间门开着，床上的被子叠得很整齐。'),
+    choices: [
+      o('把他的房间原样留着', '你每周擦一次桌子，擦了四年', { rel: { kids: 5 }, health: -1 }),
+      o('把房间改成了书房', '你在里面放了一张桌子和一盏灯', { know: 4, health: 2, rel: { kids: -2 } }),
+      o('开始和伴侣重新过日子', '你们出去旅游了两趟，找回了点以前的样子', { cash: -12000, health: 3, rel: { partner: 7 } })
+    ]
+  });
+
+  ev({
+    id: 'mm08_wealth_loss', a: [38, 55], w: 2.3, when: onlyCN(yr(2016, 2110)),
+    text: T('你买的那只产品，公告说暂停兑付。', '客服电话打不通，群里的消息一天几百条。'),
+    choices: [
+      o('去现场排队登记', '你排了三个小时，填了一张表，后来拿回三成', { cash: -80000, health: -4, know: 2, flag: { md_lost_invest: 1 } }),
+      o('认了，不再碰这类东西', '你把剩下的钱全转成了定期', { cash: -120000, know: 3, flag: { md_saver: 1 } }),
+      o('又投了一笔想回本', '第二笔也没了', { cash: -150000, health: -5, rel: { partner: -8 }, flag: { md_lost_big: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mm09_reunion', a: [38, 55], w: 2.2, when: onlyCN(),
+    text: T('同学会定在一家饭店的包间。', '有人开了好车来，有人没来。'),
+    choices: [
+      o('去了，聊了很久', '你们聊到十一点，说了很多当年的事', { cash: -800, rel: { friend: 7 }, health: -1 }),
+      o('去了，坐了一会儿就走', '你敬了一圈酒，说家里有事', { cash: -500, rel: { friend: 2 } }),
+      o('没去', '你在群里发了个红包', { cash: -200, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'mm10_weight', a: [38, 55], w: 2.2, when: onlyCN(),
+    text: T('裤腰紧了一格。', '你翻出几年前的照片，看了很久。'),
+    choices: [
+      o('每天走一万步', '你走了半年，掉了八斤', { health: 5, cash: -500 }),
+      o('报了健身房，请了教练', '你练了三个月，肩背直了', { health: 6, cash: -8000, flag: { md_fit: 1 } }),
+      o('买了大一号的裤子', '你穿着舒服，也没再称过体重', { health: -3 })
+    ]
+  });
+
+  ev({
+    id: 'mm11_kid_job', a: [45, 60], w: 2.4, need: 'kid22', when: onlyCN(yr(2018, 2110)),
+    text: T('孩子毕业了，在家投了三个月简历。', '他说，今年特别难。'),
+    choices: [
+      o('让他自己找', '他半年后去了一家小公司，工资不高', { rel: { kids: 3 }, know: 1 }),
+      o('托人给他找了个', '你找了一个老同学，孩子去了，干得不太开心', { rel: { kids: -3, friend: 3 }, cash: -5000, flag: { md_kid_nepotism: 1 } }),
+      o('让他去考公', '他在家备考两年，第二年上岸', { cash: -30000, rel: { kids: 2 }, flag: { md_kid_gov: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mm12_kid_marry', a: [48, 62], w: 2.4, need: 'kid22', when: onlyCN(yr(2018, 2110)),
+    text: T('孩子说要结婚，对方家里提了房子。', '首付差六十万。'),
+    choices: [
+      o('把积蓄拿出来', '你转了过去，账上只剩下退休前要用的那点', { cash: -600000, rel: { kids: 10 }, health: -3, flag: { md_kid_downpayment: 1 } }),
+      o('拿一半', '你给了三十万，剩下的让他们自己想办法', { cash: -300000, rel: { kids: 4 } }),
+      o('一分没给', '你说这钱是养老的，孩子沉默了很久', { rel: { kids: -10 }, cash: 0, flag: { md_refused_kid: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mm13_divorce_mid', a: [40, 55], w: 2.2, need: 'married', when: onlyCN(),
+    text: T('你们已经分房睡了两年。', '该说的话，早就说完了。'),
+    choices: [
+      o('离了', '手续办得很快，房子留给了对方', function (S) { return { cash: -200000, married: false, rel: { partner: -40 }, health: -4, flag: { md_divorced: 1 } }; }),
+      o('就这样过下去', '你们各过各的，过年还是一起吃饭', { rel: { partner: -6 }, health: -2, flag: { md_cold_marriage: 1 } }),
+      o('试着重新开始', '你们去了一趟当年蜜月的地方', { cash: -15000, rel: { partner: 12 }, health: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mm14_remarry', a: [42, 60], w: 2.1,
+    when: onlyCN(function (S) { return !S.married && !S.partner && S.flag.md_divorced; }),
+    text: T('有人给你介绍了一个，也是二婚。', '见面约在公园，走了三圈。'),
+    choices: [
+      o('处了一年，领了证', '两家人吃了顿饭，孩子都来了', { cash: -30000, married: true, rel: { partner: 12, kids: -4 }, health: 2, flag: { md_remarried: 1 } }),
+      o('处了半年，散了', '你觉得还是一个人自在', { rel: { partner: -2 }, know: 2, health: 1 }),
+      o('没见', '你跟介绍人说不考虑了', { rel: { friend: -2 }, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'mm15_company_restructure', a: [38, 55], w: 2.3, need: 'job', when: onlyCN(yr(2017, 2110)),
+    text: T('单位改制，编制要重新核。', '人事发了一张表，让你填学历和工龄。'),
+    choices: [
+      o('材料准备得很齐', '你留下了，岗位名称换了', { cash: 5000, know: 3, rel: { friend: 3 }, flag: { md_restructured: 1 } }),
+      o('被调去了闲职', '你每天没什么事，工资少了两成', { cash: -12000, health: 2, rel: { friend: -2 } }),
+      o('拿了一笔钱走人', '你签了协议，拿到十几万', { cash: 150000, job: null, health: -2, flag: { md_bought_out: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mm16_newskill', a: [38, 55], w: 2.2, when: onlyCN(yr(2019, 2110)),
+    text: T('公司让所有人都去学一个新系统。', '培训放在晚上，讲师看着比你小一轮。'),
+    choices: [
+      o('认真学，做了笔记', '你成了组里最会用的人，别人来问你', { know: 6, cash: 4000, health: -2, flag: { md_upskilled: 1 } }),
+      o('学了个皮毛', '你能应付日常操作', { know: 2, health: -1 }),
+      o('让年轻人帮你弄', '你每次都说软件有问题', { know: -2, rel: { friend: -3 }, flag: { md_techgap: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mm17_funeral', a: [40, 65], w: 2.3, need: 'parents', when: onlyCN(),
+    text: T('老家打来电话，说大伯走了。', '你要回去一趟，按规矩得随礼。'),
+    choices: [
+      o('回去，待了三天', '你在灵堂守了两夜，见到了很多年没见的亲戚', { cash: -8000, health: -3, rel: { mother: 6, father: 6 } }),
+      o('回去一天', '你当天往返，路上花了八个小时', { cash: -5000, health: -2, rel: { father: 2 } }),
+      o('没回去，转了钱', '你在电话里说了几句，那头很快就挂了', { cash: -2000, rel: { father: -6, mother: -4 } })
+    ]
+  });
+
+  ev({
+    id: 'mm18_retire_plan', a: [45, 58], w: 2.3, when: onlyCN(yr(2018, 2110)),
+    text: T('你算了一遍，按现在的交法，退休金大概是多少。', '算出来的数比现在的工资少一半。'),
+    choices: [
+      o('开始每月定投', '你每个月存三千，存了很多年', { cash: -36000, know: 3, health: 1, flag: { md_invested: 1 } }),
+      o('打算多干几年', '你去了解了返聘和延退的规定', { know: 4, health: -2, flag: { md_plan_late: 1 } }),
+      o('不打算了', '你觉得到时候再说', { cash: 0, health: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mm19_house_swap', a: [40, 58], w: 2.2, need: 'house', when: onlyCN(),
+    text: T('现在的房子在六楼，没有电梯。', '你妈上来一趟要歇两次。'),
+    choices: [
+      o('换了个带电梯的', '差价补了四十万，搬家那天扔了很多东西', { cash: -400000, health: 3, rel: { mother: 6 }, flag: { md_elevator_house: 1 } }),
+      o('装了部爬楼机', '花了三万，物业说不能装在楼道里', { cash: -30000, health: 1 }),
+      o('先住着', '你在每层楼梯口放了一把椅子', { health: -2, rel: { mother: -3 } })
+    ]
+  });
+
+  ev({
+    id: 'mm20_health_scare', a: [40, 58], w: 2.4, when: onlyCN(),
+    text: T('有一天你站起来，眼前黑了两秒。', '扶着桌子站了一会儿才过去。'),
+    choices: [
+      o('去医院查了', '是血压，医生让吃药，你吃到了现在', { health: 4, cash: -3000, know: 2, flag: { md_bp: 1 } }),
+      o('多睡了两天', '后来没再犯，你也没再提', { health: -3 }),
+      o('戒了酒，开始走路', '你每天走四十分钟，体重下来了', { health: 6, cash: -500 })
+    ]
+  });
+
+  ev({
+    id: 'mm21_debt_help', a: [42, 60], w: 2.2, need: 'sib', when: onlyCN(),
+    text: T('家里的兄弟做生意赔了，欠了一笔。', '他打电话来，说不敢跟家里说。'),
+    choices: [
+      o('帮他还了一部分', '你转了十万，没让他写借条', { cash: -100000, rel: { mother: 8 }, flag: { md_helped_sib: 1 } }),
+      o('让他自己处理', '你说这事得自己扛，他在电话那头没说话', { rel: { mother: -6 }, know: 1 }),
+      o('借了，写了借条', '他签了字，三年后还了一半', { cash: -60000, rel: { mother: 3 }, know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'mm22_alone', a: [45, 62], w: 2.2,
+    when: onlyCN(function (S) { return !S.married && !(S.kids > 0); }),
+    text: T('过年你一个人在家，煮了一袋速冻饺子。', '窗外的烟花响了半个小时。'),
+    choices: [
+      o('给自己做了顿好的', '你买了菜，做了四个菜，吃了一半', { cash: -300, health: 2, rel: { friend: 1 } }),
+      o('去朋友家过的', '你提了两瓶酒过去，那家人多摆了一副碗筷', { cash: -800, rel: { friend: 8 }, health: 1 }),
+      o('就那么过了', '你十点就睡了，第二天照常上班', { health: -2, rel: { friend: -2 } })
+    ]
+  });
+
+  // ═════════ 中晚年（52–65） ═════════
+
+  ev({
+    id: 'ml01_delay', a: [55, 62], w: 2.6, need: 'job', when: onlyCN(yr(2025, 2110)),
+    text: T('通知下来了：退休年龄往后推。', '按你的出生年月，要多干一年多。'),
+    choices: [
+      o('继续干', '你把工位上的东西又摆了一年', { cash: 40000, health: -3, know: 1, flag: { md_delayed_retire: 1 } }),
+      o('申请了病退', '你跑了几趟医院，最后批了，钱少一截', { cash: -20000, health: 2, rel: { friend: -2 } }),
+      o('提前内退', '你办了手续，工资按比例发', { cash: -50000, health: 3, retire: true, flag: { md_early_retire: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'ml02_pension', a: [55, 65], w: 2.3, when: onlyCN(yr(2019, 2110)),
+    text: T('社保 App 上能查到缴费年限。', '有一段空档，是当年换工作时没接上的。'),
+    choices: [
+      o('去补缴了', '你补了两年，花了一笔钱', { cash: -30000, know: 2, flag: { md_paid_gap: 1 } }),
+      o('没补', '你算了一下，差两年影响不大', { cash: 0, know: 1 }),
+      o('找单位开证明', '你跑了三趟，材料补齐了，没花钱', { know: 4, health: -2, rel: { friend: 3 } })
+    ]
+  });
+
+  ev({
+    id: 'ml03_rehire', a: [58, 68], w: 2.3,
+    when: onlyCN(function (S) { return S.retired || S.age >= 60; }),
+    text: T('以前单位的人打电话来，问你要不要回去带人。', '一个月四千，一周去三天。'),
+    choices: [
+      o('去了', '你回到原来的办公室，桌上换了电脑', { cash: 48000, health: -2, know: 2, rel: { friend: 5 }, flag: { md_rehired: 1 } }),
+      o('没去', '你说想歇一歇', { health: 3, rel: { friend: -2 } }),
+      o('去了半年就不去了', '你发现有些事已经跟不上了', { cash: 24000, health: -2, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'ml04_grandkid', a: [55, 70], w: 2.4, need: 'kid', when: onlyCN(),
+    text: T('孩子把孩子送来了，说带一个月。', '那个月变成了三年。'),
+    choices: [
+      o('接下来带', '你每天六点起床做饭，接送，晚上讲故事', { health: -4, rel: { kids: 8 }, cash: -30000, flag: { md_raise_grandkid: 1 } }),
+      o('只带白天', '晚上他们来接，你八点就能歇着', { health: -1, rel: { kids: 5 }, cash: -10000 }),
+      o('说带不动了', '你说身体不行，他们请了人', { rel: { kids: -6 }, health: 2, cash: 0 })
+    ]
+  });
+
+  ev({
+    id: 'ml05_supplement', a: [55, 75], w: 2.3, when: onlyCN(yr(2015, 2110)),
+    text: T('小区里搭了个棚子，说免费测骨密度。', '穿白大褂的人让你坐下面，说你的钙流失很严重。'),
+    choices: [
+      o('买了三盒', '你花了八千，吃完没什么感觉', { cash: -8000, health: 1, flag: { md_supplement: 1 } }),
+      o('没买，走了', '你在旁边看了一会儿，觉得话术都一样', { know: 2, health: 1 }),
+      o('把单子拿给孩子看', '孩子说这是套路，你有点不好意思', { rel: { kids: 2 }, know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'ml06_elder_scam', a: [58, 78], w: 2.3, when: onlyCN(yr(2016, 2110)),
+    text: T('有人加你微信，说是老同事，换了号。', '聊了半个月，他说有个理财，稳的。'),
+    choices: [
+      o('投了', '钱转过去第三天，号就没了', { cash: -80000, health: -5, rel: { kids: -4 }, flag: { md_scammed: 1 } }),
+      o('问了一句，觉得不对', '你打了个电话给那个同事，他说没换号', { know: 3, health: 1, flag: { md_sharp_old: 1 } }),
+      o('没理', '你把那个号拉黑了', { know: 1, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'ml07_dance', a: [55, 72], w: 2.2, when: onlyCN(),
+    text: T('小区广场上每晚七点有人跳舞。', '音响放在花坛边上，声音能传到六楼。'),
+    choices: [
+      o('去跳了', '你学会了七八支舞，还认识了整栋楼的人', { health: 5, rel: { friend: 7 }, cash: -300, flag: { md_dance: 1 } }),
+      o('嫌吵，去投诉了', '物业来了一趟，声音小了两格', { health: 1, rel: { friend: -3 } }),
+      o('不跳，自己散步', '你每天绕小区走五圈', { health: 4, rel: { friend: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'ml08_university', a: [55, 70], w: 2.2, when: onlyCN(yr(2016, 2110)),
+    text: T('老年大学报名，书法班满了，只剩摄影。', '一学期三百块，一周两次。'),
+    choices: [
+      o('报了摄影', '你买了一台二手相机，拍了两年花和鸟', { cash: -6000, know: 4, health: 2, rel: { friend: 5 }, flag: { md_photo: 1 } }),
+      o('报了书法', '你练了三年，字写得比年轻时好', { know: 5, health: 2, cash: -1000 }),
+      o('没报', '你在家看电视', { health: -2, know: -1 })
+    ]
+  });
+
+  ev({
+    id: 'ml09_travel', a: [58, 75], w: 2.3, when: onlyCN(yr(2016, 2110)),
+    text: T('老同事组了个团，去西北，十二天。', '报价五千八，不含门票。'),
+    choices: [
+      o('去了', '你在大太阳底下走了很多路，回来瘦了三斤', { cash: -9000, health: -2, know: 3, rel: { friend: 6 }, flag: { md_travel: 1 } }),
+      o('想去，没去', '你说家里走不开，看着他们发的照片', { rel: { friend: -2 }, health: 1 }),
+      o('自己去了另一条线', '你一个人报了个小团，路上认识了两个人', { cash: -7000, health: -1, rel: { friend: 4 } })
+    ]
+  });
+
+  ev({
+    id: 'ml10_parent_death', a: [50, 70], w: 2.6, need: 'parents', when: onlyCN(),
+    text: T('医院的电话在凌晨响。', '你赶到的时候，走廊的灯只开了一半。'),
+    choices: [
+      o('守到最后', '你在病床边坐了三天，把该说的话说了', { health: -5, rel: { mother: 6, father: 6 }, cash: -30000, flag: { md_was_there: 1 } }),
+      o('赶到时已经晚了', '你在门口站了很久', { health: -4, rel: { mother: -4 }, cash: -20000, flag: { md_too_late: 1 } }),
+      o('按老家的规矩办', '办了三天，来了很多人', { cash: -60000, rel: { mother: 4, friend: 4 }, health: -4 })
+    ]
+  });
+
+  ev({
+    id: 'ml11_health_check', a: [52, 68], w: 2.4, when: onlyCN(yr(2018, 2110)),
+    text: T('社区通知，五十岁以上可以免费做一次肠镜。', '要提前一天喝泻药清肠。'),
+    choices: [
+      o('去做了', '查出一个息肉，当场切了，医生说来得及时', { health: 6, cash: -800, know: 2, flag: { md_colonoscopy: 1 } }),
+      o('嫌麻烦没去', '你把那张通知单夹在报纸里', { health: -4 }),
+      o('去做了，太难受中途停了', '你回家躺了一天，说明年再说', { health: -2, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'ml12_medicare', a: [55, 75], w: 2.2, when: onlyCN(yr(2018, 2110)),
+    text: T('住院结算，报销比例算下来和你想的不一样。', '有几项是自费的。'),
+    choices: [
+      o('去问了医保窗口', '工作人员给你列了一张单子，你看懂了一半', { know: 4, cash: -10000, health: 1 }),
+      o('认了', '你把钱交了，回家再算', { cash: -20000, health: -1 }),
+      o('让孩子去弄', '孩子跑了两趟，退回来一笔', { rel: { kids: 3 }, cash: -6000 })
+    ]
+  });
+
+  ev({
+    id: 'ml13_old_friend', a: [55, 75], w: 2.2, when: onlyCN(),
+    text: T('一个老朋友走了。', '讣告发在群里，下面一排「一路走好」。'),
+    choices: [
+      o('去送了一程', '你在灵堂见了很多年没见的人', { cash: -2000, health: -2, rel: { friend: 6 } }),
+      o('托人随了礼', '你在家坐了一下午', { cash: -1000, health: -1, rel: { friend: 1 } }),
+      o('没表示', '你把那条消息看了几遍', { health: -2, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'ml14_community', a: [58, 78], w: 2.2, when: onlyCN(yr(2020, 2110)),
+    text: T('社区开了个食堂，一荤两素十二块。', '吃饭的都是附近的老头老太太。'),
+    choices: [
+      o('天天去吃', '你在那儿认识了四个人，每天坐同一张桌', { cash: -2000, health: 3, rel: { friend: 6 }, flag: { md_canteen: 1 } }),
+      o('偶尔去', '一个人不想做饭的时候去', { cash: -600, health: 1 }),
+      o('不去，自己做', '你觉得自己做的干净', { health: 2, cash: -3000 })
+    ]
+  });
+
+  ev({
+    id: 'ml15_house_old', a: [58, 75], w: 2.2, need: 'house', when: onlyCN(yr(2018, 2110)),
+    text: T('房龄三十年，楼道里的灯坏了一半。', '有人在业主群里提装电梯，一楼的不同意。'),
+    choices: [
+      o('签字同意，分摊了钱', '电梯装了一年半，你上下楼方便了', { cash: -60000, health: 3, rel: { friend: -2 }, flag: { md_elevator: 1 } }),
+      o('卖了，搬去别处', '你换了一套小一点的，差价存下来', { cash: 200000, health: 1, rel: { friend: -4 }, flag: { house: false, md_moved_old: 1 } }),
+      o('不参与', '你继续爬楼，一天两趟', { health: -3 })
+    ]
+  });
+
+  ev({
+    id: 'ml16_menopause', a: [48, 58], w: 2.2, when: onlyCN(),
+    text: T('你开始半夜出汗，白天容易发火。', '有一天为了一件小事，你把碗摔了。'),
+    choices: [
+      o('去看了医生', '医生说这个阶段很常见，开了点药', { health: 4, cash: -2000, know: 2, rel: { partner: 3 } }),
+      o('自己忍着', '你睡不好，白天没力气', { health: -4, rel: { partner: -4 } }),
+      o('开始锻炼、调作息', '你每天快走，晚上睡得沉了', { health: 5, cash: -300 })
+    ]
+  });
+
+  ev({
+    id: 'ml17_kid_city', a: [55, 72], w: 2.3, need: 'kid', when: onlyCN(),
+    text: T('孩子在另一个城市，一年回来两次。', '他让你过去住，说那边有医院。'),
+    choices: [
+      o('搬过去', '你在他家附近租了间小房，白天帮他做饭', { cash: -30000, health: 2, rel: { kids: 6, friend: -6 }, flag: { moved: 1, md_moved_kid: 1 } }),
+      o('不去，留在老家', '你说住惯了，哪儿也不想去', { rel: { kids: -3 }, health: -1 }),
+      o('两边住', '你半年在这儿，半年在那儿', { cash: -20000, health: 1, rel: { kids: 4, friend: 2 } })
+    ]
+  });
+
+  ev({
+    id: 'ml18_volunteer', a: [55, 72], w: 2.1, when: onlyCN(),
+    text: T('社区在招志愿者，路口维持秩序。', '一天两个小时，发一件马甲。'),
+    choices: [
+      o('报了，去了三年', '你认识了这个片区的很多人，孩子都叫你爷爷（奶奶）', { rel: { friend: 8 }, health: 3, flag: { md_volunteer_old: 1 } }),
+      o('去了一段时间', '你站了一个夏天，后来天冷了就不去了', { rel: { friend: 3 }, health: 1 }),
+      o('没去', '你在家待着', { health: -1, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'ml19_prepay_kid', a: [55, 75], w: 2.2, need: 'kid', when: onlyCN(yr(2018, 2110)),
+    text: T('孩子说要买房，首付还差一些。', '他没有直接开口。'),
+    choices: [
+      o('主动给了', '你转过去三十万，说不用还', { cash: -300000, rel: { kids: 9 }, flag: { md_kid_downpayment: 1 } }),
+      o('借，写清楚', '你让他写了借条，说这是规矩', { cash: -200000, rel: { kids: 2 }, know: 2 }),
+      o('没给', '你说这钱要留着看病', { rel: { kids: -7 }, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'ml20_retire_day', a: [58, 66], w: 2.4,
+    when: onlyCN(function (S) { return !S.retired && !!S.job; }),
+    text: T('最后一天上班，你把工位擦了一遍。', '同事送了一个蛋糕，上面的字有点歪。'),
+    choices: [
+      o('办完手续就回家了', '你在楼下站了一会儿，然后坐公交回去', { retire: true, health: 2, rel: { friend: 4 }, flag: { md_retired_quiet: 1 } }),
+      o('跟同事吃了顿饭', '你们喝到九点，说了很多以前的事', { retire: true, cash: -2000, rel: { friend: 6 }, health: -1 }),
+      o('又被返聘了', '你在家待了一个月，又回去做顾问', { cash: 30000, health: -1, rel: { friend: 3 }, flag: { md_consultant: 1 } })
+    ]
+  });
+
+  // ═════════ 老年（65+） ═════════
+
+  ev({
+    id: 'mo01_fall', a: [65, 88], w: 2.6, when: onlyCN(),
+    text: T('你在卫生间滑了一下。', '扶着洗手台站了很久，才敢动。'),
+    choices: [
+      o('去了医院', '拍了片子，骨头没事，医生让你装扶手', { health: 2, cash: -3000, know: 1, flag: { md_fell: 1 } }),
+      o('自己揉了两天', '后来走路有点跛，一直没完全好', { health: -6, flag: { md_lame: 1 } }),
+      o('把家里改了一遍', '卫生间铺了防滑垫，床边装了栏杆', { cash: -8000, health: 4, flag: { md_adapt_home: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mo02_cataract', a: [66, 90], w: 2.4, when: onlyCN(yr(2018, 2110)),
+    text: T('看东西像隔着一层毛玻璃。', '医生说是白内障，做个小手术就行。'),
+    choices: [
+      o('做了一只眼', '第二天拆纱布，你看见窗外的树叶有边', { cash: -8000, health: 4, know: 1 }),
+      o('两只都做了', '你换了人工晶体，看近处要戴眼镜', { cash: -15000, health: 6 }),
+      o('没做', '你把家里的灯都换成了更亮的', { cash: -500, health: -3 })
+    ]
+  });
+
+  ev({
+    id: 'mo03_forget', a: [70, 92], w: 2.4, when: onlyCN(),
+    text: T('你出门买菜，回来时在楼下站了很久。', '想不起自己住几楼。'),
+    choices: [
+      o('去医院查了', '医生说早期，让多动脑、多走动', { health: 2, cash: -4000, know: 2, flag: { md_mci: 1 } }),
+      o('没跟任何人说', '你在门上贴了一张纸条，写着自己的门牌', { health: -4, rel: { kids: -3 }, flag: { md_hide_forget: 1 } }),
+      o('跟孩子说了', '孩子给你买了个定位的手环', { rel: { kids: 5 }, cash: -1500, health: 1 }, null, 'kid')
+    ]
+  });
+
+  ev({
+    id: 'mo04_widow', a: [68, 95], w: 2.5, need: 'married', when: onlyCN(),
+    text: T('医院说，准备一下吧。', '你在走廊上坐了一夜，天亮时下起了小雨。'),
+    choices: [
+      o('一直陪到最后', '你把他的手握了很久，后来才知道已经凉了', { health: -4, rel: { partner: 8, kids: 3 }, cash: -30000, flag: { md_widowed: 1 } }),
+      o('按他（她）说的，不抢救', '你在同意书上签了字，字写得很难看', { health: -3, rel: { partner: 6 }, cash: -20000, flag: { md_widowed: 1 } }),
+      o('让孩子们去办', '你坐在家里，等他们回来', { health: -5, rel: { kids: 2 }, cash: -40000, flag: { md_widowed: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mo05_alone_newyear', a: [68, 95], w: 2.3,
+    when: onlyCN(function (S) { return !S.married && !(S.kids > 0); }),
+    text: T('除夕夜，楼下有人在放炮。', '你把电视开着，声音调得很大。'),
+    choices: [
+      o('给自己煮了碗面', '你吃完就睡了，第二天照常出门散步', { health: 1, know: 1 }),
+      o('去了社区的活动', '一屋子人包饺子，你包得最难看', { rel: { friend: 6 }, health: 2 }),
+      o('给几个老朋友打了电话', '有一个没接，后来才知道他住院了', { rel: { friend: 4 }, health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mo06_old_friend_gone', a: [70, 95], w: 2.3, when: onlyCN(),
+    text: T('一起下棋的那个人，有一个月没来了。', '后来听说他住进了医院。'),
+    choices: [
+      o('去医院看了他', '他瘦了很多，还认得你，说了两句棋', { cash: -500, health: -1, rel: { friend: 7 } }),
+      o('打电话问了家里', '那边说不用来，你就没去', { rel: { friend: 2 }, health: -1 }),
+      o('在棋桌那儿坐了一下午', '你一个人摆了两副棋', { health: -2, rel: { friend: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mo07_nursing_choice', a: [76, 95], w: 2.4, need: 'kid', when: onlyCN(),
+    text: T('孩子说，想把你接到他们家。', '他们家的房子不大，要腾一间出来。'),
+    choices: [
+      o('去了', '你住在朝北的那间，白天他们上班，你一个人在家', { rel: { kids: 6, friend: -5 }, health: 1, cash: -10000, flag: { md_live_with_kid: 1 } }),
+      o('没去', '你说自己还能动，不去添麻烦', { rel: { kids: -3 }, health: -2 }),
+      o('去了，但请了钟点工', '有人每天来两小时，做饭打扫', { cash: -36000, health: 3, rel: { kids: 4 } })
+    ]
+  });
+
+  ev({
+    id: 'mo08_longterm', a: [72, 95], w: 2.2, when: onlyCN(yr(2020, 2110)),
+    text: T('社区的表格上多了一项：长期护理保险。', '失能评估要上门做，评上了能报销一部分护工费。'),
+    choices: [
+      o('申请了', '评估的人来了两次，最后评上了轻度', { cash: 12000, know: 2, health: 2, flag: { md_ltci: 1 } }),
+      o('没申请', '你觉得还没到那一步', { cash: 0, health: -1 }),
+      o('让孩子去弄', '孩子跑了几趟，材料交上去了', { rel: { kids: 3 }, cash: 8000 })
+    ]
+  });
+
+  ev({
+    id: 'mo09_demolish', a: [65, 90], w: 2.2,
+    when: onlyCN(function (S) { return !!S.flag.house && S.year >= 2016; }),
+    text: T('有人在楼下量房子。', '说这一片要拆，补偿按面积算。'),
+    choices: [
+      o('签了，拿钱', '你拿到一笔，搬去了城边的新房', { cash: 600000, health: -2, rel: { friend: -6 }, flag: { house: false, md_demolished: 1 } }),
+      o('要了房', '你换了两套小的，一套给孩子', { cash: 0, rel: { kids: 8 }, flag: { md_demolish_house: 1 } }),
+      o('没签，拖着', '你拖了两年，最后按原方案签了', { cash: 300000, health: -4, rel: { friend: -3 } })
+    ]
+  });
+
+  ev({
+    id: 'mo10_grandkid_grow', a: [70, 92], w: 2.3, need: 'kid', when: onlyCN(),
+    text: T('孙子考上了大学，来给你看通知书。', '他把那张纸举得很高。'),
+    choices: [
+      o('包了个红包', '你给了一万，说好好读', { cash: -10000, rel: { kids: 8 }, flag: { md_grandkid_uni: 1 } }),
+      o('给他讲了以前的事', '你讲了一个下午，他听得比想象中认真', { rel: { kids: 6 }, know: 1 }),
+      o('什么也没给', '你说家里没这个规矩', { rel: { kids: -4 }, cash: 0 })
+    ]
+  });
+
+  ev({
+    id: 'mo11_health_emergency', a: [70, 95], w: 2.5, when: onlyCN(),
+    text: T('半夜胸口疼，出了一身汗。', '你摸到手机，屏幕上是孩子的号码。'),
+    choices: [
+      o('打了 120', '救护车二十分钟到，医生说是心梗，放了支架', { cash: -60000, health: -4, rel: { kids: 4 }, flag: { md_stent: 1 } }),
+      o('先打给孩子', '孩子赶过来花了四十分钟，路上一直没挂电话', { cash: -50000, health: -6, rel: { kids: 6 } }),
+      o('忍到天亮', '天亮后你自己去了医院，医生说再晚一点就危险了', { cash: -40000, health: -8 })
+    ]
+  });
+
+  ev({
+    id: 'mo12_digital_old', a: [66, 92], w: 2.3, when: onlyCN(yr(2018, 2110)),
+    text: T('医院要网上预约，你在挂号机前站了很久。', '后面的队伍排到了门口。'),
+    choices: [
+      o('让志愿者帮忙', '一个穿红马甲的姑娘帮你弄好了，还写在纸上', { know: 3, health: 1, rel: { friend: 3 } }),
+      o('去窗口排队', '你排了四十分钟，窗口说今天的号没了', { health: -3, know: 1 }),
+      o('回家让孩子弄', '孩子远程给你挂了下周的号', { rel: { kids: 3 }, cash: 0 }, null, 'kid')
+    ]
+  });
+
+  ev({
+    id: 'mo13_will_talk', a: [70, 92], w: 2.2, need: 'kid', when: onlyCN(),
+    text: T('孩子问起房子以后怎么处理。', '问得很委婉，你还是听懂了。'),
+    choices: [
+      o('说清楚了', '你把话讲明白，两个孩子都点了头', { rel: { kids: 4 }, know: 2, flag: { md_will_talked: 1 } }),
+      o('说以后再说', '你把话题岔开了', { rel: { kids: -4 } }),
+      o('去做了公证', '你一个人去了公证处，回来把纸锁进抽屉', { cash: -2000, know: 3, rel: { kids: -2 }, flag: { md_notarized: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mo14_move_kid', a: [68, 92], w: 2.2, need: 'kid', when: onlyCN(),
+    text: T('孩子在外地，说这边医疗条件好。', '他给你看了那边的房子，阳台朝南。'),
+    choices: [
+      o('搬过去了', '你在陌生的小区里住了下来，出门要开导航', { cash: -30000, health: 2, rel: { kids: 6, friend: -8 }, flag: { moved: 1, md_moved_kid: 1 } }),
+      o('没搬', '你说死也要死在老家', { rel: { kids: -4 }, health: -2 }),
+      o('冬天过去，夏天回来', '你成了两边跑的人', { cash: -20000, health: 1, rel: { kids: 4, friend: 2 } })
+    ]
+  });
+
+  ev({
+    id: 'mo15_hobby', a: [66, 92], w: 2.2, when: onlyCN(),
+    text: T('你把阳台上的花搬了出来。', '有一盆养了十几年，比你还高。'),
+    choices: [
+      o('开始认真养花', '你的阳台成了整栋楼最好看的那一处', { health: 3, know: 2, rel: { friend: 5 }, cash: -2000 }),
+      o('送给了邻居', '你说自己照顾不动了', { rel: { friend: 3 }, health: -1 }),
+      o('全拔了，种菜', '你种了葱和辣椒，吃不完送人', { health: 3, cash: -300, rel: { friend: 4 } })
+    ]
+  });
+
+  ev({
+    id: 'mo16_oldphoto', a: [70, 95], w: 2.2, when: onlyCN(),
+    text: T('你翻出一个铁盒，里面是几十年前的照片。', '有几张上的人，你已经想不起名字。'),
+    choices: [
+      o('一张一张看完了', '你看了两个下午，把名字能想起来的写在背面', { know: 2, health: -1, rel: { friend: 3 }, flag: { md_oldphotos: 1 } }),
+      o('给孩子看', '孩子问这是谁，你讲了一晚上', { rel: { kids: 6 }, health: -1 }),
+      o('又收了起来', '你把盒子放回柜子最上层', { health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'mo17_hospice', a: [82, 100], w: 2.3, when: onlyCN(yr(2020, 2110)),
+    text: T('医生把家属叫到外面，说了几句话。', '回来的时候，他们笑着问你今天想吃什么。'),
+    choices: [
+      o('说自己知道', '你跟他们说，别瞒着，该怎样就怎样', { health: -2, rel: { kids: 8 }, know: 2, flag: { md_knows_end: 1 } }),
+      o('配合他们演下去', '你说想吃饺子，其实吃不下几个', { rel: { kids: 4 }, health: -3 }),
+      o('要求回家', '你回了家，躺在自己的床上', { health: -4, rel: { kids: 6 }, cash: -10000, flag: { md_die_home: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mo18_remarry_old', a: [72, 96], w: 2.1,
+    when: onlyCN(function (S) { return !S.married && !S.partner && S.age >= 72; }),
+    text: T('老年活动中心有个和你差不多年纪的人。', '他（她）每天都带两个橘子，分你一个。'),
+    choices: [
+      o('处了两年，住到了一起', '两边的孩子都来了，吃了一顿饭', { married: true, rel: { partner: 8, kids: -4 }, health: 3, cash: -5000, flag: { md_old_love: 1 } }),
+      o('只做伴，不住一起', '你们每天一起散步、下棋', { rel: { partner: 5, friend: 4 }, health: 3 }),
+      o('没往下走', '你觉得这个年纪了，不必了', { health: 1, rel: { friend: 2 } })
+    ]
+  });
+
+  ev({
+    id: 'mo19_saving_secret', a: [68, 95], w: 2.1, when: onlyCN(),
+    text: T('床头柜的抽屉里有一本存折。', '上面的数你谁也没说过。'),
+    choices: [
+      o('告诉了一个孩子', '你把存折和密码写在纸上，交给了他', { rel: { kids: 5 }, know: 1, flag: { md_gave_passbook: 1 } }),
+      o('写进了遗嘱', '你改了遗嘱，把这一笔单独写明', { know: 2, rel: { kids: 1 }, flag: { md_will_money: 1 } }),
+      o('谁也没说', '你把存折塞回原处', { health: -1, flag: { md_secret_money: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'mo20_last_wish', a: [78, 100], w: 2.3, when: onlyCN(),
+    text: T('你想去一个地方，很多年没去了。', '坐车要三个小时，来回一天。'),
+    choices: [
+      o('让孩子带你去了', '你在那儿站了一会儿，回来路上睡着了', { cash: -2000, health: -2, rel: { kids: 6 }, flag: { md_last_trip: 1 } }),
+      o('自己坐车去的', '你一个人去的，没人知道你去了哪儿', { cash: -500, health: -3, know: 2, flag: { md_alone_trip: 1 } }),
+      o('没去', '你在家看了一天的窗外', { health: -2 })
+    ]
+  });
+  // ── 中晚年补池 ─────────────────────────────────────────────
+  // 52–65 这十四年，原来只有二十条，其中几条还挂着「在职」的门槛，
+  // 一到退休就全部失效，实测进这一段时能抽的只剩九条。
+  // 下面这些不依赖单位，退没退休都成立。
+
+  ev({
+    id: 'ml21_kid_wed', a: [52, 66], w: 2.4, need: 'kid22', when: onlyCN(yr(2018, 2110)),
+    text: T('孩子的婚礼定在下个月。', '两家人坐在一起对了三遍名单。'),
+    choices: [
+      o('办得体面', '你出了一半的钱，敬酒时被叫上台说了两句', { cash: -120000, rel: { kids: 8 }, health: -2, flag: { md_kid_wedding: 1 } }),
+      o('让他们自己办', '你只出了酒席那部分', { cash: -40000, rel: { kids: 3 } }),
+      o('一切从简', '两桌人，吃了顿饭就散了', { cash: -10000, rel: { kids: 2, friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'ml22_unit_end', a: [52, 62], w: 2.4, need: 'job', when: onlyCN(yr(2015, 2110)),
+    text: T('厂子（单位）说要搬走，人跟着走或者留下。', '留下的按工龄算一笔钱。'),
+    choices: [
+      o('跟着搬', '你去了外省，宿舍在厂区里', { cash: 30000, health: -4, rel: { friend: -5 }, flag: { moved: 1, md_followed_factory: 1 } }),
+      o('留下，拿钱走人', '你签了字，那笔钱存进了定期', { cash: 180000, job: null, health: -2, flag: { md_bought_out: 1 } }),
+      o('留下，转去做别的', '你被安排去看仓库，工资少了一半', { cash: -20000, health: 1, rel: { friend: 2 } })
+    ]
+  });
+
+  ev({
+    id: 'ml23_downsize', a: [55, 70], w: 2.3, need: 'house', when: onlyCN(),
+    text: T('两个人住一百二十平，打扫一次要半天。', '中介说，这种户型现在好卖。'),
+    choices: [
+      o('换了个小的', '差价存下来，屋子小了一半，事也少了一半', { cash: 300000, health: 3, rel: { friend: -3 }, flag: { house: false, md_downsize: 1 } }),
+      o('没换', '你请了钟点工，一周来一次', { cash: -12000, health: 1 }),
+      o('把一间租出去', '租给了一个上班的年轻人，晚上很安静', { cash: 24000, rel: { friend: 2 }, flag: { md_landlord: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'ml24_oldloan', a: [52, 70], w: 2.2, when: onlyCN(),
+    text: T('一个几十年的朋友开口借钱。', '他说是给孩子还债，数目不小。'),
+    choices: [
+      o('借了', '你转了二十万，后来他每年还一点', { cash: -200000, rel: { friend: 6 }, flag: { md_lent_old: 1 } }),
+      o('借了一半', '你转了十万，说这是能拿出来的全部', { cash: -100000, rel: { friend: 3 } }),
+      o('没借', '你说钱都在孩子那儿，他后来没再联系', { rel: { friend: -8 }, know: 1 })
+    ]
+  });
+
+  ev({
+    id: 'ml25_choir', a: [52, 72], w: 2.2, when: onlyCN(),
+    text: T('区里组织合唱比赛，社区在凑人。', '每周三下午排练，管一顿晚饭。'),
+    choices: [
+      o('去了，还上了台', '你们拿了三等奖，照片贴在活动室的墙上', { health: 3, rel: { friend: 7 }, cash: -300, flag: { md_choir: 1 } }),
+      o('去了两次', '你觉得自己五音不全，没再去', { rel: { friend: 1 }, health: 1 }),
+      o('没去', '你在家看电视', { health: -1, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'ml26_knee', a: [55, 78], w: 2.4, when: onlyCN(yr(2016, 2110)),
+    text: T('膝盖疼了半年，上下楼要扶着。', '医生说是磨损，建议换。'),
+    choices: [
+      o('做了手术', '你换了人工关节，恢复期练了三个月', { cash: -80000, health: 6, rel: { kids: 2 }, flag: { md_knee: 1 } }),
+      o('先保守治疗', '你打了针，少爬楼，能撑几年', { cash: -12000, health: 1 }),
+      o('忍着', '你改成一天只下楼一次', { health: -6, rel: { friend: -3 } })
+    ]
+  });
+
+  ev({
+    id: 'ml27_alone_old', a: [55, 72], w: 2.2,
+    when: onlyCN(function (S) { return !S.married && !S.partner; }),
+    text: T('一个人住了几年，屋子里的东西都是自己摆的。', '晚上开灯的地方只有两处。'),
+    choices: [
+      o('养了只猫', '它每天在门口等你回来', { cash: -6000, health: 3, rel: { friend: 1 }, flag: { pet: 1 } }),
+      o('把日子排满', '你报了三个班，一周有五天在外面', { cash: -3000, health: 3, rel: { friend: 6 } }),
+      o('就这么过', '你习惯了，也不太想改', { health: -2, rel: { friend: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'ml28_grandkid_school', a: [55, 70], w: 2.3, need: 'kid', when: onlyCN(),
+    text: T('孙子（孙女）上小学，家里没人接送。', '学校四点半放学，你正好有空。'),
+    choices: [
+      o('每天去接', '你四点站在校门口，站了六年', { health: -3, rel: { kids: 9 }, cash: -20000, flag: { md_pickup: 1 } }),
+      o('一周接两天', '其余几天他们自己想办法', { health: -1, rel: { kids: 4 } }),
+      o('说自己腿脚不行', '他们请了人，一个月两千', { rel: { kids: -5 }, health: 2 })
+    ]
+  });
+
+  ev({
+    id: 'ml29_spouse_sick', a: [55, 78], w: 2.5, need: 'married', when: onlyCN(),
+    text: T('老伴查出来要长期吃药。', '一个月的药费，报销完还要一千多。'),
+    choices: [
+      o('你每天盯着他吃', '你把药分在小盒里，一格一格摆好', { cash: -15000, health: -2, rel: { partner: 10 }, flag: { md_care_spouse: 1 } }),
+      o('请了个护工', '护工白天来，你晚上守着', { cash: -48000, health: 1, rel: { partner: 5 } }),
+      o('让孩子分担', '孩子每月转钱过来，人回不来', { cash: -6000, rel: { partner: 3, kids: -2 } })
+    ]
+  });
+
+  ev({
+    id: 'ml30_smartphone', a: [52, 70], w: 2.3, when: onlyCN(yr(2018, 2110)),
+    text: T('孩子给你换了个新手机。', '屏幕上全是图标，你只认得电话和微信。'),
+    choices: [
+      o('让孩子教了三天', '你学会了视频、挂号、扫码', { know: 4, rel: { kids: 3 }, cash: -3000, flag: { md_smart_old: 1 } }),
+      o('自己摸索', '你点错了很多次，最后也会了', { know: 5, health: -1 }),
+      o('只用来看视频', '你刷起了短视频，一天能刷两个小时', { health: -2, know: 1, flag: { md_scroll_old: 1 } })
+    ]
+  });
+
+  ev({
+    id: 'ml31_chronic', a: [52, 70], w: 2.4, when: onlyCN(yr(2016, 2110)),
+    text: T('社区医院给你建了个档。', '高血压、血糖，三个月随访一次。'),
+    choices: [
+      o('按时去，按时吃药', '你的指标一直很稳', { health: 6, cash: -3000, know: 2, flag: { md_chronic_ok: 1 } }),
+      o('去了两次就不去了', '你觉得没什么感觉', { health: -4 }),
+      o('自己买了血压计', '你每天早上量一次，记在本子上', { health: 4, cash: -500, know: 2 })
+    ]
+  });
+
+  ev({
+    id: 'ml32_birthday_alone', a: [55, 75], w: 2.2, when: onlyCN(),
+    text: T('生日那天，手机响了几声。', '都是系统发的祝福，还有一条是银行。'),
+    choices: [
+      o('自己出去吃了顿好的', '你点了两个菜，服务员给你送了一碗面', { cash: -200, health: 1, rel: { friend: 1 } }),
+      o('给几个老朋友打了电话', '你们聊了一个多小时，约了下次见面', { rel: { friend: 6 }, health: 1 }),
+      o('当普通一天过', '你煮了碗面，看完新闻就睡了', { health: -1, rel: { friend: -1 } })
+    ]
+  });
+  // 下面这几条不挂任何身份条件：没结婚、没孩子、没房子、已经退休，
+  // 也都抽得到。池子的下限靠它们兜住。
+  ev({
+    id: 'ml33_chess', a: [52, 78], w: 1.7, when: onlyCN(),
+    text: T('楼下的石桌每天下午有人下棋。', '围观的人比下棋的多。'),
+    choices: [
+      o('坐下来下', '你成了固定搭子，一天两盘，输了请喝茶', { health: 3, rel: { friend: 7 }, cash: -300 }),
+      o('只在一旁看', '你看了一个下午，一句话没说', { health: 1, rel: { friend: 2 } }),
+      o('觉得没意思', '你绕过去了', { health: -1 })
+    ]
+  });
+
+  ev({
+    id: 'ml34_tv', a: [52, 80], w: 1.7, when: onlyCN(),
+    text: T('电视从早开到晚，你其实没在看。', '屋里有点声音，才不像一个人。'),
+    choices: [
+      o('改听广播', '你听着听着学会了很多事，还打进了热线', { know: 4, health: 1, rel: { friend: 3 } }),
+      o('关了，出去走', '你每天走一个小时，认识了门口修鞋的', { health: 5, rel: { friend: 3 } }),
+      o('就那么开着', '你靠在沙发上睡了一下午', { health: -3 })
+    ]
+  });
+
+  ev({
+    id: 'ml35_qingming', a: [52, 85], w: 1.7, when: onlyCN(),
+    text: T('清明回老家上坟。', '山上草很高，路要自己踩出来。'),
+    choices: [
+      o('自己爬上去', '你把碑上的字擦了一遍，坐了一会儿', { health: -2, rel: { friend: 2 }, cash: -1000, know: 1 }),
+      o('让孩子一起去', '一家人在山上待了半天', { rel: { kids: 5 }, cash: -2000, health: -1 }),
+      o('托老家的人代劳', '你转了钱，在阳台上点了三支烟', { cash: -500, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'ml36_hearing', a: [55, 82], w: 1.7, when: onlyCN(yr(2016, 2110)),
+    text: T('电视的声音越开越大。', '家里人说话，你总要再问一遍。'),
+    choices: [
+      o('去配了助听器', '戴上以后，你听见了冰箱的嗡嗡声', { cash: -12000, health: 4, rel: { friend: 3 }, flag: { md_hearing: 1 } }),
+      o('没配，说别人说话小声', '你慢慢不太参加饭局了', { health: -3, rel: { friend: -6 } }),
+      o('配了便宜的', '效果一般，但能听清菜市场讲价', { cash: -2000, health: 2 })
+    ]
+  });
+
+  ev({
+    id: 'ml37_cook', a: [52, 80], w: 1.7, when: onlyCN(),
+    text: T('你开始一个人做饭。', '一个菜吃两顿，锅也越来越小。'),
+    choices: [
+      o('认真做', '你学会了几道拿手菜，孩子回来点名要吃', { health: 4, cash: -3000, rel: { kids: 5 }, know: 2 }),
+      o('凑合吃', '一碗面对付一天', { health: -4, cash: -1000 }),
+      o('去社区食堂', '一天两顿在那儿解决，还认识了人', { health: 2, cash: -6000, rel: { friend: 5 } })
+    ]
+  });
+
+  ev({
+    id: 'ml38_reunion_old', a: [55, 75], w: 1.7, when: onlyCN(),
+    text: T('老同学建了个群，说要聚一次。', '照片里的人都胖了，也老了。'),
+    choices: [
+      o('去了', '你们聊起当年的老师，有人记错了名字', { cash: -800, rel: { friend: 8 }, health: 1 }),
+      o('在群里说了几句，没去', '你看着他们发的合影', { rel: { friend: 2 } }),
+      o('退了群', '你觉得没什么好说的', { rel: { friend: -5 }, health: -1 })
+    ]
+  });
+  ev({
+    id: 'ml39_park', a: [52, 82], w: 1.8, when: onlyCN(),
+    text: T('早上六点，公园里已经有人了。', '打太极的一群，快走的一群，各自占一块地方。'),
+    choices: [
+      o('跟着快走', '你走了两年，血压降下来一点', { health: 6, rel: { friend: 4 }, cash: -200 }),
+      o('学太极', '你站在最后一排，学了三个月才跟上', { health: 4, know: 2, rel: { friend: 5 } }),
+      o('在长椅上坐着看', '你每天坐一个小时，看别人出汗', { health: -1, rel: { friend: 2 } })
+    ]
+  });
+
+  ev({
+    id: 'ml40_broadband', a: [52, 75], w: 1.8, when: onlyCN(yr(2018, 2110)),
+    text: T('宽带到期了，营业厅说要换套餐。', '新套餐便宜，但要绑定两年。'),
+    choices: [
+      o('换了，绑两年', '每个月省了三十，电视盒子也换了新的', { cash: -1200, know: 2 }),
+      o('没换，按原来的续', '你觉得麻烦，多花点钱算了', { cash: -2400, health: 1 }),
+      o('让孩子去弄', '孩子远程给你办了，你什么也没管', { rel: { kids: 2 }, cash: -1000 })
+    ]
+  });
+
+  ev({
+    id: 'ml41_land', a: [52, 80], w: 1.8, when: onlyCN(),
+    text: T('老家有人打电话，说地要流转出去。', '一亩一年八百，签十五年。'),
+    choices: [
+      o('签了', '你每年多一笔钱，地不种了', { cash: 24000, rel: { mother: 3 }, flag: { md_land_lease: 1 } }),
+      o('没签，自己种', '你每年回去两趟，种点玉米', { health: 2, cash: 3000, rel: { mother: 5 } }),
+      o('让亲戚种', '不收钱，只求有人看着房子', { rel: { mother: 4 }, health: 1 })
+    ]
+  });
+
+  ev({
+    id: 'ml42_relative_wed', a: [52, 78], w: 1.8, when: onlyCN(),
+    text: T('亲戚家的孩子结婚，请柬送到家里。', '按辈分，你要坐在靠前的那一桌。'),
+    choices: [
+      o('去了，随了礼', '你坐了两个小时，见到了很多年没见的人', { cash: -2000, rel: { mother: 4, friend: 3 }, health: -1 }),
+      o('只随礼没去', '你托人带了红包', { cash: -1000, rel: { mother: -2 } }),
+      o('去了，还帮忙张罗', '你在门口迎客，站了一上午', { cash: -2000, health: -3, rel: { mother: 6, friend: 5 } })
+    ]
   });
 })(typeof window !== 'undefined' ? window : globalThis);
 
