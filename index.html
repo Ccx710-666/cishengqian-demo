@@ -14533,16 +14533,23 @@ window.CSQ_URL = 'https://ccx710-666.github.io/cishengqian-demo/';
 
   // 底栏只留这一年最重要的两个数；开销明细和还贷都挪进口袋的存折里，
   // 免得每页都有一块数字在跟正文抢注意力。
-  function renderLedger(settle) {
+  // adj：这一步选择带来的现金变化。结算是在选择之前算的，不加进去的话
+  // 玩家刚花了三千，「存下」还停在原来的数上——看起来就像账没更新。
+  function renderLedger(settle, adj) {
     if (!settle) { $('ledger').innerHTML = ''; return; }
     if (settle.household) { $('ledger').innerHTML = '这一年的开销，由家里承担。'; return; }
-    var net = settle.net;
-    var spend = settle.living + settle.mortgage + settle.med + (settle.interest || 0);
+    var d = adj || 0;
+    var net = settle.net + d;
+    var spend = settle.living + settle.mortgage + settle.med + (settle.interest || 0) + (d < 0 ? -d : 0);
     // 以前这里写「结余」——玩家会把它当成余额，钱花出去却不动，像账错了。
     // 现在改成「存下」（这一年的净进出），余额在左边那格「钱」里，会跟着变。
     var html = '这一年 · 收入 <b>' + money(S, settle.income) + '</b> · 开销 <b>' + money(S, spend) +
       '</b> · 存下 <b>' + (net < 0 ? '-' : '+') + money(S, Math.abs(net)) + '</b>' +
       (settle.debt > 0 && net > 0 ? '（先还账）' : '');
+    if (Math.abs(d) >= 1) {
+      html += '<div class="ledger-2">这一步 ' + (d > 0 ? '+' : '-') + money(S, Math.abs(d)) +
+        '，已算进上面的存下</div>';
+    }
     if (settle.debt > 0) html += '<div class="ledger-2">账上欠款 ' + money(S, settle.debt) + '</div>';
     $('ledger').innerHTML = html;
   }
@@ -14824,11 +14831,13 @@ window.CSQ_URL = 'https://ccx710-666.github.io/cishengqian-demo/';
     if (!res) { chosen = false; return; }
     renderPocketFeel();
 
+    // 三个非钱的数按「看上去变了多少」算：身体 65→63 就是 -2。
+    // 直接拿效果里的 ±3 会和底栏角标对不上，玩家一眼就能发现两处不一致。
     var cells = [
       { k: '钱', v: compactMoney(S.cash), d: res.deltas.cash, cash: 1, note: res.deltas.borne ? '家里出' : (res.intoDebt ? '这笔是借的' : '') },
-      { k: '身体', v: Math.round(S.health), d: res.deltas.health },
-      { k: '关系', v: Math.round(S.relScore || 0), d: res.deltas.rel },
-      { k: '学识', v: Math.round(S.know), d: res.deltas.know }
+      { k: '身体', v: Math.round(S.health), d: Math.round(S.health) - Math.round(from.health) },
+      { k: '关系', v: Math.round(S.relScore || 0), d: Math.round(S.relScore || 0) - Math.round(from.rel) },
+      { k: '学识', v: Math.round(S.know), d: Math.round(S.know) - Math.round(from.know) }
     ];
     var grid = cells.map(function (c) {
       var dv = c.d, cls = !hasDelta(dv) ? 'flat' : (dv > 0 ? 'up' : 'down');
@@ -14860,7 +14869,7 @@ window.CSQ_URL = 'https://ccx710-666.github.io/cishengqian-demo/';
     $('decision').appendChild(box);
 
     renderHud(from);
-    renderLedger(page.settle);
+    renderLedger(page.settle, res.deltas.cash);
     if (res.deltas.cash) flashDot();
 
     var undo = $('rs-undo');
@@ -14879,7 +14888,7 @@ window.CSQ_URL = 'https://ccx710-666.github.io/cishengqian-demo/';
     chosen = false;
     renderHud(null);
     renderPocket(page.settle);
-    renderLedger(page.settle);
+    renderLedger(page.settle, 0);
     paintDecision(page);
     placePocket();
     toast('退回去了，重新选');
