@@ -1915,7 +1915,7 @@ html, body {
 
   C.title = '此生签';
   C.subtitle = '一次人生的随机抽样';
-  C.version = '0.13.1 modern';
+  C.version = '0.14.0 modern';
 
   C.countries = {
     CHN: { code: 'CHN', name: '中国', weight: 1410, life: 78.2, cur: '元', sym: '¥', living: 18000, mortgage: 36000, pension: 0.42 },
@@ -2650,14 +2650,14 @@ html, body {
       return ['上面问你愿不愿意接一个位置。', '钱多，但要常年在外，家里的事顾不上。'];
     },
     choices: [
-      { t: '接', s: '你接下了那个位置', eff: function (S) { return { job: { tier: Math.min(5, S.job.tier + 1), name: null }, rel: { partner: -6, mother: -3 }, health: -5 }; } },
+      { t: '接', s: '你接下了那个位置', eff: function (S) { return { job: { tier: Math.min(5, S.job.tier + 1) }, rel: { partner: -6, mother: -3 }, health: -5 }; } },
       { t: '推掉', s: '你推掉了那个位置', eff: { rel: { partner: 5 }, flag: { declined: 1 } }, ghost: '那个位置后来给了比你晚来三年的人' },
       {
         t: '谈条件', s: '你和上面谈了条件',
         eff: {},
         gamble: {
           p: function (S) { return S.know > 65 ? 0.6 : 0.38; },
-          win: { job: { tier: 4, name: null }, rel: { partner: 2 }, flag: { negotiator: 1 } },
+          win: { job: { tier: 4 }, rel: { partner: 2 }, flag: { negotiator: 1 } },
           lose: { rel: { partner: -3 }, flag: { sidelined: 1 } }
         }
       }
@@ -2711,9 +2711,9 @@ html, body {
       return ['单位开始裁人。名单贴在门口，你的名字在第二页。', '走廊里没有人说话，只有复印机在响。'];
     },
     choices: [
-      { t: '马上去找新工作', s: '你马上去找了新工作', eff: { job: { tier: 2, name: null }, cash: -3000, health: -4 } },
+      { t: '马上去找新工作', s: '你马上去找了新工作', eff: { jobChange: 1, job: { tier: 2 }, cash: -3000, health: -4 } },
       { t: '拿补偿，休息一段', s: '你拿了补偿，休息了一段时间', eff: function (S) { return { job: null, cash: M(S, 40000, 8000, 15000), health: 3 }; } },
-      { t: '去外地', s: '你去了外地找活干', eff: function (S) { return { job: { tier: 3, name: null }, rel: { partner: -8 }, cash: -M(S, 8000, 2000, 1500), flag: { away: 1 } }; } }
+      { t: '去外地', s: '你去了外地找活干', eff: function (S) { return { jobChange: 1, job: { tier: 3 }, rel: { partner: -8 }, cash: -M(S, 8000, 2000, 1500), flag: { away: 1 } }; } }
     ]
   });
 
@@ -2986,7 +2986,7 @@ html, body {
     b: '回头看，真正由自己决定的只有那么几步'
   };
 
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一整套事，从幼儿园摇号、双减、普职分流，到考研考编、租房裁员、体检房贷，再到延迟退休与长期护理，每个阶段都有二十条以上，抽到哪些看这一次的运气。原型版本 0.13.1，全部内容在本地运行，不联网、不上传。";
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一整套事，从幼儿园摇号、双减、普职分流，到考研考编、租房裁员、体检房贷，再到延迟退休与长期护理，每个阶段都有二十条以上，抽到哪些看这一次的运气。原型版本 0.14.0，全部内容在本地运行，不联网、不上传。";
 
   root.CONTENT = C;
   if (typeof module !== 'undefined' && module.exports) module.exports = C;
@@ -3579,7 +3579,7 @@ html, body {
   });
 
   ev({
-    id: 'm_car', a: [30, 38], w: 1,
+    id: 'm_car', a: [30, 38], w: 1, need: 'job',
     text: lines('上班太远，你开始想弄辆车。', '新车和旧车，差一半钱。'),
     choices: [
       opt('贷款买新的', '你贷款买了辆新的', function (S) { return { cash: -M(S, 25000, 5000, 4000), health: 2, flag: { car_new: 1 } }; }),
@@ -3592,7 +3592,7 @@ html, body {
     id: 'm_bizinvite', a: [33, 42], w: 0.9, slot: 'biz2',
     text: lines('一个熟人拉你合伙做点事。', '他把账算给你看了，算得很漂亮。'),
     choices: [
-      opt('辞了工作去合伙', '你辞了工作', function (S) { return { cash: -M(S, 26000, 6000, 4200), health: -3, flag: { partner_biz: 1 } }; }),
+      opt('辞了工作去合伙', '你辞了工作，成了那个摊子的一半', function (S) { return { jobChange: 1, job: { tier: 2, name: '合伙人' }, cash: -M(S, 26000, 6000, 4200), health: -3, flag: { partner_biz: 1 } }; }),
       opt('只出钱不出人', '你出了钱，人没去', function (S) { return { cash: -M(S, 30000, 7000, 5000) }; }),
       opt('拒了', '你拒了', { know: 2 })
     ]
@@ -3648,7 +3648,7 @@ html, body {
     text: function (S) { return [C.cnAge(S.age) + '岁。', '一半的日子已经用掉了。']; },
     choices: [
       opt('认了', '你接受了现在的样子', { know: 3 }),
-      opt('换个活法', '你把工作辞了，换了个活法', function (S) { return { cash: -M(S, 20000, 5000, 3000), health: 3, flag: { restart: 1 } }; }, '那一年你重新变成了一个什么都不熟的人'),
+      opt('换个活法', '你把工作辞了，换了个活法', function (S) { return { job: null, jobChange: 1, cash: -M(S, 20000, 5000, 3000), health: 3, flag: { restart: 1 } }; }, '那一年你重新变成了一个什么都不熟的人'),
       opt('更狠地干', '你干得更狠了', function (S) { return { cash: M(S, 15000, 4000, 2500), health: -6 }; })
     ]
   });
@@ -3725,7 +3725,7 @@ html, body {
     choices: [
       opt('提前找下家', '你悄悄开始投简历', function (S) { return { cash: M(S, 3000, 800, 600), health: -2, know: 2 }; }),
       opt('熬着', '你等着', { health: -3 }),
-      opt('主动走', '你先辞了', function (S) { return { cash: -M(S, 8000, 2000, 1500), health: 1, flag: { hopped: 1 } }; })
+      opt('主动走', '你先辞了，先接些零活干', function (S) { return { job: null, jobChange: 1, cash: -M(S, 8000, 2000, 1500), health: 1, flag: { hopped: 1 } }; })
     ]
   });
 
@@ -4742,9 +4742,9 @@ html, body {
       return why.concat(['你今年' + C.cnAge(S.age) + '。']);
     },
     choices: [
-      opt('赶紧换个稳的', '你赶在三十五之前换了份稳的', function (S) { return { job: { tier: Math.max(1, S.jobTier - 1), name: null }, cash: -M(S, 3000, 0, 0), health: -2, flag: { settled: 1 } }; }),
-      opt('往上走', '你决定往上走', function (S) { return { job: { tier: Math.min(5, S.jobTier + 1), name: null }, health: -8, rel: { partner: -5, kids: -3 }, flag: { pushed: 1 } }; }, '那两年你几乎没在家吃过晚饭'),
-      opt('自己出来做', '你辞了职，用积蓄注册了一家公司', function (S) { return { job: { tier: 2, name: C.selfJobName[S.country] || '自己开的店' }, cash: -M(S, 20000, 0, 0), health: -3, flag: { selfEmployed: 1 } }; })
+      opt('赶紧换个稳的', '你赶在三十五之前换了份稳的', function (S) { return { jobChange: 1, job: { tier: Math.max(1, S.jobTier - 1) }, cash: -M(S, 3000, 0, 0), health: -2, flag: { settled: 1 } }; }),
+      opt('往上走', '你决定往上走', function (S) { return { jobChange: 1, job: { tier: Math.min(5, S.jobTier + 1) }, health: -8, rel: { partner: -5, kids: -3 }, flag: { pushed: 1 } }; }, '那两年你几乎没在家吃过晚饭'),
+      opt('自己出来做', '你辞了职，用积蓄注册了一家公司', function (S) { return { jobChange: 1, job: { tier: 2, name: C.selfJobName[S.country] || '自己开的店' }, cash: -M(S, 20000, 0, 0), health: -3, flag: { selfEmployed: 1 } }; })
     ]
   });
 
@@ -4767,12 +4767,12 @@ html, body {
         t: '接那个大单', s: '你接了那笔要垫资的单子',
         gamble: {
           p: function (S) { return S.know > 60 ? 0.45 : 0.3; },
-          win: function (S) { return { cash: M(S, 90000, 0, 0), job: { tier: 3, name: C.selfJobName.CHN }, health: -5, flag: { bigOrder: 1 } }; },
+          win: function (S) { return { cash: M(S, 90000, 0, 0), jobChange: 1, job: { tier: 3, name: C.selfJobName.CHN }, health: -5, flag: { bigOrder: 1 } }; },
           lose: function (S) { return { cash: -M(S, 60000, 0, 0), health: -8, rel: { partner: -4 }, flag: { badDebt: 1 } }; }
         }
       },
       opt('守住这几个客户', '你守住了手上这几个客户', function (S) { return { cash: M(S, 12000, 0, 0), health: 2, rel: { partner: 4 }, flag: { smallButSteady: 1 } }; }, '那个老客户第二年又回来了，说还是你这边省心'),
-      opt('关门，回去上班', '你把公司注销了，回去上班', function (S) { return { job: { tier: 3, name: null }, cash: M(S, 8000, 0, 0), health: 2, flag: { selfEmployed: 0, gaveUp: 1 } }; })
+      opt('关门，回去上班', '你把公司注销了，回去上班', function (S) { return { jobChange: 1, job: { tier: 3, name: C.jobNames[S.country][0][2] }, cash: M(S, 8000, 0, 0), health: 2, flag: { selfEmployed: 0, gaveUp: 1 } }; })
     ]
   });
 
@@ -4967,7 +4967,7 @@ html, body {
     choices: [
       opt('接受短时', '你接受了短时工作', function (S) { return { cash: -M(S, 6000, 1200, 700), health: 2, rel: { kids: 3 } }; }),
       opt('趁空去进修', '你趁那段时间读了个证', function (S) { return { know: 8, cash: -M(S, 4000, 900, 500), health: -2, flag: { retrained: 1 } }; }, '那张证后来救了你一次'),
-      opt('换一家', '你换了一家公司', function (S) { return { job: { tier: 2, name: null }, cash: -M(S, 3000, 700, 400), rel: { friend: -3 } }; })
+      opt('换一家', '你换了一家公司', function (S) { return { jobChange: 1, job: { tier: 2 }, cash: -M(S, 3000, 700, 400), rel: { friend: -3 } }; })
     ]
   });
 
@@ -5058,8 +5058,8 @@ html, body {
     text: lines('没有正式合同，钱按天结。', '好处是没人管你，坏处是没人管你。'),
     choices: [
       opt('就这么干', '你一直做着没有合同的活', function (S) { return { cash: M(S, 8000, 1200, 900), health: -3, flag: { informal: 1 } }; }),
-      opt('想办法进正式单位', '你托人进了一家正式单位', function (S) { return { job: { tier: 2, name: null }, cash: -M(S, 2000, 300, 250), rel: { friend: 4 }, flag: { formal: 1 } }; }),
-      opt('自己开个小店', '你开了个小店', function (S) { return { job: { tier: 2, name: null }, cash: -M(S, 12000, 1800, 1500), health: -4, flag: { shopOwner: 1 } }; })
+      opt('想办法进正式单位', '你托人进了一家正式单位', function (S) { return { jobChange: 1, job: { tier: 2, name: null }, cash: -M(S, 2000, 300, 250), rel: { friend: 4 }, flag: { formal: 1 } }; }),
+      opt('自己开个小店', '你开了个小店', function (S) { return { jobChange: 1, job: { tier: 2, name: '小店老板' }, cash: -M(S, 12000, 1800, 1500), health: -4, flag: { shopOwner: 1 } }; })
     ]
   });
 
@@ -5202,7 +5202,7 @@ html, body {
     id: 'deu_umzug', a: [30, 46], w: 2.2, need: 'job', when: only('DEU'),
     text: lines('公司在另一个城市开了分部，问谁愿意去。', '去了升一级，但要带着一家人搬。'),
     choices: [
-      opt('搬', '你们全家搬了过去', function (S) { return { job: { tier: Math.min(5, S.jobTier + 1), name: null }, cash: -M(S, 12000, 3000, 1800), rel: { partner: -5, friend: -8 }, flag: { away: 1 } }; }),
+      opt('搬', '你们全家搬了过去', function (S) { return { jobChange: 1, job: { tier: Math.min(5, S.jobTier + 1) }, cash: -M(S, 12000, 3000, 1800), rel: { partner: -5, friend: -8 }, flag: { away: 1 } }; }),
       opt('不搬', '你留了下来', { rel: { partner: 4, friend: 3 }, flag: { declined: 1 } }),
       opt('自己先去两年', '你一个人先去了两年', function (S) { return { cash: M(S, 15000, 3500, 2000), rel: { partner: -9, kids: -5 }, health: -3 }; })
     ]
@@ -5987,8 +5987,8 @@ html, body {
     return '晚年';
   };
 
-  C.version = '0.13.1 modern';
-  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一整套事，从幼儿园摇号、双减、普职分流，到考研考编、租房裁员、体检房贷，再到延迟退休与长期护理，每个阶段都有二十条以上，抽到哪些看这一次的运气。原型版本 0.13.1，全部内容在本地运行，不联网、不上传。";
+  C.version = '0.14.0 modern';
+  C.about = "《此生签》是一份还在打磨中的原型。抽一支签，你会落到中国、德国或巴西的某个家庭，从一个年份、一对父母开始，一直活到这一生结束。全程约 10–15 分钟，每个选择都会留下代价，结局由数值、制度与运气共同决定。没有存档，一支签只活一次——不满意可以重新抽。正文是逐字出现的，读完才给选项：这是一份要读的东西，不是一道要点的题。选完先看这一步的结果，钱、身体、关系、学识各变了多少都写在眼前，选错了还能改选一次。结局面只有三块：结局、财富、回首。想要留个念，可以存成一张带二维码的长图。抽签时可以指定年代：八九十年代、零零后、一零后——后两支有自己的一整套事，从幼儿园摇号、双减、普职分流，到考研考编、租房裁员、体检房贷，再到延迟退休与长期护理，每个阶段都有二十条以上，抽到哪些看这一次的运气。原型版本 0.14.0，全部内容在本地运行，不联网、不上传。";
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -7746,7 +7746,7 @@ html, body {
         t: '争', s: '你把话挑明了', eff: function (S) { return { health: -4, rel: { partner: -3, friend: -2 } }; },
         gamble: {
           p: function (S) { return S.know > 62 ? 0.55 : 0.34; },
-          win: function (S) { return { job: { tier: Math.min(5, (S.jobTier || 1) + 1), name: null }, know: 2, flag: { promoted2: 1 } }; },
+          win: function (S) { return { jobChange: 1, job: { tier: Math.min(5, (S.jobTier || 1) + 1) }, know: 2, flag: { promoted2: 1 } }; },
           lose: function (S) { return { rel: { friend: -4 }, health: -2, flag: { sidelined2: 1 } }; }
         }
       },
@@ -7754,7 +7754,7 @@ html, body {
         return { know: 3, health: 2, flag: { steady: 1 } };
       }),
       opt('换个地方', '你去了另一家', function (S) {
-        return { job: { tier: Math.min(5, (S.jobTier || 1) + 1), name: null }, cash: -M(S, 6000, 1500, 2000), rel: { friend: -6 }, flag: { moved2: 1 } };
+        return { jobChange: 1, job: { tier: Math.min(5, (S.jobTier || 1) + 1) }, cash: -M(S, 6000, 1500, 2000), rel: { friend: -6 }, flag: { moved2: 1 } };
       })
     ]
   });
@@ -8066,12 +8066,17 @@ html, body {
   // ① 第一份工
   fork('firstjob', {
     CHN: function (S) {
+      // 第三条路要看年份：2015 年以前没有外卖平台，
+      // 1986 年生的人二十一岁是 2007 年，那时候能「先干着」的是工地和跟车。
+      var gig = S.year < 2015
+        ? { t: '去工地、跟车搬货，先干着', s: '你没有固定的单位，哪有活就去哪', eff: function (S) { return { job: { tier: 1, name: '工地小工' }, health: -5, cash: M(S, 3000, 0, 0), flag: { gig: 1, hard: 1 } }; } }
+        : { t: '跑外卖、开网约车，先干着', s: '你没有固定的单位，但有活就干', eff: function (S) { return { job: { tier: 1, name: '外卖骑手' }, health: -3, cash: M(S, 4000, 0, 0), flag: { gig: 1 } }; } };
       return [
         // 考编先花钱：报班买书是明账，两年不上班是暗账——所以岗位要 delayed 两年再给，
         // 这两年按待业结算，账上的钱是往下走的。
         { t: '考编，考到上岸为止', s: '你在家复习了两年，最后考上了', eff: function (S) { return { job: { tier: 2, name: '事业单位职员' }, jobDelay: 2, cash: -M(S, 12000, 0, 0), know: 4, health: -2, rel: { father: 4 }, flag: { examPost: 1 }, _note: '报班买书是一笔现钱；这两年不进工资，只有支出，入职之后才开始有。' }; } },
         { t: '进厂，加班多', s: '你进了厂，加班费比工资高', eff: function (S) { return { job: { tier: 2, name: C.jobNames[S.country][0][1] }, health: -7, cash: M(S, 6000, 0, 0), flag: { hard: 1 } }; }, ghost: '那份工后来落下了腰上的毛病' },
-        { t: '跑外卖、开网约车，先干着', s: '你没有固定的单位，但有活就干', eff: function (S) { return { job: { tier: 1, name: '外卖骑手' }, health: -3, cash: M(S, 4000, 0, 0), flag: { gig: 1 } }; } }
+        gig
       ];
     },
     DEU: function (S) {
@@ -12193,7 +12198,11 @@ html, body {
 
   ev({
     id: 'md08_pet', a: [6, 13], w: 2.2, when: onlyCN(),
-    text: T('家里养了一只猫。', '是从同事那儿抱来的，来的时候还没断奶。'),
+    text: function (S) {
+      return S.age >= 22
+        ? ['家里养了一只猫。', '是从同事那儿抱来的，来的时候还没断奶。']
+        : ['家里养了一只猫。', '是从别人家抱来的，来的时候还没断奶。'];
+    },
     choices: [
       o('你来喂', '你每天早上添一次粮，添了很多年', { health: 2, rel: { mother: 3 }, cash: -3000, flag: { pet: 1 } }),
       o('只跟它玩', '你只负责逗它，铲屎的活儿不归你', { health: 1, rel: { mother: -1 }, flag: { pet: 1 } }),
@@ -12389,7 +12398,7 @@ html, body {
       ];
     },
     choices: [
-      o('考了两年，考上了', '你考了两年，最后进了一个离家两百公里的单位', { job: { tier: 2, name: '事业单位职员' }, jobDelay: 2, know: 4, cash: -15000, rel: { father: 6, mother: 5 }, flag: { md_post_job: 1 }, _note: '这两年没有工资，报名、报班、来回跑的钱先出去；入职之后才有那份稳定收入。' }),
+      o('考了两年，考上了', '你考了两年，最后进了一个离家两百公里的单位', { jobChange: 1, job: { tier: 2, name: '事业单位职员' }, jobDelay: 2, know: 4, cash: -15000, rel: { father: 6, mother: 5 }, flag: { md_post_job: 1 }, _note: '这两年没有工资，报名、报班、来回跑的钱先出去；入职之后才有那份稳定收入。' }),
       o('考了一次，没再考', '成绩出来，你把书收进了箱子', { know: 2, cash: -6000, rel: { father: -4 }, flag: { md_gaveup_exam: 1 } }),
       o('没去考', '你说了句不想，饭桌上没人接话', { rel: { father: -6, mother: -3 }, know: 1, flag: { md_no_exam: 1 } })
     ]
@@ -12402,7 +12411,7 @@ html, body {
     text: T('毕业了，工作还没定。', '同学群里有人晒入职，有人晒录取，你把群设成了免打扰。'),
     choices: [
       o('先在家待着', '你在家待了半年，白天睡觉，晚上看书', { know: 2, health: -2, rel: { father: -5, mother: -2 }, cash: -6000, flag: { md_gap: 1 } }),
-      o('找了份不喜欢的先干', '你先上了班，工资不高，好歹每月有进项', { job: { tier: 1 }, cash: 3000, know: 1, health: -2 }),
+      o('找了份不喜欢的先干', '你先上了班，工资不高，好歹每月有进项', { jobChange: 1, job: { tier: 1 }, cash: 3000, know: 1, health: -2 }),
       o('自己做点小生意', '你在网上开了个店，头一个月只卖出去三单', { cash: -8000, know: 3, health: -2, flag: { md_smallbiz: 1 } })
     ]
   });
@@ -12419,8 +12428,8 @@ html, body {
   });
 
   ev({
-    id: 'md27_ai', a: [23, 55], w: 2.6,
-    when: onlyCN(function (S) { return !S.jobPending && S.year >= 2023 && S.year <= 2060; }),
+    id: 'md27_ai', a: [23, 55], w: 2.6, need: 'job',
+    when: onlyCN(function (S) { return !S.jobPending && S.year >= 2023; }),
     text: T('公司给每个人开了个新工具。', '写方案、做表、回邮件，它几秒钟就出一版。'),
     choices: [
       o('先学会用它', '你把手上重复的活都交给了它，空出来的时间用来做别的', { know: 6, cash: 4000, health: -3, flag: { md_ai: 1 } }),
@@ -12433,18 +12442,20 @@ html, body {
     id: 'md28_selfmedia', a: [22, 40], w: 2.4, when: onlyCN(),
     text: T('你的号有了一万个人关注。', '后台的数字跳了一下，你把手机举给别人看。'),
     choices: [
-      o('辞了工作，全职做', '你辞了职，把设备配齐，每天剪到凌晨', { cash: -20000, health: -5, know: 4, flag: { md_fulltime_creator: 1 } }),
+      o('辞了工作，全职做', '你辞了职，把设备配齐，每天剪到凌晨', { jobChange: 1, job: { tier: 1, name: '自媒体' }, cash: -20000, health: -5, know: 4, flag: { md_fulltime_creator: 1 } }),
       o('下班以后做', '你白天上班，晚上剪视频，一周更两条', { cash: 12000, health: -3, know: 2 }),
       o('不做了', '你发了一条说停更，之后就再没打开过后台', { know: 1, rel: { friend: -3 } })
     ]
   });
 
   ev({
-    id: 'md29_gig', a: [22, 50], w: 2.5, when: onlyCN(),
+    id: 'md29_gig', a: [22, 50], w: 2.5,
+    // 「找了一圈，只有这种活随时能上」：手上已经有工作的人不会这么找活。
+    when: onlyCN(function (S) { return !S.job && !S.jobPending; }),
     text: T('找了一圈，只有这种活随时能上。', '注册、上传证件、等审核通过。'),
     choices: [
-      o('跑外卖', '你一天跑十个小时，跑到膝盖开始疼', { job: { tier: 1, name: '外卖骑手' }, cash: 9000, health: -6, flag: { md_rider: 1, gig: 1 } }),
-      o('开网约车', '你租了辆车，一天在线十二个小时', { job: { tier: 1, name: '网约车司机' }, cash: 7000, health: -4, flag: { md_driver: 1, gig: 1 } }),
+      o('跑外卖', '你一天跑十个小时，跑到膝盖开始疼', { jobChange: 1, job: { tier: 1, name: '外卖骑手' }, cash: 9000, health: -6, flag: { md_rider: 1, gig: 1 } }),
+      o('开网约车', '你租了辆车，一天在线十二个小时', { jobChange: 1, job: { tier: 1, name: '网约车司机' }, cash: 7000, health: -4, flag: { md_driver: 1, gig: 1 } }),
       o('都没干，继续找', '你继续投简历，账上的钱一天比一天少', { cash: -8000, know: 2, health: -2, flag: { md_waiting: 1 } })
     ]
   });
@@ -12454,9 +12465,9 @@ html, body {
     when: onlyCN(yr(2019, 2110)),
     text: T('部门开会，说业务要调整。', '名单在下午发到每个人邮箱，附件是一个 PDF。'),
     choices: [
-      o('拿了补偿，重新找', '你签了字，拿到 N+1 的离职补偿，在家投了三个月简历', function (S) { return { cash: 40000, job: { tier: Math.max(1, (S.jobTier || 1) - 1), name: '新单位的职员' }, health: -3, know: 2, flag: { md_layoff: 1 } }; }),
+      o('拿了补偿，重新找', '你签了字，拿到 N+1 的离职补偿，在家投了三个月简历', function (S) { return { cash: 40000, jobChange: 1, job: { tier: Math.max(1, (S.jobTier || 1) - 1), name: '新单位的职员' }, health: -3, know: 2, flag: { md_layoff: 1 } }; }),
       o('转去了另一个岗', '你留下来，做起了以前没碰过的活', { know: 4, health: -3, rel: { friend: 2 }, flag: { md_transfer: 1 } }),
-      o('自己出来干', '你用那笔赔偿金，注册了一个小公司', { cash: -60000, job: { tier: 2, name: '自己的公司' }, health: -3, flag: { md_founder: 1 } })
+      o('自己出来干', '你用那笔赔偿金，注册了一个小公司', { cash: -60000, jobChange: 1, job: { tier: 2, name: '自己的公司' }, health: -3, flag: { md_founder: 1 } })
     ]
   });
 
@@ -12496,7 +12507,7 @@ html, body {
   });
 
   ev({
-    id: 'md34_checkup', a: [28, 50], w: 2.3, when: onlyCN(),
+    id: 'md34_checkup', a: [28, 50], w: 2.3, need: 'job', when: onlyCN(),
     text: T('单位组织体检。', '报告上标了三项偏高，最后一行写着建议复查。'),
     choices: [
       o('去复查了', '你请了半天假，查完医生说问题不大，注意作息', { health: 4, cash: -1500, know: 1 }),
@@ -12529,7 +12540,7 @@ html, body {
     id: 'md37_backhome', a: [28, 45], w: 2.3, when: onlyCN(),
     text: T('老家的朋友说，回来吧，这边压力小。', '你在阳台上站了一会儿，楼下是高架。'),
     choices: [
-      o('回去了', '你辞了职，把东西寄回老家，租了一间带院子的房', function (S) { return { job: { tier: Math.max(1, (S.jobTier || 1) - 1), name: '老家的活儿' }, cash: -15000, health: 4, rel: { father: 8, mother: 8, friend: -4 }, flag: { md_backhome: 1, moved: (S.flag.moved || 0) + 1 } }; }),
+      o('回去了', '你辞了职，把东西寄回老家，租了一间带院子的房', function (S) { return { jobChange: 1, job: { tier: Math.max(1, (S.jobTier || 1) - 1), name: '老家的活儿' }, cash: -15000, health: 4, rel: { father: 8, mother: 8, friend: -4 }, flag: { md_backhome: 1, moved: (S.flag.moved || 0) + 1 } }; }),
       o('留下来', '你把那条消息回了，说再看看', { know: 2, health: -2, flag: { md_stay: 1 } }),
       o('两边跑', '你每个月回去一趟，高铁三个小时', { cash: -12000, health: -3, rel: { father: 5, mother: 5 }, flag: { md_split: 1 } })
     ]
@@ -12669,7 +12680,16 @@ html, body {
   function hasElder(S) {
     return !!(S.sibs && S.sibs.some(function (x) { return x.d > 0 && x.alive; }));
   }
-  C.mdh = {
+  // 体制内的岗位。这些人不能经商、不能自己接活：
+  // 「夜市摆摊」「接远程的活」这类事，只能写成辞职之后才发生。
+  function govJob(S) {
+    if (!S || !S.job) {
+      return !!(S && S.flag && (S.flag.md_soe || S.flag.md_teacher || S.flag.md_post_job || S.flag.md_gov));
+    }
+    if (/事业单位|国企|老师|公务员|编制|基层服务/.test(S.job.name)) return true;
+    return !!(S.flag && (S.flag.md_soe || S.flag.md_teacher || S.flag.md_post_job || S.flag.md_gov));
+  }
+  C.mdh = { govJob: govJob,
     ev: ev, o: o, T: T, onlyCN: onlyCN, SCH: SCH, SCHY: SCHY, yr: yr,
     flag: flag, noflag: noflag, hasYounger: hasYounger, hasElder: hasElder,
     M: M, E: E, inSchool: inSchool
@@ -13924,8 +13944,8 @@ html, body {
     when: onlyCN(function (S) { return !S.jobPending && S.year >= 2014 && S.year <= 2040; }),
     text: T('一家大公司在招人，面试有四轮。', '最后一轮问的是：你能接受加班吗。'),
     choices: [
-      o('说能', '你进去了，工资不低，工位一米二', { job: { tier: 3, name: '大厂工程师' }, cash: 12000, health: -4, know: 3, flag: { md_bigtech: 1 } }),
-      o('说看情况', '你没被录用，去了另一家小公司', { job: { tier: 2, name: '小公司职员' }, cash: 4000, know: 2 }),
+      o('说能', '你进去了，工资不低，工位一米二', { jobChange: 1, job: { tier: 3, name: '大厂工程师' }, cash: 12000, health: -4, know: 3, flag: { md_bigtech: 1 } }),
+      o('说看情况', '你没被录用，去了另一家小公司', { jobChange: 1, job: { tier: 2, name: '小公司职员' }, cash: 4000, know: 2 }),
       o('没去面', '你觉得自己不喜欢那种楼', { know: 1, cash: 0 })
     ]
   });
@@ -13935,7 +13955,7 @@ html, body {
     when: onlyCN(function (S) { return !S.jobPending; }),
     text: T('国企的招聘公告挂在网站上，报名截止三天。', '笔试在一所中学的教室里，两个考场。'),
     choices: [
-      o('考上了', '你去了一个不太忙的部门，工资不高，五险一金齐；办公室里最年轻的同事也比你大十岁', { job: { tier: 2, name: '国企职员' }, cash: 3000, know: 2, health: 1, rel: { friend: -4 }, flag: { md_soe: 1 } }),
+      o('考上了', '你去了一个不太忙的部门，工资不高，五险一金齐；办公室里最年轻的同事也比你大十岁', { jobChange: 1, job: { tier: 2, name: '国企职员' }, cash: 3000, know: 2, health: 1, rel: { friend: -4 }, flag: { md_soe: 1 } }),
       o('笔试过了，面试没过', '你在门口等结果，等到天黑', { know: 2, health: -2, rel: { father: -3 } }),
       o('没报名', '你觉得那种地方待不住', { know: 1, flag: { md_no_soe: 1 } })
     ]
@@ -13946,8 +13966,8 @@ html, body {
     when: onlyCN(function (S) { return !S.jobPending; }),
     text: T('区里招老师，一个岗位两百人报名。', '公告上写着：师范类优先。'),
     choices: [
-      o('考上了', '你被分到一所小学，教三年级', { job: { tier: 2, name: '小学老师' }, jobDelay: 1, know: 3, cash: -8000, rel: { mother: 6 }, flag: { md_teacher: 1 } }),
-      o('没考上', '你去了一所私立学校，工资高一截，没有编制', { job: { tier: 1, name: '民办学校老师' }, cash: 2000, health: -3, know: 2 }),
+      o('考上了', '你被分到一所小学，教三年级', { jobChange: 1, job: { tier: 2, name: '小学老师' }, jobDelay: 1, know: 3, cash: -8000, rel: { mother: 6 }, flag: { md_teacher: 1 } }),
+      o('没考上', '你去了一所私立学校，工资高一截，没有编制', { jobChange: 1, job: { tier: 1, name: '民办学校老师' }, cash: 2000, health: -3, know: 2 }),
       o('考了两年，放弃了', '你把资料装进箱子，去做了别的', { know: 3, cash: -12000, health: -3, rel: { mother: -4 } })
     ]
   });
@@ -13957,7 +13977,7 @@ html, body {
     when: onlyCN(function (S) { return !S.jobPending; }),
     text: T('公告栏上贴着西部计划的招募。', '服务两年，回来考公有加分。'),
     choices: [
-      o('报了名，去了', '你去了一个县里，住的是单位宿舍', { job: { tier: 1, name: '基层服务人员' }, cash: -5000, health: -2, know: 4, rel: { friend: 3 }, flag: { md_west: 1 } }),
+      o('报了名，去了', '你去了一个县里，住的是单位宿舍', { jobChange: 1, job: { tier: 1, name: '基层服务人员' }, cash: -5000, health: -2, know: 4, rel: { friend: 3 }, flag: { md_west: 1 } }),
       o('想了想，没报', '你留在了本地', { know: 1 }),
       o('报了，家里不同意', '你最后没去，报名表存在手机里', { rel: { mother: -3 }, know: 2 })
     ]
@@ -13969,8 +13989,8 @@ html, body {
     text: T('分数出来，差十二分。', '有人已经在准备复试了。'),
     choices: [
       o('再来一年', '你在学校旁边租了间房，每天六点起', { know: 7, health: -5, cash: -20000, flag: { md_second_exam: 1 } }),
-      o('去工作', '你投了简历，先上了班', { job: { tier: 1 }, cash: 2000, know: 1 }),
-      o('一边工作一边考', '你白天上班，晚上看书，两边都勉强', { job: { tier: 1 }, know: 4, health: -6, cash: 1000, flag: { md_work_study: 1 } })
+      o('去工作', '你投了简历，先上了班', { jobChange: 1, job: { tier: 1 }, cash: 2000, know: 1 }),
+      o('一边工作一边考', '你白天上班，晚上看书，两边都勉强', { jobChange: 1, job: { tier: 1 }, know: 4, health: -6, cash: 1000, flag: { md_work_study: 1 } })
     ]
   });
 
@@ -13990,9 +14010,9 @@ html, body {
     when: onlyCN(function (S) { return !S.jobPending; }),
     text: T('家里说，你舅舅那边有个位置。', '去了先做助理，工资四千，学东西靠自己。'),
     choices: [
-      o('去了', '你去了，办公室里的人都认识你舅舅', { job: { tier: 1, name: '亲戚公司的职员' }, cash: 2000, know: 2, rel: { father: 5 }, flag: { md_nepotism: 1 } }),
-      o('没去，自己找', '你继续投简历，两个月后上了一家小公司', { job: { tier: 1 }, cash: 0, know: 3, rel: { father: -4 } }),
-      o('去了半年就出来了', '你受不了那种眼神，自己重新找', { job: { tier: 1 }, know: 3, health: -2, rel: { father: -5 } })
+      o('去了', '你去了，办公室里的人都认识你舅舅', { jobChange: 1, job: { tier: 1, name: '亲戚公司的职员' }, cash: 2000, know: 2, rel: { father: 5 }, flag: { md_nepotism: 1 } }),
+      o('没去，自己找', '你继续投简历，两个月后上了一家小公司', { jobChange: 1, job: { tier: 1 }, cash: 0, know: 3, rel: { father: -4 } }),
+      o('去了半年就出来了', '你受不了那种眼神，自己重新找', { jobChange: 1, job: { tier: 1 }, know: 3, health: -2, rel: { father: -5 } })
     ]
   });
 
@@ -14161,8 +14181,8 @@ html, body {
     when: onlyCN(function (S) { return S.edu !== 'uni' && S.edu !== 'post'; }),
     text: T('高中（中职）毕业，没再往下读。', '镇上广场摆了两张桌子，招工的人坐在后面。'),
     choices: [
-      o('进了电子厂', '你在流水线上站了两年，学会了看图纸', { job: { tier: 1, name: '流水线工人' }, cash: 12000, health: -4, know: 2, flag: { md_factory: 1 } }),
-      o('跟人去了工地', '你干了一年小工，晒得脱了一层皮', { job: { tier: 1, name: '工地小工' }, cash: 16000, health: -6, rel: { friend: 3 } }),
+      o('进了电子厂', '你在流水线上站了两年，学会了看图纸', { jobChange: 1, job: { tier: 1, name: '流水线工人' }, cash: 12000, health: -4, know: 2, flag: { md_factory: 1 } }),
+      o('跟人去了工地', '你干了一年小工，晒得脱了一层皮', { jobChange: 1, job: { tier: 1, name: '工地小工' }, cash: 16000, health: -6, rel: { friend: 3 } }),
       o('在家再想想', '你在家待了半年，帮着看店', { cash: -2000, health: -1, know: 2, rel: { father: -4 } })
     ]
   });
@@ -14172,7 +14192,7 @@ html, body {
     when: onlyCN(function (S) { return S.edu !== 'uni' && S.edu !== 'post'; }),
     text: T('你在家待了半年。', '每天睡到十点，起来吃现成的。'),
     choices: [
-      o('去跑单', '你注册了账号，第一个月跑了四千', { job: { tier: 1, name: '外卖骑手' }, cash: 4000, health: -4, flag: { gig: 1 } }),
+      o('去跑单', '你注册了账号，第一个月跑了四千', { jobChange: 1, job: { tier: 1, name: '外卖骑手' }, cash: 4000, health: -4, flag: { gig: 1 } }),
       o('报了个培训班', '你学了三个月，考了张证', { cash: -8000, know: 5, health: -1, flag: { md_trained: 1 } }),
       o('继续待着', '你爸开始不跟你说话', { cash: -3000, health: -2, rel: { father: -8, mother: -4 } })
     ]
@@ -14338,7 +14358,7 @@ html, body {
     id: 'mc01_jump', a: [25, 34], w: 2.6, need: 'job', when: onlyCN(),
     text: T('猎头发来一个职位，工资高三成。', '那边的项目刚起步，人手只有三个。'),
     choices: [
-      o('跳了', '你换了工牌，头三个月天天十点后回家', { job: { tier: 3, name: '新公司的骨干' }, cash: 15000, health: -4, know: 3, flag: { md_jumped: 1 } }),
+      o('跳了', '你换了工牌，头三个月天天十点后回家', { jobChange: 1, job: { tier: 3, name: '新公司的骨干' }, cash: 15000, health: -4, know: 3, flag: { md_jumped: 1 } }),
       o('拿这个去谈了加薪', '领导给你涨了一千五，活也多了一倍', { cash: 6000, health: -3, rel: { friend: -2 } }),
       o('没动', '你留在原处，第二年升了一级', { cash: 4000, know: 3, rel: { friend: 3 } })
     ]
@@ -14358,9 +14378,9 @@ html, body {
     id: 'mc03_age35', a: [32, 38], w: 2.7, need: 'job', when: onlyCN(yr(2018, 2110)),
     text: T('招聘要求上写着：三十五岁以下。', '你今年三十四。'),
     choices: [
-      o('赶紧找下家', '你半年面了十几家，最后靠一个老同事介绍进去了', { job: { tier: 2, name: '新单位的职员' }, cash: 3000, health: -4, rel: { friend: 6 }, flag: { md_agegate: 1 } }),
+      o('赶紧找下家', '你半年面了十几家，最后靠一个老同事介绍进去了', { jobChange: 1, job: { tier: 2, name: '新单位的职员' }, cash: 3000, health: -4, rel: { friend: 6 }, flag: { md_agegate: 1 } }),
       o('留在原处不动', '你把手上的事做得更细，谁也不敢轻易换你', { know: 4, health: -2, flag: { md_indispensable: 1 } }),
-      o('转去做管理', '你带了三个人，开会比干活多', { job: { tier: 3, name: '小组主管' }, cash: 6000, health: -3, rel: { friend: -2 } })
+      o('转去做管理', '你带了三个人，开会比干活多', { jobChange: 1, job: { tier: 3, name: '小组主管' }, cash: 6000, health: -3, rel: { friend: -2 } })
     ]
   });
 
@@ -14479,25 +14499,35 @@ html, body {
     id: 'mc15_relocate', a: [26, 40], w: 2.3, need: 'job', when: onlyCN(),
     text: T('公司在另一个城市开了分部，问谁愿意去。', '去了职级升一级，补贴另算。'),
     choices: [
-      o('去了', '你搬到一个陌生城市，第一年过年才回家', { job: { tier: 3, name: '分公司负责人' }, cash: 20000, health: -3, rel: { father: -5, mother: -5 }, flag: { moved: 1, md_relocated: 1 } }),
+      o('去了', '你搬到一个陌生城市，第一年过年才回家', { jobChange: 1, job: { tier: 3, name: '分公司负责人' }, cash: 20000, health: -3, rel: { father: -5, mother: -5 }, flag: { moved: 1, md_relocated: 1 } }),
       o('没去', '你留在原地，那个位置给了别人', { know: 1, health: 1 }),
       o('家里不同意，还是去了', '你走的那天，家里没人送你', { cash: 20000, rel: { mother: -8, partner: -6 }, flag: { md_relocated: 1 } })
     ]
   });
 
   ev({
-    id: 'mc16_nomad', a: [26, 40], w: 2.1, when: onlyCN(yr(2020, 2110)),
+    id: 'mc16_nomad', a: [26, 40], w: 2.1,
+    // 「接远程的活」的前提是没有单位；体制内的人抽到就是前后文对不上。
+    when: onlyCN(function (S) { return S.year >= 2020 && !C.mdh.govJob(S); }),
     text: T('有人在群里晒了一张在海边的工位照。', '他说，只要有网，在哪儿都一样。'),
     choices: [
-      o('试了半年', '你在一个小城租了房，接远程的活，收入少了两成', { job: { tier: 2, name: '远程工作者' }, cash: -6000, health: 4, know: 3, flag: { md_nomad: 1 } }),
+      o('试了半年', '你在一个小城租了房，接远程的活，收入少了两成', { jobChange: 1, job: { tier: 2, name: '远程工作者' }, cash: -6000, health: 4, know: 3, flag: { md_nomad: 1 } }),
       o('觉得不靠谱', '你继续上班', { know: 1 }),
-      o('把工作辞了去做', '你辞了职，半年后接不到活，又投简历', { cash: -20000, health: -2, know: 3 })
+      o('把工作辞了去做', '你辞了职，半年后接不到活，又投简历', { job: null, jobChange: 1, cash: -20000, health: -2, know: 3 })
     ]
   });
 
   ev({
-    id: 'mc17_stall', a: [26, 45], w: 2.2, when: onlyCN(yr(2020, 2110)),
-    text: T('夜市摆摊要抽签，一个月三百。', '隔壁卖烤肠的一天能卖两百根。'),
+    id: 'mc17_stall', a: [26, 45], w: 2.2,
+    // 体制内不能经商：公务员、事业单位、国企、老师都抽不到这一条。
+    // 有工作的人读到的是「下班以后去摆」，没工作的人读到的是晚上的营生。
+    // 以前两种情况都写「每晚出摊」，事业单位的人会以为自己被换成了摊主。
+    when: onlyCN(function (S) { return S.year >= 2020 && !C.mdh.govJob(S); }),
+    text: function (S) {
+      return (S.job && !S.retired)
+        ? ['夜市摆摊要抽签，一个月三百。', '下了班过去，正好赶上人流。隔壁卖烤肠的一天能卖两百根。']
+        : ['夜市摆摊要抽签，一个月三百。', '隔壁卖烤肠的一天能卖两百根。'];
+    },
     choices: [
       o('摆了一个夏天', '你每天晚上出摊到十一点，挣了一万多', { cash: 12000, health: -4, rel: { friend: 5 }, flag: { md_stall: 1 } }),
       o('摆了两周就收了', '剩下一箱货堆在阳台上', { cash: -3000, health: -2 }),
@@ -14546,7 +14576,7 @@ html, body {
   });
 
   ev({
-    id: 'mc22_cert', a: [26, 45], w: 2.2, when: onlyCN(),
+    id: 'mc22_cert', a: [26, 45], w: 2.2, need: 'job', when: onlyCN(),
     text: T('同事在考一个证，说考下来挂出去一年有几万。', '报名费两千，教材三本。'),
     choices: [
       o('考了，考过了', '你考了两次，证拿到手，行情已经不如从前', { cash: -4000, know: 6, health: -3, flag: { md_cert: 1 } }),
@@ -14811,12 +14841,14 @@ html, body {
   // ═════════ 中年（38–52） ═════════
 
   ev({
-    id: 'mm01_midlevel', a: [36, 48], w: 2.5, need: 'job', when: onlyCN(),
+    id: 'mm01_midlevel', a: [36, 48], w: 2.5, need: 'job',
+    // 正文写的是「你带了一个十人的组」：没到管事的位置，这句话就不成立。
+    when: onlyCN(function (S) { return S.jobTier >= 2 && !S.flag.selfEmployed; }),
     text: T('你带了一个十人的组。', '上面要结果，下面要说法，中间只有你。'),
     choices: [
       o('把活分下去，自己盯进度', '你学会了开会和写周报，头发少了一些', { cash: 15000, know: 4, health: -3, rel: { friend: 4 }, flag: { md_manager: 1 } }),
       o('什么都自己干', '你干得比谁都多，组里的人越来越闲', { cash: 5000, health: -6, rel: { friend: -4 } }),
-      o('往上争一个位置', '你争到了，坐进了那间有窗的办公室', { job: { tier: 4, name: '部门负责人' }, cash: 30000, health: -4, rel: { friend: -3 } })
+      o('往上争一个位置', '你争到了，坐进了那间有窗的办公室', { jobChange: 1, job: { tier: 4 }, cash: 30000, health: -4, rel: { friend: -3 } })
     ]
   });
 
@@ -14824,9 +14856,9 @@ html, body {
     id: 'mm02_pivot', a: [36, 50], w: 2.4, when: onlyCN(yr(2018, 2110)),
     text: T('行业在往下走，同组的人一个个走了。', '有人去做了别的，有人回了老家。'),
     choices: [
-      o('转行，从低的做起', '你去了一家小公司，工资少了一半，重新学', function (S) { return { job: { tier: Math.max(1, (S.jobTier || 2) - 1), name: '新行业的职员' }, cash: -20000, know: 5, health: -3, flag: { md_pivot: 1 } }; }),
+      o('转行，从低的做起', '你去了一家小公司，工资少了一半，重新学', function (S) { return { jobChange: 1, job: { tier: Math.max(1, (S.jobTier || 2) - 1), name: '新行业的职员' }, cash: -20000, know: 5, health: -3, flag: { md_pivot: 1 } }; }),
       o('留下来等', '你留到了最后，部门缩到三个人', { cash: -10000, health: -3, know: 2, flag: { md_stayed: 1 } }),
-      o('自己出来做', '你用积蓄开了个小店，第一年没赚到钱', { job: { tier: 1, name: '小店老板' }, cash: -80000, health: -4, rel: { friend: 4 }, flag: { selfEmployed: 1 } })
+      o('自己出来做', '你用积蓄开了个小店，第一年没赚到钱', { jobChange: 1, job: { tier: 1, name: '小店老板' }, cash: -80000, health: -4, rel: { friend: 4 }, flag: { selfEmployed: 1 } })
     ]
   });
 
@@ -16121,7 +16153,15 @@ html, body {
     }
     if (typeof e.know === 'number') {
       var b2 = S.know;
-      S.know = r1(clamp(S.know + e.know, 1, 100));
+      var kv = e.know;
+      // 学识也有天花板，理由和身体那条一样：越往上，同一件事能教给你的越少。
+      // 没有这条，现代线到中年就所有人顶在 100（实测中位数 100），这个数字就没用了。
+      if (kv > 0) {
+        if (S.know >= 85) kv = r1(kv * 0.15);
+        else if (S.know >= 75) kv = r1(kv * 0.4);
+        else if (S.know >= 65) kv = r1(kv * 0.65);
+      }
+      S.know = r1(clamp(S.know + kv, 1, 100));
       d.know = r1(S.know - b2);
     }
     if (e.rel) {
@@ -16140,7 +16180,29 @@ html, body {
       if (e.job === null) { S.job = null; S.jobTier = 0; S.jobPending = null; }
       else {
         var tier = e.job.tier || 1;
-        var jn = e.job.name || C.jobNames[S.country][0][tier - 1];
+        var named = e.job.name;   // undefined = 没点名（升职/调级）；null = 要回到通用档位名（换了份新工作）
+        var jn = (named === undefined || named === null)
+          ? C.jobNames[S.country][0][tier - 1]
+          : named;
+        // ── 岗位核对 ────────────────────────────────────────────
+        // 已经有一份工作的人，岗位名不能被剧情顺手改掉。
+        // 之前的 bug：一个事业单位的人选了「跑外卖」当副业，岗位就变成了外卖骑手；
+        // 升职（只给 tier 不给 name）也会因为档位表默认名把「外卖骑手」改成「技术工」。
+        // 规则：
+        //   · 只给 tier 不给 name → 升职/调级，沿用原来的岗位名；
+        //   · 给了 name → 只有选项标了 jobChange（辞职、跳槽、转行、被裁再就业）才允许换名；
+        //   · 被拦下的换岗记在 flag 里，QA 会把它当异常报出来。
+        if (S.job && !S.retired) {
+          if (named === undefined) {
+            jn = S.job.name;
+          } else if (jn !== S.job.name && !e.jobChange) {
+            S.flag._jobBlocked = (S.flag._jobBlocked || 0) + 1;
+            S.flag._jobBlockedBy = S.flag._jobBlockedBy
+              ? S.flag._jobBlockedBy + '／' + jn : jn;
+            jn = S.job.name;
+            tier = S.jobTier || S.job.tier || tier;
+          }
+        }
         // jobDelay：先备考，过几年才真正入职。
         // 考编、考研这类选择，文本写的是「在家复习了两年」——如果当页就把岗位给他，
         // 下一年的账立刻多一份工资，玩家会觉得「考编居然还能挣钱」。
